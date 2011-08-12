@@ -1,0 +1,24 @@
+{% load publication_extras %}
+
+{% for author, author_escaped in publication.authors_escaped %}
+<a href="/publications/{{ author_escaped }}/" class="author">{{ author }}</a>{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}
+{% endfor %}<br />
+<b><a href="/publications/{{ publication.pk }}/" class="title">{{ publication.title|tex_parse }}</a></b><br/>
+{% if publication.journal %}
+	<i>{{ publication.journal }}, {{ publication.year }}</i><br />
+{% else %}
+	<i>{% if publication.book_title %}{{ publication.book_title }},{% endif %}
+	{% if publication.publisher %}{{ publication.publisher }},{% endif %}
+	{{ publication.year }}</i><br/>
+{% endif %}
+{% if publication.keywords %}
+	{% for keyword, keyword_escaped in publication.keywords_escaped %}
+		<a class="keyword" href="/publications/tag/{{ keyword_escaped }}/">{{ keyword }}</a>
+	{% endfor %}
+	<br />
+{% endif %}
+{% if publication.code %}<a class="link" href="{{ publication.code }}">Code</a>,{% endif %}
+{% if publication.url %}<a class="link" rel="external" href="{{ publication.url }}">URL</a>,{% endif %}
+{% if publication.pdf %}<a class="link" href="{{ MEDIA_URL }}{{ publication.pdf }}">PDF</a>,{% endif %}
+{% if publication.doi %}<a class="link" rel="external" href="http://dx.doi.org/{{ publication.doi }}">DOI</a>,{% endif %}
+<a href="/publications/{{ publication.pk }}/?bibtex">BibTex</a>

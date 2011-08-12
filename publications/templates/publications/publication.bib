@@ -1,0 +1,13 @@
+@{{ publication.type.bibtex_type }}{% templatetag openbrace %}{{ publication.key }},
+  author = "{{ publication.authors_bibtex }}",
+  title = "{{ publication.title }}",
+  year = {{ publication.year }}{% if publication.journal %},
+  journal = "{{ publication.journal }}"{% endif %}{% if publication.book_title %},
+  booktitle = "{{ publication.book_title }}"{% endif %}{% if publication.publisher %},
+  publisher = "{{ publication.publisher }}"{% endif %}{% if publication.pages %},
+  pages = "{{ publication.pages }}"{% endif %}{% if publication.month_bibtex %},
+  month = "{{ publication.month_bibtex }}"{% endif %}{% if publication.keywords %},
+  keywords = "{{ publication.keywords }}"{% endif %}{% if publication.doi %},
+  doi = "{{ publication.doi }}"{% endif %}{% if publication.url %},
+  url = "{{ publication.url }}"{% endif %}
+}
