@@ -71,11 +71,13 @@ class Publication(models.Model):
 
 		# post-process keywords
 		self.keywords = replace(self.keywords, ';', ',')
+		self.keywords = replace(self.keywords, ', and ', ',')
 		self.keywords = replace(self.keywords, 'and', ',')
 		self.keywords = [strip(s).lower() for s in split(self.keywords, ',')]
 		self.keywords = join(self.keywords, ', ').lower()
 
 		# post-process author names
+		self.authors = replace(self.authors, ', and ', ',')
 		self.authors = replace(self.authors, ' and ', ',')
 		self.authors = replace(self.authors, ';', ',')
 
@@ -124,7 +126,7 @@ class Publication(models.Model):
 		if len(self.authors_list) > 1:
 			self.authors = join([
 				join(self.authors_list[:-1], ', '),
-				self.authors_list[-1]], ' and ')
+				self.authors_list[-1]], ', and ')
 		else:
 			self.authors = self.authors_list[0]
 

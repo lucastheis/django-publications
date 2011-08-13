@@ -1,7 +1,7 @@
 {% load publication_extras %}
 
 {% for author, author_escaped in publication.authors_escaped %}
-<a href="/publications/{{ author_escaped }}/" class="author">{{ author }}</a>{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}
+<a href="/publications/{{ author_escaped }}/" class="author">{{ author }}</a>{% if not forloop.last %}{% if forloop.revcounter == 2 %}{% if not forloop.first %},{% endif %} and {% else %}, {% endif %}{% endif %}
 {% endfor %}<br />
 <b><a href="/publications/{{ publication.pk }}/" class="title">{{ publication.title|tex_parse }}</a></b><br/>
 {% if publication.journal %}
