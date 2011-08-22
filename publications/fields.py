@@ -19,12 +19,13 @@ class PagesWidget(widgets.MultiWidget):
 
 
 	def decompress(self, value):
-		values = value.split('-')
+		if value:
+			values = value.split('-')
 
-		if len(values) > 1:
-			return values
-		if len(values) > 0:
-			return [values[0], values[0]]
+			if len(values) > 1:
+				return values
+			if len(values) > 0:
+				return [values[0], values[0]]
 		return [None, None]
 
 
