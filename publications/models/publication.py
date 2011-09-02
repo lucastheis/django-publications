@@ -71,14 +71,16 @@ class Publication(models.Model):
 
 		# post-process keywords
 		self.keywords = replace(self.keywords, ';', ',')
-		self.keywords = replace(self.keywords, ', and ', ',')
-		self.keywords = replace(self.keywords, 'and', ',')
+		self.keywords = replace(self.keywords, ', and ', ', ')
+		self.keywords = replace(self.keywords, ',and ', ', ')
+		self.keywords = replace(self.keywords, ' and ', ', ')
 		self.keywords = [strip(s).lower() for s in split(self.keywords, ',')]
 		self.keywords = join(self.keywords, ', ').lower()
 
 		# post-process author names
-		self.authors = replace(self.authors, ', and ', ',')
-		self.authors = replace(self.authors, ' and ', ',')
+		self.authors = replace(self.authors, ', and ', ', ')
+		self.authors = replace(self.authors, ',and ', ', ')
+		self.authors = replace(self.authors, ' and ', ', ')
 		self.authors = replace(self.authors, ';', ',')
 
 		# list of authors
