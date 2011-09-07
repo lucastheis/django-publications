@@ -70,6 +70,17 @@
 	"pk": 7,
 		"fields": {
 			"order": 6,
+			"type": "Thesis",
+			"description": "Theses",
+			"bibtex_types": "phdthesis, mastersthesis",
+			"hidden": 1
+		}
+	},
+	{
+	"model": "publications.type",
+	"pk": 8,
+		"fields": {
+			"order": 7,
 			"type": "Unpublished",
 			"description": "Unpublished Papers",
 			"bibtex_types": "unpublished",
