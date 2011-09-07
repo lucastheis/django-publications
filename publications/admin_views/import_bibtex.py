@@ -66,14 +66,17 @@ def import_bibtex(request):
 						'url',
 						'doi',
 						'keywords',
+						'note',
 						'month']
 
 					for key in keys:
 						if not entry.has_key(key):
 							entry[key] = ''
 
-					# map month to number
+					# map integer fields to integers
 					entry['month'] = MONTHS.get(entry['month'].lower(), 0)
+					entry['volume'] = entry.get('volume', None)
+					entry['number'] = entry.get('number', None)
 
 					# determine type
 					type_id = None
@@ -97,6 +100,9 @@ def import_bibtex(request):
 						journal=entry['journal'],
 						book_title=entry['booktitle'],
 						publisher=entry['publisher'],
+						volume=entry['volume'],
+						number=entry['number'],
+						note=entry['note'],
 						url=entry['url'],
 						doi=entry['doi'],
 						keywords=entry['keywords']))

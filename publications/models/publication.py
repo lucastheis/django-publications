@@ -54,7 +54,10 @@ class Publication(models.Model):
 	journal = models.CharField(max_length=256, blank=True)
 	book_title = models.CharField(max_length=256, blank=True)
 	publisher = models.CharField(max_length=256, blank=True)
+	volume = models.IntegerField(blank=True, null=True)
+	number = models.IntegerField(blank=True, null=True, verbose_name='Issue number')
 	pages = PagesField(max_length=32, blank=True)
+	note = models.CharField(max_length=256, blank=True)
 	keywords = models.CharField(max_length=256, blank=True,
 		help_text='List of keywords separated by commas.')
 	url = models.URLField(blank=True, verify_exists=False, verbose_name='URL',
