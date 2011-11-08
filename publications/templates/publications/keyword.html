@@ -2,7 +2,10 @@
 
 {% block content %}
 	{% if publications %}
-		<a class="bibtex_link" href="?bibtex">BibTex</a>
+		<div class="special_links">
+			<a href="?ascii">plain text</a>, 
+			<a href="?bibtex">BibTex</a>
+		</div>
 		<h1>Publications with the keyword &quot;{{ keyword }}&quot;</h1>
 		<hr/>
 		{% for publication in publications %}

@@ -2,7 +2,10 @@
 
 {% block content %}
 	{% if publications %}
-		<a class="bibtex_link" href="?bibtex">BibTex</a>
+		<div class="special_links">
+			<a href="?ascii">plain text</a>, 
+			<a href="?bibtex">BibTex</a>
+		</div>
 		{% for type in types %}
 				{% if type.menu_description %}
 					<h1>{{ type.menu_description }}{% if forloop.first %} by {{ author }}{% endif %}</h1>

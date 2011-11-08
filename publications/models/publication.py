@@ -92,6 +92,8 @@ class Publication(models.Model):
 		# simplified representation of author names
 		self.authors_list_simple = []
 
+		self.title_ends_with_punct = self.title[-1] in ['.', '!', '?']
+
 		# further post-process author names
 		for i, author in enumerate(self.authors_list):
 			names = split(author, ' ')
@@ -128,10 +130,12 @@ class Publication(models.Model):
 		self.authors_bibtex = join(self.authors_list, ' and ')
 
 		# overwrite authors string
-		if len(self.authors_list) > 1:
+		if len(self.authors_list) > 2:
 			self.authors = join([
 				join(self.authors_list[:-1], ', '),
 				self.authors_list[-1]], ', and ')
+		elif len(self.authors_list) > 1:
+			self.authors = join(self.authors_list, ' and ')
 		else:
 			self.authors = self.authors_list[0]
 
@@ -181,6 +185,13 @@ class Publication(models.Model):
 
 	def month_bibtex(self):
 		return self.MONTH_BIBTEX.get(self.month, '')
+
+	
+	def month_long(self):
+		for month_int, month_str in self.MONTH_CHOICES:
+			if month_int == self.month:
+				return month_str
+		return ''
 
 
 	def first_author(self):

@@ -16,7 +16,11 @@ def keyword(request, keyword):
 		if keyword in [k[1] for k in publication.keywords_escaped()]:
 			publications.append(publication)
 
-	if 'bibtex' in request.GET:
+	if 'ascii' in request.GET:
+		return render_to_response('publications/ascii.txt', {
+				'publications': publications
+			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+	elif 'bibtex' in request.GET:
 		return render_to_response('publications/publications.bib', {
 				'publications': publications
 			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')

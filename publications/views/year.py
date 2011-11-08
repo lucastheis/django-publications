@@ -21,7 +21,11 @@ def year(request, year=None):
 			years.append((publication.year, []))
 		years[-1][1].append(publication)
 
-	if 'bibtex' in request.GET:
+	if 'ascii' in request.GET:
+		return render_to_response('publications/ascii.txt', {
+				'publications': sum([y[1] for y in years], [])
+			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+	elif 'bibtex' in request.GET:
 		return render_to_response('publications/publications.bib', {
 				'publications': sum([y[1] for y in years], [])
 			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
