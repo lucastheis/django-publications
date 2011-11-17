@@ -92,7 +92,9 @@ class Publication(models.Model):
 		# simplified representation of author names
 		self.authors_list_simple = []
 
-		self.title_ends_with_punct = self.title[-1] in ['.', '!', '?']
+		# tests if title already ends with a punctuation mark
+		self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] \
+			if len(self.title) > 0 else False
 
 		# further post-process author names
 		for i, author in enumerate(self.authors_list):
