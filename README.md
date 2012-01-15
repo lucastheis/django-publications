@@ -36,9 +36,11 @@ Installation
 
 1) Copy the `publications` folder to your project.
 
-2) Add the following to your project's `urls.py`:
+2) Add the publications app to `INSTALLED_APPS` in your project's `settings.py`.
+
+3) Add the following to your project's `urls.py`:
 
 	url(r'^publications/', include('publications.urls')),
 	url(r'^admin/publications/publication/import_bibtex/$', 'publications.admin_views.import_bibtex')
 
-3) Run `python <yourproject>/manage.py syncdb`
+4) Run `python <yourproject>/manage.py syncdb`
