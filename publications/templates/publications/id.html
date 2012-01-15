@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<div class="special_links">
+		<a href="?ascii">plain text</a>, 
+		<a href="?bibtex">BibTex</a>
+	</div>
 	{% for publication in publications %}
 		<h1>Publication</h1>
 		<hr/>

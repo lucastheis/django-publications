@@ -53,13 +53,22 @@ def person(request, name):
 		t.publications = types_dict[t]
 
 	if 'ascii' in request.GET:
-		return render_to_response('publications/ascii.txt', {
+		return render_to_response('publications/publications.txt', {
 				'publications': publications
 			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+
 	elif 'bibtex' in request.GET:
 		return render_to_response('publications/publications.bib', {
 				'publications': publications
-			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+			}, context_instance=RequestContext(request), mimetype='text/x-bibtex; charset=UTF-8')
+
+	elif 'rss' in request.GET:
+		return render_to_response('publications/publications.rss', {
+				'url': 'http://' + request.META['HTTP_HOST'] + request.path,
+				'author': author,
+				'publications': publications
+			}, context_instance=RequestContext(request), mimetype='application/rss+xml; charset=UTF-8')
+
 	else:
 		return render_to_response('publications/person.html', {
 				'publications': publications,

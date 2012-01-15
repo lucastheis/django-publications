@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Publications{% if author %} by {{ author }}{% endif %}</title>
+		<link>{{ url }}{{ request.path }}</link>
+		<description></description>
+		<atom:link href="{{ url }}?rss" rel="self" type="application/rss+xml" />
+		{% for publication in publications %}
+		<item>
+			<title>{{ publication.title }}, {{ publication.authors_list|first }}{% if publication.authors_list|length > 1 %} et al.{% endif %}, {{ publication.year }}</title>
+			<link>{{ url }}{{ publication.pk }}/</link>
+			<guid>{{ url }}{{ publication.pk }}/</guid>
+			<description>{{ publication.abstract }}</description>
+		</item>
+		{% endfor %}
+	</channel>
+</rss>

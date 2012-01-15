@@ -22,13 +22,21 @@ def year(request, year=None):
 		years[-1][1].append(publication)
 
 	if 'ascii' in request.GET:
-		return render_to_response('publications/ascii.txt', {
+		return render_to_response('publications/publications.txt', {
 				'publications': sum([y[1] for y in years], [])
 			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+
 	elif 'bibtex' in request.GET:
 		return render_to_response('publications/publications.bib', {
 				'publications': sum([y[1] for y in years], [])
-			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+			}, context_instance=RequestContext(request), mimetype='text/x-bibtex; charset=UTF-8')
+
+	elif 'rss' in request.GET:
+		return render_to_response('publications/publications.rss', {
+				'url': 'http://' + request.META['HTTP_HOST'] + request.path,
+				'publications': sum([y[1] for y in years], [])
+			}, context_instance=RequestContext(request), mimetype='application/rss+xml; charset=UTF-8')
+
 	else:
 		return render_to_response('publications/years.html', {
 				'years': years

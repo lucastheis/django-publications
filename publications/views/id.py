@@ -10,13 +10,15 @@ def id(request, publication_id):
 	publications = Publication.objects.filter(pk=publication_id)
 
 	if 'ascii' in request.GET:
-		return render_to_response('publications/ascii.txt', {
+		return render_to_response('publications/publications.txt', {
 				'publications': publications
 			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+
 	elif 'bibtex' in request.GET:
 		return render_to_response('publications/publications.bib', {
 				'publications': publications
-			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+			}, context_instance=RequestContext(request), mimetype='text/x-bibtex; charset=UTF-8')
+
 	else:
 		return render_to_response('publications/id.html', {
 				'publications': publications
