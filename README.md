@@ -14,13 +14,22 @@ Screenshots
 [3]: http://files.theis.io/django-publications/frontend_small.png
 [4]: http://files.theis.io/django-publications/backend_small.png
 
+Features
+--------
+
+* automatically creates lists for individual authors or keywords
+* BibTex import/export
+* customizable publication categories/BibTex entry types
+* PDF upload
+* RSS feeds
+
 Requirements
 ------------
 
 * Python >= 2.5.0
 * Django >= 1.3.0
 
-The app has been tested with the above versions, but older versions might also work.
+The app should work with the above versions, but older versions might also work.
 
 Installation
 ------------
