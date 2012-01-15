@@ -7,19 +7,15 @@
 			<a href="?bibtex">BibTex</a>
 		</div>
 		{% for type in types %}
-				{% if type.menu_description %}
-					<h1>{{ type.menu_description }}{% if forloop.first %} by {{ author }}{% endif %}</h1>
-				{% else %}
-					<h1>{{ type }}{% if forloop.first %} by {{ author }}{% endif %}</h1>
-				{% endif %}
-				<hr/>
-				<div{% if not forloop.last %} style="margin-bottom: 30px;"{% endif %}>
-					{% for publication in type.publications %}
-						<div{% if not forloop.last %} style="margin-bottom: 20px;"{% endif %}>
-							{% include "publications/publication.html" %}
-						</div>
-					{% endfor %}
-				</div>
+			<h1>{{ type.description }}{% if forloop.first %} by {{ author }}{% endif %}</h1>
+			<hr/>
+			<div{% if not forloop.last %} style="margin-bottom: 30px;"{% endif %}>
+				{% for publication in type.publications %}
+					<div{% if not forloop.last %} style="margin-bottom: 20px;"{% endif %}>
+						{% include "publications/publication.html" %}
+					</div>
+				{% endfor %}
+			</div>
 		{% endfor %}
 	{% else %}
 		<h2>Sorry,</h2>
