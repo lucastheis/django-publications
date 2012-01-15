@@ -68,6 +68,7 @@ class Publication(models.Model):
 	doi = models.CharField(max_length=128, verbose_name='DOI', blank=True)
 	external = models.BooleanField(
 		help_text='If publication was written in another lab, mark as external.')
+	abstract = models.TextField(blank=True)
 
 	def __init__(self, *args, **kwargs):
 		models.Model.__init__(self, *args, **kwargs)

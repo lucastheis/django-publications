@@ -67,6 +67,7 @@ def import_bibtex(request):
 						'doi',
 						'keywords',
 						'note',
+						'abstract',
 						'month']
 
 					for key in keys:
@@ -105,6 +106,7 @@ def import_bibtex(request):
 						note=entry['note'],
 						url=entry['url'],
 						doi=entry['doi'],
+						abstract=entry['abstract'],
 						keywords=entry['keywords']))
 				else:
 					errors['bibliography'] = 'Make sure that the keys title, author and year are present.'
