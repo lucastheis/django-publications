@@ -9,12 +9,12 @@ import re
 
 # special character mapping
 special_chars = (
-	(r'{\"a}', 'ä'), (r'\"a', 'ä'), (r'H{a}', 'ä'),
-	(r'{\"A}', 'Ä'), (r'\"A', 'Ä'), (r'H{A}', 'Ä'),
-	(r'{\"o}', 'ö'), (r'\"o', 'ö'), (r'H{o}', 'ö'),
-	(r'{\"O}', 'Ö'), (r'\"O', 'Ö'), (r'H{O}', 'Ö'),
-	(r'{\"u}', 'ü'), (r'\"u', 'ü'), (r'H{u}', 'ü'),
-	(r'{\"U}', 'Ü'), (r'\"U', 'Ü'), (r'H{U}', 'Ü'),
+	(r'\"{a}', 'ä'), (r'{\"a}', 'ä'), (r'\"a', 'ä'), (r'H{a}', 'ä'),
+	(r'\"{A}', 'Ä'), (r'{\"A}', 'Ä'), (r'\"A', 'Ä'), (r'H{A}', 'Ä'),
+	(r'\"{o}', 'ö'), (r'{\"o}', 'ö'), (r'\"o', 'ö'), (r'H{o}', 'ö'),
+	(r'\"{O}', 'Ö'), (r'{\"O}', 'Ö'), (r'\"O', 'Ö'), (r'H{O}', 'Ö'),
+	(r'\"{u}', 'ü'), (r'{\"u}', 'ü'), (r'\"u', 'ü'), (r'H{u}', 'ü'),
+	(r'\"{U}', 'Ü'), (r'{\"U}', 'Ü'), (r'\"U', 'Ü'), (r'H{U}', 'Ü'),
 	(r'{‘a}', 'à'), (r'\‘A', 'À'),
 	(r'{‘e}', 'è'), (r'\‘E', 'È'),
 	(r'{‘o}', 'ò'), (r'\‘O', 'Ò'),
@@ -53,9 +53,7 @@ def parse(string):
 
 	# replace special characters
 	for key, value in special_chars:
-		key = key.decode('utf-8')
-		value = value.decode('utf-8')
-		string = string.replace(key, value)
+		string = string.replace(key.decode('utf-8'), value.decode('utf-8'))
 
 	# split into BibTex entries
 	entries = re.findall(r'(?u)@(\w+)\s?{\s?([^,]*),?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{[^}]*}|[^,}]*),?\s*?)+)\s*}', string)
