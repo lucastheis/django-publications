@@ -94,6 +94,7 @@ def import_bibtex(request):
 					# add publication
 					publications.append(Publication(
 						type_id=type_id,
+						citekey=entry['key'],
 						title=entry['title'],
 						authors=authors,
 						year=entry['year'],
