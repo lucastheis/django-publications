@@ -70,6 +70,10 @@ def person(request, name):
 			}, context_instance=RequestContext(request), mimetype='application/rss+xml; charset=UTF-8')
 
 	else:
+		for publication in publications:
+			publication.links = publication.customlink_set.all()
+			publication.files = publication.customfile_set.all()
+
 		return render_to_response('publications/person.html', {
 				'publications': publications,
 				'types': types,

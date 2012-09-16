@@ -3,6 +3,19 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 from django.contrib import admin
+from publications.models import CustomLink, CustomFile
+
+class CustomLinkInline(admin.StackedInline):
+	model = CustomLink
+	extra = 1
+	max_num = 5
+
+
+class CustomFileInline(admin.StackedInline):
+	model = CustomFile
+	extra = 1
+	max_num = 5
+
 
 class PublicationAdmin(admin.ModelAdmin):
 	list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
@@ -19,3 +32,4 @@ class PublicationAdmin(admin.ModelAdmin):
 		(None, {'fields':
 			('abstract',)}),
 	)
+	inlines = [CustomLinkInline, CustomFileInline]

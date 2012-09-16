@@ -4,8 +4,8 @@ __docformat__ = 'epytext'
 
 from django.contrib import admin
 from publications.models import Type, Publication
-from typeadmin import TypeAdmin
 from publicationadmin import PublicationAdmin
+from typeadmin import TypeAdmin
 
 admin.site.register(Type, TypeAdmin)
 admin.site.register(Publication, PublicationAdmin)

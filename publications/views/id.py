@@ -20,6 +20,10 @@ def id(request, publication_id):
 			}, context_instance=RequestContext(request), mimetype='text/x-bibtex; charset=UTF-8')
 
 	else:
+		for publication in publications:
+			publication.links = publication.customlink_set.all()
+			publication.files = publication.customfile_set.all()
+
 		return render_to_response('publications/id.html', {
 				'publications': publications
 			}, context_instance=RequestContext(request))
