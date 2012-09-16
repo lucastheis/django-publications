@@ -22,7 +22,7 @@
 {% if publication.doi %}<a class="link" rel="external" href="http://dx.doi.org/{{ publication.doi }}">DOI</a>,{% endif %}
 {% if publication.pdf %}<a class="link" href="{{ MEDIA_URL }}{{ publication.pdf }}">PDF</a>,{% endif %}
 {% for file in publication.files %}
-	<a class="link" rel="external" href="{{ MEDIA_URL }}{{ file.file }}">{{ file.description }}</a>,
+	<a class="link" href="{{ MEDIA_URL }}{{ file.file }}">{{ file.description }}</a>,
 {% endfor %}
 {% for link in publication.links %}
 	<a class="link" rel="external" href="{{ link.url }}">{{ link.description }}</a>,
