@@ -9,6 +9,7 @@
 {% else %}
 	<i>{% if publication.book_title %}{{ publication.book_title }},{% endif %}
 	{% if publication.publisher %}{{ publication.publisher }},{% endif %}
+	{% if publication.institution %}{{ publication.institution }},{% endif %}
 	{{ publication.year }}</i><br/>
 {% endif %}
 {% if publication.keywords %}
