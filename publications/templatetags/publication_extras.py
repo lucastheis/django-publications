@@ -19,6 +19,9 @@ GREEK_LETTERS = \
 def get_publication(id):
 	pbl = Publication.objects.filter(pk=int(id))
 
+	pbl.links = pbl.customlink_set.all()
+	pbl.files = pbl.customfile_set.all()
+
 	if len(pbl) < 1:
 		return ''
 	return get_template('publications/publication.html').render(
