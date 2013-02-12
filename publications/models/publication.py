@@ -148,7 +148,6 @@ class Publication(models.Model):
 			self.authors = self.authors_list[0]
 
 
-
 	def __unicode__(self):
 		if len(self.title) < 64:
 			return self.title

@@ -140,7 +140,6 @@ def import_bibtex(request):
 				else:
 					msg = 'Successfully added ' + str(len(publications)) + ' publication.'
 
-
 			# show message
 			messages.info(request, msg)
 

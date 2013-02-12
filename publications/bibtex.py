@@ -68,7 +68,6 @@ def parse(string):
 		for key, value in pairs:
 			# post-process key and value
 			key = key.lower()
-			value = value.replace('{', '').replace('}', '')
 			if value and value[0] == '"':
 				value = value[1:]
 			if value and value[-1] == '"':

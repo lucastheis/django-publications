@@ -8,6 +8,7 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from publications.models import Publication
 from re import sub
+from string import replace
 
 register = Library()
 
@@ -29,6 +30,7 @@ def get_publication(id):
 		Context({'publication': pbl[0]}))
 
 def tex_parse(string):
+	string = replace(replace(string, '{', ''), '}', '')
 	def tex_replace(match):
 		return \
 			sub(r'\^(\w)', r'<sup>\1</sup>',
