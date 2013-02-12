@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 from setuptools import setup, find_packages
 from publications import __version__
