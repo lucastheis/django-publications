@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
@@ -124,13 +126,13 @@ class Publication(models.Model):
 			if len(names):
 				self.authors_list[i] = join(names, ' ')
 
-				# create simplified representation of author name
+				# create simplified/normalized representation of author name
 				if len(names) > 1:
 					for name in names[0].split('-'):
-						self.authors_list_simple.append(join(
-							[name.lower(), names[-1].lower()], ' '))
+						name_simple = self.simplify_name(join([name, names[-1]], ' '))
+						self.authors_list_simple.append(name_simple)
 				else:
-					self.authors_list_simple.append(names[0].lower())
+					self.authors_list_simple.append(self.simplify_name(names[0]))
 
 		# list of authors in BibTex format
 		self.authors_bibtex = join(self.authors_list, ' and ')
@@ -215,3 +217,13 @@ class Publication(models.Model):
 	def clean(self):
 		if not self.citekey:
 			self.citekey = self.key()
+
+
+	@staticmethod
+	def simplify_name(name):
+		name = name.lower()
+		name = replace(name, u'ä', u'ae')
+		name = replace(name, u'ö', u'oe')
+		name = replace(name, u'ü', u'ue')
+		name = replace(name, u'ß', u'ss')
+		return name

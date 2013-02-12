@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
@@ -31,15 +33,31 @@ def person(request, name):
 	for t in types:
 		types_dict[t] = []
 
+	# construct a liberal query
+	surname = names[-1]
+	surname = replace(surname, u'ä', u'%%')
+	surname = replace(surname, u'ae', u'%%')
+	surname = replace(surname, u'ö', u'%%')
+	surname = replace(surname, u'oe', u'%%')
+	surname = replace(surname, u'ü', u'%%')
+	surname = replace(surname, u'ue', u'%%')
+	surname = replace(surname, u'ß', u'%%')
+	surname = replace(surname, u'ss', u'%%')
+	query_str = u'SELECT * FROM {table} WHERE lower(authors) LIKE lower(\'%%{surname}%%\')'
+	query = Publication.objects.raw(
+		query_str.format(table=Publication._meta.db_table, surname=surname))
+
+	# further filter results
 	if len(names) > 1:
-		for publication in Publication.objects.filter(authors__icontains=names[-1]):
-			if names[0][0].lower() + '. ' + names[-1].lower() in publication.authors_list_simple:
+		name_simple = Publication.simplify_name(names[0][0] + '. ' + names[-1])
+		for publication in query:
+			if name_simple in publication.authors_list_simple:
 				publications.append(publication)
 				types_dict[publication.type].append(publication)
 
 	elif len(names) > 0:
-		for publication in Publication.objects.filter(authors__icontains=names[-1]):
-			if names[-1].lower() in publication.authors_list_simple:
+		for publication in query:
+			if Publication.simplify_name(names[-1].lower()) in publication.authors_list_simple:
 				publications.append(publication)
 				types_dict[publication.type].append(publication)
 
