@@ -43,4 +43,10 @@ Installation
 	url(r'^publications/', include('publications.urls')),
 	url(r'^admin/publications/publication/import_bibtex/$', 'publications.admin_views.import_bibtex')
 
+Note: add this to your url.py before 
+
+	url(r'^admin/', include(admin.site.urls)),
+
+to avoid an error "type object with primary key u'import_bibtex' does not exist".
+
 4) Run `python <yourproject>/manage.py syncdb`
