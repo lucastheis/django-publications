@@ -36,7 +36,7 @@ Installation
 
 1) Copy the `publications` folder to your project.
 
-2) Add the publications app to `INSTALLED_APPS` in your project's `settings.py`.
+2) Add `publications` to `INSTALLED_APPS` in your project's `settings.py`.
 
 3) Add the following to your project's `urls.py`:
 
