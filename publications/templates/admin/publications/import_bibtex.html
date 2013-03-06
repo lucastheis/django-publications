@@ -1,19 +1,15 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_modify adminmedia %}
+{% load i18n admin_static admin_modify %}
+{% load admin_urls %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />{% endblock %}
-
-{% block extrahead %}{{ block.super }}
-<script type="text/javascript" src="/media/admin/js/admin/RelatedObjectLookups.js"></script>
-{% endblock %}
-
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
 
 {% block breadcrumbs %}
 	<div class="breadcrumbs">
-		<a href="../../../">{% trans "Home" %}</a> &rsaquo;
-		<a href="../../">Publications</a> &rsaquo;
-		<a href="../">Publications</a> &rsaquo;
-		Import BibTex
+		<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo;
+		<a href="../../">{% trans 'Publications' %}</a> &rsaquo;
+		<a href="../">{% trans 'Publications' %}</a> &rsaquo;
+		{% trans 'Import BibTex' %}
 	</div>
 {% endblock %}
 
@@ -24,7 +20,7 @@
 			{{ bib }}
 			<div>
 				{% if errors %}
-					<p class="errornote">Please correct the errors below.</p>
+				<p class="errornote">{% trans 'Please correct the errors below.' %}</p>
 				{% endif %}
 				<fieldset class="module aligned">
 					{% if errors.bibliography %}
@@ -34,14 +30,14 @@
 					<div class="form-row">
 					{% endif %}
 						<div>
-							<label for="id_bibliography" class="required">Bibliography:</label>
+							<label for="id_bibliography" class="required">{% trans 'Bibliography' %}:</label>
 							<textarea rows="20" cols="80" name="bibliography" id="id_bibliography">{{ request.POST.bibliography }}</textarea>
-							<p class="help">Required keys: title, author and year.</p>
+							<p class="help">{% trans 'Required keys: title, author and year.' %}</p>
 						</div>
 					</div>
 				</fieldset>
 				<ul class="submit-row">
-					<li class="submit-button-container"><input type="submit" value="Import" class="default" name="_save" /></li>
+					<li class="submit-button-container"><input type="submit" value="{% trans 'Import' %}" class="default" name="_save" /></li>
 				</ul><br clear="all" />
 			</div>
 		</form>

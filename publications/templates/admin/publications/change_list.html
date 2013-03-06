@@ -1,15 +1,15 @@
 {% extends "admin/base_site.html" %}
-{% load adminmedia admin_list i18n %}
+{% load i18n admin_static admin_list %}
+{% load admin_urls %}
 
 {% block extrastyle %}
   {{ block.super }}
-  <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />
   {% if cl.formset %}
-    <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
   {% endif %}
   {% if cl.formset or action_form %}
-    {% url admin:jsi18n as jsi18nurl %}
-    <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
   {% endif %}
   {{ media.css }}
   {% if not actions_on_top and not actions_on_bottom %}
@@ -38,14 +38,8 @@
 {% if not is_popup %}
   {% block breadcrumbs %}
     <div class="breadcrumbs">
-      <a href="../../">
-        {% trans "Home" %}
-      </a>
-       &rsaquo; 
-       <a href="../">
-         {{ app_label|capfirst }}
-      </a>
-      &rsaquo; 
+       <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo;
+       <a href="{% url 'admin:app_list' app_label=cl.opts.app_label %}">{{ app_label|capfirst|escape }}</a> &rsaquo;
       {{ cl.opts.verbose_name_plural|capfirst }}
     </div>
   {% endblock %}
@@ -59,7 +53,7 @@
       {% if has_add_permission %}
         <ul class="object-tools">
           <li>
-            <a href="import_bibtex/">Import BibTex</a>
+            <a href="import_bibtex/">{% trans 'Import BibTex' %}</a>
           </li>
           <li>
             <a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
@@ -87,10 +81,10 @@
           </div>
         {% endif %}
       {% endblock %}
-      
+
       <form id="changelist-form" action="" method="post"{% if cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
       {% if cl.formset %}
-        {{ cl.formset.management_form }}
+        <div>{{ cl.formset.management_form }}</div>
       {% endif %}
 
       {% block result_list %}

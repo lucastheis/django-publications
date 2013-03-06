@@ -11,7 +11,7 @@ class CustomLink(models.Model):
 
 	publication = models.ForeignKey(Publication)
 	description = models.CharField(max_length=256)
-	url = models.URLField(verify_exists=False, verbose_name='URL')
+	url = models.URLField(verbose_name='URL')
 
 	def __unicode__(self):
 		return self.description
