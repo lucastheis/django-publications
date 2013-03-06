@@ -27,7 +27,7 @@ Requirements
 ------------
 
 * Python >= 2.5.0
-* Django >= 1.3.0
+* Django >= 1.4.0
 
 The app should work with the above versions, but older versions might also work.
 
