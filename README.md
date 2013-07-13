@@ -34,7 +34,7 @@ The app should work with the above versions, but older versions might also work.
 Installation
 ------------
 
-1) Copy the `publications` folder to your project.
+1) Copy the `publications` folder to your project or run `pip install django-publications`.
 
 2) Add `publications` to `INSTALLED_APPS` in your project's `settings.py`.
 
