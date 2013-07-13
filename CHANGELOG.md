@@ -2,6 +2,7 @@
 
 ## 0.5.0
 
+- Fixed compatibility issues with Django 1.5. This breaks compatibility with Django 1.3.
 - Added institution field.
 - Added support for custom links and files.
 - Author names can now be written with umlauts or digraphs and still be recognized as belonging to one author.

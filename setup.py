@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 from publications import __version__
 
 setup(
-	name='Django Publications',
+	name='django-publications',
 	version=__version__,
 	author='Lucas Theis',
 	author_email='lucas@theis.io',
@@ -12,7 +12,8 @@ setup(
 	url='https://github.com/lucastheis/django-publications',
 	packages=find_packages(),
 	include_package_data=True,
-	install_requires=('Python>=2.5.0', 'Django>=1.3.0'),
+	install_requires=('Python>=2.5.0', 'Django>=1.4.0'),
+	zip_safe=False,
 	license='MIT',
 	classifiers=(
 		'Development Status :: 2 - Pre-Alpha',
@@ -22,5 +23,5 @@ setup(
 		'License :: OSI Approved :: MIT License',
 		'Operating System :: OS Independent',
 		'Programming Language :: Python',
-	)
+	),
 )
