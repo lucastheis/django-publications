@@ -16,7 +16,8 @@
 	<i>{% if publication.book_title %}{{ publication.book_title }},{% endif %}
 	{% if publication.publisher %}{{ publication.publisher }},{% endif %}
 	{% if publication.institution %}{{ publication.institution }},{% endif %}
-	{{ publication.year }}</i><br/>
+	{{ publication.year }},
+	{% if publication.isbn %}{{ publication.isbn }}{% endif %}</i><br />
 {% endif %}
 {% if publication.keywords %}
 	{% for keyword, keyword_escaped in publication.keywords_escaped %}
@@ -27,6 +28,7 @@
 {% if publication.code %}<a class="link" href="{{ publication.code }}">Code</a>,{% endif %}
 {% if publication.url %}<a class="link" rel="external" href="{{ publication.url }}">URL</a>,{% endif %}
 {% if publication.doi %}<a class="link" rel="external" href="http://dx.doi.org/{{ publication.doi }}">DOI</a>,{% endif %}
+{% if not publication.journal and publication.isbn %}<a class="link" rel="external" href="http://isbndb.com/search/all?query={{ publication.isbn }}">ISBN</a>,{% endif %}
 {% if publication.pdf %}<a class="link" href="{{ MEDIA_URL }}{{ publication.pdf }}">PDF</a>,{% endif %}
 {% for file in publication.files %}
 	<a class="link" href="{{ MEDIA_URL }}{{ file.file }}">{{ file.description }}</a>,
