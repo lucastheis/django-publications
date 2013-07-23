@@ -74,6 +74,8 @@ class Publication(models.Model):
 	external = models.BooleanField(
 		help_text='If publication was written in another lab, mark as external.')
 	abstract = models.TextField(blank=True)
+	isbn = models.CharField(max_length=32, verbose_name="ISBN", blank=True,
+		help_text='Only for a book.') # A-B-C-D
 
 	def __init__(self, *args, **kwargs):
 		models.Model.__init__(self, *args, **kwargs)

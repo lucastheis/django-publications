@@ -66,6 +66,7 @@ def import_bibtex(request):
 						'institution',
 						'url',
 						'doi',
+						'isbn',
 						'keywords',
 						'note',
 						'abstract',
@@ -109,6 +110,7 @@ def import_bibtex(request):
 						note=entry['note'],
 						url=entry['url'],
 						doi=entry['doi'],
+						isbn=entry['isbn'],
 						abstract=entry['abstract'],
 						keywords=entry['keywords']))
 				else:
