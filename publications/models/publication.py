@@ -14,6 +14,7 @@ class Publication(models.Model):
 	class Meta:
 		app_label = 'publications'
 		ordering = ['-year', '-month', '-id']
+		verbose_name_plural = ' Publications'
 
 	# names shown in admin area
 	MONTH_CHOICES = (
