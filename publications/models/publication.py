@@ -14,6 +14,7 @@ class Publication(models.Model):
 	class Meta:
 		app_label = 'publications'
 		ordering = ['-year', '-month', '-id']
+		verbose_name_plural = ' Publications'
 
 	# names shown in admin area
 	MONTH_CHOICES = (
@@ -104,17 +105,38 @@ class Publication(models.Model):
 		self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] \
 			if len(self.title) > 0 else False
 
+		suffixes = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', "Jr.", "Sr."]
+		prefixes = ['Dr.']
+		prepositions = ['van', 'von', 'der', 'de', 'den']
+
 		# further post-process author names
 		for i, author in enumerate(self.authors_list):
+			if author == '':
+				continue
+
 			names = split(author, ' ')
 
 			# check if last string contains initials
-			if (len(names[-1]) <= 3) and all(c in ascii_uppercase for c in names[-1]):
+			if (len(names[-1]) <= 3) \
+				and names[-1] not in suffixes \
+				and all(c in ascii_uppercase for c in names[-1]):
+				# turn "Gauss CF" into "C. F. Gauss"
 				names = [c + '.' for c in names[-1]] + names[:-1]
 
+			# number of suffixes
+			num_suffixes = 0
+			for name in names[::-1]:
+				if name in suffixes:
+					num_suffixes += 1
+				else:
+					break
+
 			# abbreviate names
-			for j, name in enumerate(names[:-1]):
-				if (j > 0) and name in ['van', 'von', 'der']:
+			for j, name in enumerate(names[:-1 - num_suffixes]):
+				# don't try to abbreviate these
+				if j == 0 and name in prefixes:
+					continue
+				if j > 0 and name in prepositions:
 					continue
 
 				if (len(name) > 2) or (len(name) and (name[-1] != '.')):
