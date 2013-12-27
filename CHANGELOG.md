@@ -2,7 +2,7 @@
 
 ## 0.5.1
 
-– Restored backwards compatibility with Django 1.3.
+- Restored backwards compatibility with Django 1.3.
 - Improved BibTex parsing.
 - Added ISBN field.
 
