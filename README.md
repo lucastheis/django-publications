@@ -27,7 +27,7 @@ Requirements
 ------------
 
 * Python >= 2.5.0
-* Django >= 1.4.0
+* Django >= 1.3.0
 
 The app should work with the above versions, but older versions might also work.
 
@@ -46,3 +46,9 @@ Installation
 The second line has to come before `url(r'^admin/', include(admin.site.urls))`!
 
 4) Run `python <yourproject>/manage.py syncdb`
+
+Troubleshooting
+---------------
+
+If Django throws a `TemplateDoesNotExist` error, try adding the absolute path
+to `publications/templates/` to `TEMPLATE_DIRS` in your `settings.py`.

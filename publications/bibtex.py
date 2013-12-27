@@ -3,7 +3,7 @@
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 import re
 
@@ -56,11 +56,11 @@ def parse(string):
 		string = string.replace(key.decode('utf-8'), value.decode('utf-8'))
 
 	# split into BibTex entries
-	entries = re.findall(r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{[^}]*}|[^,}]*),?\s*?)+)\s*}', string)
+	entries = re.findall(r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,}]*),?\s*?)+)\s*}', string)
 
 	for entry in entries:
 		# parse entry
-		pairs = re.findall(r'(?u)([^=,\s]+)\s*\=\s*("[^"]*"|{[^}]*}|[^,]*)', entry[2])
+		pairs = re.findall(r'(?u)([^=,\s]+)\s*\=\s*("[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,]*)', entry[2])
 
 		# add to bibliography
 		bib.append({u'type': entry[0].lower(), u'key': entry[1]})
@@ -68,10 +68,12 @@ def parse(string):
 		for key, value in pairs:
 			# post-process key and value
 			key = key.lower()
-			if value and value[0] == '"':
-				value = value[1:]
-			if value and value[-1] == '"':
-				value = value[:-1]
+			if value and value[0] == '"' and value[-1] == '"':
+				value = value[1:-1]
+			if value and value[0] == '{' and value[-1] == '}':
+				value = value[1:-1]
+			if key not in ['booktitle', 'title']:
+				value = value.replace('}', '').replace('{', '')
 			value = value.strip()
 			value = re.sub(r'\s+', ' ', value)
 

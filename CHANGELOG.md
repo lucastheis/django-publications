@@ -1,5 +1,11 @@
 # django-publications
 
+## 0.5.1
+
+- Restored backwards compatibility with Django 1.3.
+- Improved BibTex parsing.
+- Added ISBN field.
+
 ## 0.5.0
 
 - Fixed compatibility issues with Django 1.5. This breaks compatibility with Django 1.3.
