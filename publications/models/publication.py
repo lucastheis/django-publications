@@ -8,9 +8,13 @@ from django.db import models
 from django.utils.http import urlquote_plus
 from string import split, strip, join, replace, ascii_uppercase
 from publications.fields import PagesField
-from publications.models import Type
+from publications.models import Type, List
 
 class Publication(models.Model):
+	"""
+	Model representing a publication.
+	"""
+
 	class Meta:
 		app_label = 'publications'
 		ordering = ['-year', '-month', '-id']
@@ -77,6 +81,7 @@ class Publication(models.Model):
 	abstract = models.TextField(blank=True)
 	isbn = models.CharField(max_length=32, verbose_name="ISBN", blank=True,
 		help_text='Only for a book.') # A-B-C-D
+	lists = models.ManyToManyField(List, blank=True)
 
 	def __init__(self, *args, **kwargs):
 		models.Model.__init__(self, *args, **kwargs)

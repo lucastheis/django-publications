@@ -23,13 +23,15 @@ class PublicationAdmin(admin.ModelAdmin):
 	change_list_template = 'admin/publications/change_list.html'
 	search_fields = ('title', 'journal', 'authors', 'keywords', 'year')
 	fieldsets = (
-		(None, {'fields': 
+		(None, {'fields':
 			('type', 'title', 'authors', 'year', 'month')}),
-		(None, {'fields': 
+		(None, {'fields':
 			('journal', 'book_title', 'publisher', 'institution', 'volume', 'number', 'pages')}),
-		(None, {'fields': 
+		(None, {'fields':
 			('citekey', 'keywords', 'url', 'code', 'pdf', 'doi', 'isbn', 'note', 'external')}),
 		(None, {'fields':
 			('abstract',)}),
+		(None, {'fields':
+			('lists',)}),
 	)
 	inlines = [CustomLinkInline, CustomFileInline]
