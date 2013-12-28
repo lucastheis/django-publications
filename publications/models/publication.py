@@ -71,6 +71,8 @@ class Publication(models.Model):
 	code = models.URLField(blank=True,
 		help_text='Link to page with code.')
 	pdf = models.FileField(upload_to='publications/', verbose_name='PDF', blank=True, null=True)
+	image = models.ImageField(upload_to='publications/images/', blank=True, null=True)
+	banner = models.ImageField(upload_to='publications/banners/', blank=True, null=True)
 	doi = models.CharField(max_length=128, verbose_name='DOI', blank=True)
 	external = models.BooleanField(
 		help_text='If publication was written in another lab, mark as external.')
