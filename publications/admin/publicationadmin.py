@@ -30,9 +30,9 @@ class PublicationAdmin(admin.ModelAdmin):
 		(None, {'fields':
 			('citekey', 'keywords', 'url', 'code', 'pdf', 'doi', 'isbn', 'note', 'external')}),
 		(None, {'fields':
-			('image', 'banner')}),
-		(None, {'fields':
 			('abstract',)}),
+		(None, {'fields':
+			('image', 'banner')}),
 		(None, {'fields':
 			('lists',)}),
 	)

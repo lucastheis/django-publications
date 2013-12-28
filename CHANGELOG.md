@@ -1,5 +1,10 @@
 # django-publications
 
+## 0.6.0
+
+– Added the possibility to create lists of publications.
+- Added support for images.
+
 ## 0.5.1
 
 - Restored backwards compatibility with Django 1.3.
