@@ -3,15 +3,19 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 from django.db import models
-from publications.models import Publication
 
-class CustomFile(models.Model):
+class List(models.Model):
+	"""
+	Model representing a list of publications.
+	"""
+
 	class Meta:
 		app_label = 'publications'
+		ordering = ('list',)
+		verbose_name_plural = 'Lists'
 
-	publication = models.ForeignKey(Publication)
-	description = models.CharField(max_length=256)
-	file = models.FileField(upload_to='publications/')
+	list = models.CharField(max_length=128)
+	description = models.CharField(max_length=128)
 
 	def __unicode__(self):
-		return self.description
+		return self.list

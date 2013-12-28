@@ -10,6 +10,7 @@ class Type(OrderedModel):
 	class Meta:
 		ordering = ('order',)
 		app_label = 'publications'
+		verbose_name_plural = '  Types'
 
 	type = models.CharField(max_length=128)
 	description = models.CharField(max_length=128)

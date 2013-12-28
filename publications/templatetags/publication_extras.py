@@ -2,11 +2,13 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
+import os
+
 from django.template import Library, Node, Context
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from publications.models import Publication
+from publications.models import Publication, List
 from re import sub
 from string import replace
 
@@ -29,6 +31,28 @@ def get_publication(id):
 	return get_template('publications/publication.html').render(
 		Context({'publication': pbl[0]}))
 
+
+def get_publication_list(list, template='publications/publications.html'):
+	list = List.objects.filter(list__iexact=list)
+
+	if not list:
+		return ''
+
+	list = list[0]
+	publications = list.publication_set.all()
+	publications = publications.order_by('-year', '-month', '-id')
+
+	if not publications:
+		return ''
+
+	for publication in publications:
+		publication.links = publication.customlink_set.all()
+		publication.files = publication.customfile_set.all()
+
+	return get_template(template).render(
+			Context({'list': list, 'publications': publications}))
+
+
 def tex_parse(string):
 	string = replace(replace(string, '{', ''), '}', '')
 	def tex_replace(match):
@@ -41,4 +65,5 @@ def tex_parse(string):
 	return mark_safe(sub(r'\$([^\$]*)\$', tex_replace, escape(string)))
 
 register.simple_tag(get_publication)
+register.simple_tag(get_publication_list)
 register.filter('tex_parse', tex_parse)

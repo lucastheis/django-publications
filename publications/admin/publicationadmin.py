@@ -33,5 +33,7 @@ class PublicationAdmin(admin.ModelAdmin):
 			('image', 'banner')}),
 		(None, {'fields':
 			('abstract',)}),
+		(None, {'fields':
+			('lists',)}),
 	)
 	inlines = [CustomLinkInline, CustomFileInline]

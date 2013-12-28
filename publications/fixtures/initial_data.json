@@ -86,5 +86,13 @@
 			"bibtex_types": "unpublished",
 			"hidden": 1
 		}
+	},
+	{
+	"model": "publications.list",
+	"pk": 1,
+		"fields": {
+			"list": "Highlights",
+			"description": "Highlights"
+		}
 	}
 ]
