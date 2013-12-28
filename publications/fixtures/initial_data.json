@@ -92,7 +92,7 @@
 	"pk": 1,
 		"fields": {
 			"list": "Highlights",
-			"description": "Highlighted publications."
+			"description": "Highlights"
 		}
 	}
 ]

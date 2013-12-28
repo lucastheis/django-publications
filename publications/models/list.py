@@ -15,7 +15,7 @@ class List(models.Model):
 		verbose_name_plural = 'Lists'
 
 	list = models.CharField(max_length=128)
-	description = models.CharField(max_length=128, blank=True)
+	description = models.CharField(max_length=128)
 
 	def __unicode__(self):
 		return self.list

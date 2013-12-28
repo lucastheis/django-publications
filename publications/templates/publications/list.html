@@ -6,7 +6,7 @@
 			<a href="?ascii">plain text</a>, 
 			<a href="?bibtex">BibTex</a>
 		</div>
-		<h1>{{ list }}</h1>
+		<h1>{{ list.description }}</h1>
 		<hr/>
 		{% for publication in publications %}
 			<div{% if not forloop.last %} style="margin-bottom: 20px;"{% endif %}>
