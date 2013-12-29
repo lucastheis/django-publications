@@ -2,7 +2,10 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
-from django.conf.urls import *
+try:
+	from django.conf.urls import patterns
+except ImportError:
+	from django.conf.urls.defaults import patterns
 
 urlpatterns = patterns('',
 	(r'^$', 'publications.views.year'),
