@@ -4,7 +4,7 @@ __docformat__ = 'epytext'
 
 import os
 
-from django.template import Library, Node, Context
+from django.template import Library, Node, Context, RequestContext
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -19,7 +19,7 @@ GREEK_LETTERS = \
 	'[Ee]ta|[Tt]heta|[Ll]ambda|[Mm]u|[Nn]u|[Pp]i|[Ss]igma|[Tt]au|' + \
 	'[Pp]hi|[Pp]si|[Cc]hi|[Oo]mega|[Rr]ho|[Xx]i|[Kk]appa'
 
-def get_publication(id):
+def get_publication(context, id):
 	pbl = Publication.objects.filter(pk=int(id))
 
 	if len(pbl) < 1:
@@ -29,10 +29,10 @@ def get_publication(id):
 	pbl[0].files = pbl[0].customfile_set.all()
 
 	return get_template('publications/publication.html').render(
-		Context({'publication': pbl[0]}))
+		RequestContext(context['request'], {'publication': pbl[0]}))
 
 
-def get_publication_list(list, template='publications/publications.html'):
+def get_publication_list(context, list, template='publications/publications.html'):
 	list = List.objects.filter(list__iexact=list)
 
 	if not list:
@@ -50,7 +50,7 @@ def get_publication_list(list, template='publications/publications.html'):
 		publication.files = publication.customfile_set.all()
 
 	return get_template(template).render(
-			Context({'list': list, 'publications': publications}))
+			RequestContext(context['request'], {'list': list, 'publications': publications}))
 
 
 def tex_parse(string):
@@ -64,6 +64,6 @@ def tex_parse(string):
 			sub(r'\\(' + GREEK_LETTERS + ')', r'&\1;', match.group(1))))))
 	return mark_safe(sub(r'\$([^\$]*)\$', tex_replace, escape(string)))
 
-register.simple_tag(get_publication)
-register.simple_tag(get_publication_list)
+register.simple_tag(get_publication, takes_context=True)
+register.simple_tag(get_publication_list, takes_context=True)
 register.filter('tex_parse', tex_parse)
