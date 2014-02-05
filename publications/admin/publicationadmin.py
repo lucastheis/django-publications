@@ -32,7 +32,7 @@ class PublicationAdmin(admin.ModelAdmin):
 		(None, {'fields':
 			('abstract',)}),
 		(None, {'fields':
-			('image', 'banner')}),
+			('image', 'thumbnail')}),
 		(None, {'fields':
 			('lists',)}),
 	)

@@ -12,12 +12,12 @@ def id(request, publication_id):
 	if 'ascii' in request.GET:
 		return render_to_response('publications/publications.txt', {
 				'publications': publications
-			}, context_instance=RequestContext(request), mimetype='text/plain; charset=UTF-8')
+			}, context_instance=RequestContext(request), content_type='text/plain; charset=UTF-8')
 
 	elif 'bibtex' in request.GET:
 		return render_to_response('publications/publications.bib', {
 				'publications': publications
-			}, context_instance=RequestContext(request), mimetype='text/x-bibtex; charset=UTF-8')
+			}, context_instance=RequestContext(request), content_type='text/x-bibtex; charset=UTF-8')
 
 	else:
 		for publication in publications:

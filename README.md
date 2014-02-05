@@ -47,10 +47,4 @@ Installation
 
 The second line has to come before `url(r'^admin/', include(admin.site.urls))`!
 
-4) Run `python <yourproject>/manage.py syncdb`
-
-Troubleshooting
----------------
-
-If Django throws a `TemplateDoesNotExist` error, try adding the absolute path
-to `publications/templates/` to `TEMPLATE_DIRS` in your `settings.py`.
+4) Run `./manage.py syncdb`
