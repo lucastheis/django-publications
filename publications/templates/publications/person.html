@@ -8,7 +8,7 @@
 {% block content %}
 	{% if publications %}
 		<div class="special_links">
-			<a href="?ascii">plain text</a>, 
+			<a href="?ascii">Plain text</a>,
 			<a href="?bibtex">BibTex</a>
 		</div>
 		{% for type in types %}
@@ -23,7 +23,6 @@
 			</div>
 		{% endfor %}
 	{% else %}
-		<h2>Sorry,</h2>
-		no publications found for {{ author }}.
+		No publications found for {{ author }}.
 	{% endif %}
 {% endblock %}
