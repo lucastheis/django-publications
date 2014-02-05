@@ -16,8 +16,8 @@
 	<i>{% if publication.book_title %}{{ publication.book_title }},{% endif %}
 	{% if publication.publisher %}{{ publication.publisher }},{% endif %}
 	{% if publication.institution %}{{ publication.institution }},{% endif %}
-	{{ publication.year }},
-	{% if publication.isbn %}ISBN {{ publication.isbn }}{% endif %}</i><br />
+	{{ publication.year }}{% if publication.isbn %},
+	ISBN {{ publication.isbn }}{% endif %}</i><br />
 {% endif %}
 {% if publication.keywords %}
 	{% for keyword, keyword_escaped in publication.keywords_escaped %}

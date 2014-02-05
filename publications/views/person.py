@@ -43,7 +43,7 @@ def person(request, name):
 	surname = replace(surname, u'ue', u'%%')
 	surname = replace(surname, u'ß', u'%%')
 	surname = replace(surname, u'ss', u'%%')
-	query_str = u'SELECT * FROM {table} WHERE lower(authors) LIKE lower(\'%%{surname}%%\')'
+	query_str = u'SELECT * FROM {table} WHERE lower(authors) LIKE lower(\'%%{surname}%%\') ORDER BY year DESC, month DESC, id DESC'
 	query = Publication.objects.raw(
 		query_str.format(table=Publication._meta.db_table, surname=surname))
 

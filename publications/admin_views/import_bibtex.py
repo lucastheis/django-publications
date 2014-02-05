@@ -111,6 +111,7 @@ def import_bibtex(request):
 						url=entry['url'],
 						doi=entry['doi'],
 						isbn=entry['isbn'],
+						external=False,
 						abstract=entry['abstract'],
 						keywords=entry['keywords']))
 				else:

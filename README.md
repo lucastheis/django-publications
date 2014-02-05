@@ -22,14 +22,16 @@ Features
 * customizable publication categories/BibTex entry types
 * PDF upload
 * RSS feeds
+* support for images
 
 Requirements
 ------------
 
 * Python >= 2.5.0
-* Django >= 1.3.0
+* Django >= 1.4.0
+* PIL >= 1.7.0
 
-The app should work with the above versions, but older versions might also work.
+The app was tested with the versions above, but older versions might also work.
 
 Installation
 ------------

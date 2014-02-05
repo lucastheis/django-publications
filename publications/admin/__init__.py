@@ -7,6 +7,7 @@ from publications.models import Type, List, Publication
 from publicationadmin import PublicationAdmin
 from typeadmin import TypeAdmin
 from listadmin import ListAdmin
+from orderedmodeladmin import OrderedModelAdmin
 
 admin.site.register(Type, TypeAdmin)
 admin.site.register(List, ListAdmin)
