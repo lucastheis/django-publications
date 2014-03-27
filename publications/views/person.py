@@ -7,10 +7,10 @@ __docformat__ = 'epytext'
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from publications.models import Type, Publication
-from string import capwords, replace, split
+from string import capwords
 
 def person(request, name):
-	author = capwords(replace(name, '+', ' '))
+	author = capwords(name.replace('+', ' '))
 	author = author.replace(' Von ', ' von ').replace(' Van ', ' van ')
 	author = author.replace(' Der ', ' der ')
 
@@ -23,7 +23,7 @@ def person(request, name):
 		off = author.find('-', off)
 
 	# split into forename, middlenames and surname
-	names = split(replace(name, ' ', '+'), '+')
+	names = name.replace(' ', '+').split('+')
 
 	# find publications of this author
 	publications = []
@@ -35,14 +35,14 @@ def person(request, name):
 
 	# construct a liberal query
 	surname = names[-1]
-	surname = replace(surname, u'ä', u'%%')
-	surname = replace(surname, u'ae', u'%%')
-	surname = replace(surname, u'ö', u'%%')
-	surname = replace(surname, u'oe', u'%%')
-	surname = replace(surname, u'ü', u'%%')
-	surname = replace(surname, u'ue', u'%%')
-	surname = replace(surname, u'ß', u'%%')
-	surname = replace(surname, u'ss', u'%%')
+	surname = surname.replace(u'ä', u'%%')
+	surname = surname.replace(u'ae', u'%%')
+	surname = surname.replace(u'ö', u'%%')
+	surname = surname.replace(u'oe', u'%%')
+	surname = surname.replace(u'ü', u'%%')
+	surname = surname.replace(u'ue', u'%%')
+	surname = surname.replace(u'ß', u'%%')
+	surname = surname.replace(u'ss', u'%%')
 	query_str = u'SELECT * FROM {table} WHERE lower(authors) LIKE lower(\'%%{surname}%%\') ORDER BY year DESC, month DESC, id DESC'
 	query = Publication.objects.raw(
 		query_str.format(table=Publication._meta.db_table, surname=surname))

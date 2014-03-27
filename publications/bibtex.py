@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 __version__ = '1.2.0'
 
-import re
+import re, six
 
 # special character mapping
 special_chars = (
@@ -48,12 +49,12 @@ def parse(string):
 	bib = []
 
 	# make sure we are dealing with unicode strings
-	if not isinstance(string, unicode):
+	if not isinstance(string, six.text_type):
 		string = string.decode('utf-8')
 
 	# replace special characters
 	for key, value in special_chars:
-		string = string.replace(key.decode('utf-8'), value.decode('utf-8'))
+		string = string.replace(key, value)
 
 	# split into BibTex entries
 	entries = re.findall(r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,}]*),?\s*?)+)\s*}', string)
@@ -63,7 +64,7 @@ def parse(string):
 		pairs = re.findall(r'(?u)([^=,\s]+)\s*\=\s*("[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,]*)', entry[2])
 
 		# add to bibliography
-		bib.append({u'type': entry[0].lower(), u'key': entry[1]})
+		bib.append({'type': entry[0].lower(), 'key': entry[1]})
 
 		for key, value in pairs:
 			# post-process key and value
