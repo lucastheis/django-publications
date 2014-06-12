@@ -7,9 +7,9 @@ __docformat__ = 'epytext'
 from django.db import models
 from django.utils.http import urlquote_plus
 from django.contrib.sites.models import Site
-from string import split, strip, join, replace, ascii_uppercase
 from publications.fields import PagesField
 from publications.models import Type, List
+from string import ascii_uppercase
 
 class Publication(models.Model):
 	"""
@@ -90,21 +90,21 @@ class Publication(models.Model):
 		models.Model.__init__(self, *args, **kwargs)
 
 		# post-process keywords
-		self.keywords = replace(self.keywords, ';', ',')
-		self.keywords = replace(self.keywords, ', and ', ', ')
-		self.keywords = replace(self.keywords, ',and ', ', ')
-		self.keywords = replace(self.keywords, ' and ', ', ')
-		self.keywords = [strip(s).lower() for s in split(self.keywords, ',')]
-		self.keywords = join(self.keywords, ', ').lower()
+		self.keywords = self.keywords.replace(';', ',')
+		self.keywords = self.keywords.replace(', and ', ', ')
+		self.keywords = self.keywords.replace(',and ', ', ')
+		self.keywords = self.keywords.replace(' and ', ', ')
+		self.keywords = [s.strip().lower() for s in self.keywords.split(',')]
+		self.keywords = ', '.join(self.keywords).lower()
 
 		# post-process author names
-		self.authors = replace(self.authors, ', and ', ', ')
-		self.authors = replace(self.authors, ',and ', ', ')
-		self.authors = replace(self.authors, ' and ', ', ')
-		self.authors = replace(self.authors, ';', ',')
+		self.authors = self.authors.replace(', and ', ', ')
+		self.authors = self.authors.replace(',and ', ', ')
+		self.authors = self.authors.replace(' and ', ', ')
+		self.authors = self.authors.replace(';', ',')
 
 		# list of authors
-		self.authors_list = [strip(author) for author in split(self.authors, ',')]
+		self.authors_list = [author.strip() for author in self.authors.split(',')]
 
 		# simplified representation of author names
 		self.authors_list_simple = []
@@ -122,7 +122,7 @@ class Publication(models.Model):
 			if author == '':
 				continue
 
-			names = split(author, ' ')
+			names = author.split(' ')
 
 			# check if last string contains initials
 			if (len(names[-1]) <= 3) \
@@ -156,26 +156,26 @@ class Publication(models.Model):
 						names[j] = name[0] + '.'
 
 			if len(names):
-				self.authors_list[i] = join(names, ' ')
+				self.authors_list[i] = ' '.join(names)
 
 				# create simplified/normalized representation of author name
 				if len(names) > 1:
 					for name in names[0].split('-'):
-						name_simple = self.simplify_name(join([name, names[-1]], ' '))
+						name_simple = self.simplify_name(' '.join([name, names[-1]]))
 						self.authors_list_simple.append(name_simple)
 				else:
 					self.authors_list_simple.append(self.simplify_name(names[0]))
 
 		# list of authors in BibTex format
-		self.authors_bibtex = join(self.authors_list, ' and ')
+		self.authors_bibtex = ' and '.join(self.authors_list)
 
 		# overwrite authors string
 		if len(self.authors_list) > 2:
-			self.authors = join([
-				join(self.authors_list[:-1], ', '),
-				self.authors_list[-1]], ', and ')
+			self.authors = ', and '.join([
+				', '.join(self.authors_list[:-1]),
+				self.authors_list[-1]])
 		elif len(self.authors_list) > 1:
-			self.authors = join(self.authors_list, ' and ')
+			self.authors = ' and '.join(self.authors_list)
 		else:
 			self.authors = self.authors_list[0]
 
@@ -193,12 +193,12 @@ class Publication(models.Model):
 
 
 	def keywords_escaped(self):
-		return [(strip(keyword), urlquote_plus(strip(keyword)))
-			for keyword in split(self.keywords, ',')]
+		return [(keyword.strip(), urlquote_plus(keyword.strip()))
+			for keyword in self.keywords.split(',')]
 
 
 	def authors_escaped(self):
-		return [(author, replace(author.lower(), ' ', '+'))
+		return [(author, author.lower().replace(' ', '+'))
 			for author in self.authors_list]
 
 
@@ -317,8 +317,8 @@ class Publication(models.Model):
 	@staticmethod
 	def simplify_name(name):
 		name = name.lower()
-		name = replace(name, u'ä', u'ae')
-		name = replace(name, u'ö', u'oe')
-		name = replace(name, u'ü', u'ue')
-		name = replace(name, u'ß', u'ss')
+		name = name.replace( u'ä', u'ae')
+		name = name.replace( u'ö', u'oe')
+		name = name.replace( u'ü', u'ue')
+		name = name.replace( u'ß', u'ss')
 		return name

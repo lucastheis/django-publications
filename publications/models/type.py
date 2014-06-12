@@ -4,7 +4,6 @@ __docformat__ = 'epytext'
 
 from django.db import models
 from publications.models.orderedmodel import OrderedModel
-from string import replace, split, strip
 
 class Type(OrderedModel):
 	class Meta:
@@ -27,10 +26,10 @@ class Type(OrderedModel):
 	def __init__(self, *args, **kwargs):
 		OrderedModel.__init__(self, *args, **kwargs)
 
-		self.bibtex_types = replace(self.bibtex_types, '@', '')
-		self.bibtex_types = replace(self.bibtex_types, ';', ',')
-		self.bibtex_types = replace(self.bibtex_types, 'and', ',')
-		self.bibtex_type_list = [strip(s).lower()
-			for s in split(self.bibtex_types, ',')]
+		self.bibtex_types = self.bibtex_types.replace('@', '')
+		self.bibtex_types = self.bibtex_types.replace(';', ',')
+		self.bibtex_types = self.bibtex_types.replace('and', ',')
+		self.bibtex_type_list = [s.strip().lower()
+			for s in self.bibtex_types.split(',')]
 		self.bibtex_types = ', '.join(self.bibtex_type_list)
 		self.bibtex_type = self.bibtex_type_list[0]

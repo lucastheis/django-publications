@@ -5,11 +5,10 @@ __docformat__ = 'epytext'
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from publications.models import Type, Publication
-from string import replace, split
 
 def keyword(request, keyword):
-	keyword = replace(keyword.lower(), ' ', '+')
-	candidates = Publication.objects.filter(keywords__icontains=split(keyword, '+')[0], external=False)
+	keyword = keyword.lower().replace(' ', '+')
+	candidates = Publication.objects.filter(keywords__icontains=keyword.split('+')[0], external=False)
 	publications = []
 
 	for i, publication in enumerate(candidates):
@@ -33,5 +32,5 @@ def keyword(request, keyword):
 
 		return render_to_response('publications/keyword.html', {
 				'publications': publications,
-				'keyword': replace(keyword, '+', ' ')
+				'keyword': keyword.replace('+', ' ')
 			}, context_instance=RequestContext(request))

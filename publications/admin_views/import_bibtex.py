@@ -9,7 +9,6 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from publications.bibtex import parse
 from publications.models import Publication, Type
-from string import split, join
 
 # mapping of months
 MONTHS = {
@@ -47,16 +46,16 @@ def import_bibtex(request):
 
 			# try adding publications
 			for entry in bib:
-				if entry.has_key('title') and \
-				   entry.has_key('author') and \
-				   entry.has_key('year'):
+				if 'title' in entry and \
+				   'author' in entry and \
+				   'year' in entry:
 					# parse authors
-					authors = split(entry['author'], ' and ')
+					authors = entry['author'].split(' and ')
 					for i in range(len(authors)):
-						author = split(authors[i], ',')
+						author = authors[i].split(',')
 						author = [author[-1]] + author[:-1]
-						authors[i] = join(author, ' ')
-					authors = join(authors, ', ')
+						authors[i] = ' '.join(author)
+					authors = ', '.join(authors)
 
 					# add missing keys
 					keys = [
@@ -73,7 +72,7 @@ def import_bibtex(request):
 						'month']
 
 					for key in keys:
-						if not entry.has_key(key):
+						if not key in entry:
 							entry[key] = ''
 
 					# map integer fields to integers
