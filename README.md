@@ -23,6 +23,7 @@ Features
 * PDF upload
 * RSS feeds
 * support for images
+* support for Zotero/OpenURL
 
 Requirements
 ------------

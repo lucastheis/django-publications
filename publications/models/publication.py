@@ -6,6 +6,7 @@ __docformat__ = 'epytext'
 
 from django.db import models
 from django.utils.http import urlquote_plus
+from django.contrib.sites.models import Site
 from string import split, strip, join, replace, ascii_uppercase
 from publications.fields import PagesField
 from publications.models import Type, List
@@ -244,9 +245,73 @@ class Publication(models.Model):
 			return self.book_title
 
 
+	def z3988(self):
+		contextObj = ['ctx_ver=Z39.88-2004']
+
+		current_site = Site.objects.get_current()
+
+		rfr_id = current_site.domain.split('.')
+
+		if len(rfr_id) > 2:
+			rfr_id = rfr_id[-2]
+		elif len(rfr_id) > 1:
+			rfr_id = rfr_id[0]
+		else:
+			rfr_id = ''
+
+		if self.book_title and not self.journal:
+			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:book')
+			contextObj.append('rfr_id=info:sid/' + current_site.domain + ':' + rfr_id)
+			contextObj.append('rft_id=' + urlquote_plus(self.doi))
+
+			contextObj.append('rft.btitle=' + urlquote_plus(self.title))
+
+			if self.publisher:
+				contextObj.append('rft.pub=' + urlquote_plus(self.publisher))
+
+		else:
+			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
+			contextObj.append('rfr_id=info:sid/' + current_site.domain + ':' + rfr_id)
+			contextObj.append('rft_id=' + urlquote_plus(self.doi))
+			contextObj.append('rft.atitle=' + urlquote_plus(self.title))
+
+			if self.journal:
+				contextObj.append('rft.jtitle=' + urlquote_plus(self.journal))
+
+			if self.volume:
+				contextObj.append('rft.volume={0}'.format(self.volume))
+
+			if self.pages:
+				contextObj.append('rft.pages=' + urlquote_plus(self.pages))
+
+			if self.number:
+				contextObj.append('rft.issue={0}'.format(self.number))
+
+		if self.month:
+			contextObj.append('rft.date={0}-{1}-1'.format(self.year, self.month))
+		else:
+			contextObj.append('rft.date={0}'.format(self.year))
+
+		for author in self.authors_list:
+			contextObj.append('rft.au=' + urlquote_plus(author))
+
+
+		if self.isbn:
+			contextObj.append('rft.isbn=' + urlquote_plus(self.isbn))
+
+		return '&'.join(contextObj)
+
+
 	def clean(self):
 		if not self.citekey:
 			self.citekey = self.key()
+
+		# remove unnecessary whitespace
+		self.title = strip(self.title)
+		self.journal = strip(self.journal)
+		self.book_title = strip(self.book_title)
+		self.publisher = strip(self.publisher)
+		self.institution = strip(self.institution)
 
 
 	@staticmethod
