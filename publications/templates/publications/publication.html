@@ -11,9 +11,13 @@
 {% endif %}
 <b><a href="/publications/{{ publication.pk }}/" class="title">{{ publication.title|tex_parse }}</a></b><br/>
 {% if publication.journal %}
-	<i>{{ publication.journal }}, {{ publication.year }}</i><br />
+	<i>{{ publication.journal }}{% if publication.note %} ({{ publication.note }}){% endif %},
+	{% if publication.volume %}<b>{{ publication.volume }}</b>{% if publication.number %}({{ publication.number }}){% endif %},{% endif %}
+	{% if publication.pages %}{{ publication.pages }},{% endif %}
+	{{ publication.year }}
+	</i><br />
 {% else %}
-	<i>{% if publication.book_title %}{{ publication.book_title }},{% endif %}
+	<i>{% if publication.book_title %}{{ publication.book_title }}{% if publication.note %} ({{ publication.note }}){% endif %},{% endif %}
 	{% if publication.publisher %}{{ publication.publisher }},{% endif %}
 	{% if publication.institution %}{{ publication.institution }},{% endif %}
 	{{ publication.year }}{% if publication.isbn %},

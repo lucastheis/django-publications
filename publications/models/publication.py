@@ -226,7 +226,7 @@ class Publication(models.Model):
 	def month_bibtex(self):
 		return self.MONTH_BIBTEX.get(self.month, '')
 
-	
+
 	def month_long(self):
 		for month_int, month_str in self.MONTH_CHOICES:
 			if month_int == self.month:
@@ -307,11 +307,11 @@ class Publication(models.Model):
 			self.citekey = self.key()
 
 		# remove unnecessary whitespace
-		self.title = strip(self.title)
-		self.journal = strip(self.journal)
-		self.book_title = strip(self.book_title)
-		self.publisher = strip(self.publisher)
-		self.institution = strip(self.institution)
+		self.title = self.title.strip()
+		self.journal = self.journal.strip()
+		self.book_title = self.book_title.strip()
+		self.publisher = self.publisher.strip()
+		self.institution = self.institution.strip()
 
 
 	@staticmethod
