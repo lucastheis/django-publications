@@ -6,6 +6,7 @@ __docformat__ = 'epytext'
 
 from django.db import models
 from django.utils.http import urlquote_plus
+from django.conf import settings
 from django.contrib.sites.models import Site
 from publications.fields import PagesField
 from publications.models import Type, List
@@ -248,9 +249,12 @@ class Publication(models.Model):
 	def z3988(self):
 		contextObj = ['ctx_ver=Z39.88-2004']
 
-		current_site = Site.objects.get_current()
+		if 'django.contrib.sites' in settings.INSTALLED_APPS:
+			domain = Site.objects.get_current()
+		else:
+			domain = 'example.com'
 
-		rfr_id = current_site.domain.split('.')
+		rfr_id = domain.split('.')
 
 		if len(rfr_id) > 2:
 			rfr_id = rfr_id[-2]
@@ -261,7 +265,7 @@ class Publication(models.Model):
 
 		if self.book_title and not self.journal:
 			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:book')
-			contextObj.append('rfr_id=info:sid/' + current_site.domain + ':' + rfr_id)
+			contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
 			contextObj.append('rft_id=' + urlquote_plus(self.doi))
 
 			contextObj.append('rft.btitle=' + urlquote_plus(self.title))
@@ -271,7 +275,7 @@ class Publication(models.Model):
 
 		else:
 			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
-			contextObj.append('rfr_id=info:sid/' + current_site.domain + ':' + rfr_id)
+			contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
 			contextObj.append('rft_id=' + urlquote_plus(self.doi))
 			contextObj.append('rft.atitle=' + urlquote_plus(self.title))
 
