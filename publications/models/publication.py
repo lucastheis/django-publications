@@ -4,6 +4,8 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
+import os
+
 from django.db import models
 from django.utils.http import urlquote_plus
 from django.conf import settings
@@ -246,6 +248,14 @@ class Publication(models.Model):
 			return self.book_title
 
 
+	def first_page(self):
+		return self.pages.split('-')[0]
+
+
+	def last_page(self):
+		return self.pages.split('-')[-1]
+
+
 	def z3988(self):
 		contextObj = ['ctx_ver=Z39.88-2004']
 
@@ -266,7 +276,7 @@ class Publication(models.Model):
 		if self.book_title and not self.journal:
 			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:book')
 			contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
-			contextObj.append('rft_id=' + urlquote_plus(self.doi))
+			contextObj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
 
 			contextObj.append('rft.btitle=' + urlquote_plus(self.title))
 
@@ -276,7 +286,7 @@ class Publication(models.Model):
 		else:
 			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
 			contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
-			contextObj.append('rft_id=' + urlquote_plus(self.doi))
+			contextObj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
 			contextObj.append('rft.atitle=' + urlquote_plus(self.title))
 
 			if self.journal:
