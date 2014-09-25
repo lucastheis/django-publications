@@ -13,5 +13,6 @@ urlpatterns = patterns('',
 	(r'^year/(?P<year>\d+)/$', 'publications.views.year'),
 	(r'^tag/(?P<keyword>.+)/$', 'publications.views.keyword'),
 	(r'^list/(?P<list>.+)/$', 'publications.views.list'),
+	(r'^unapi/$', 'publications.views.unapi'),
 	(r'^(?P<name>.+)/$', 'publications.views.person'),
 )
