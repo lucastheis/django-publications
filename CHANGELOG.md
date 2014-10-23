@@ -8,13 +8,13 @@
 
 ## 0.6.0
 
-- Added the possibility to create lists of publications.
+- Added the possibility to create lists of publications.
 - Added support for images (requires PIL).
-- Dropped support for Django 1.3.
+- Dropped support for Django 1.3.
 
 ## 0.5.1
 
-- Restored backwards compatibility with Django 1.3.
+- Restored backwards compatibility with Django 1.3.
 - Improved BibTex parsing.
 - Added ISBN field.
 

@@ -321,8 +321,8 @@ class Publication(models.Model):
 	@staticmethod
 	def simplify_name(name):
 		name = name.lower()
-		name = name.replace( u'ä', u'ae')
-		name = name.replace( u'ö', u'oe')
-		name = name.replace( u'ü', u'ue')
-		name = name.replace( u'ß', u'ss')
+		name = name.replace(u'ä', u'ae')
+		name = name.replace(u'ö', u'oe')
+		name = name.replace(u'ü', u'ue')
+		name = name.replace(u'ß', u'ss')
 		return name

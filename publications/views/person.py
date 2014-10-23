@@ -36,7 +36,7 @@ def person(request, name):
 	surname = surname.replace(u'ue', u'%%')
 	surname = surname.replace(u'ß', u'%%')
 	surname = surname.replace(u'ss', u'%%')
-	# INNER JOIN publications_type ON (publications_publication.type_id = publications_type.id) '
+
 	query_str = u'SELECT * FROM {table} ' \
 		'WHERE lower({table}.authors) LIKE lower(\'%%{surname}%%\') ' \
 		'ORDER BY {table}.year DESC, {table}.month DESC, {table}.id DESC'
