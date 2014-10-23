@@ -4,14 +4,15 @@ __docformat__ = 'epytext'
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from publications.models import Type, Publication
+from publications.models import Type, Publication, CustomLink, CustomFile
 
 def year(request, year=None):
 	years = []
+	publications = Publication.objects.select_related()
 	if year:
-		publications = Publication.objects.filter(year=year, external=False)
+		publications = publications.filter(year=year, external=False)
 	else:
-		publications = Publication.objects.filter(external=False)
+		publications = publications.filter(external=False)
 	publications = publications.order_by('-year', '-month', '-id')
 
 	for publication in publications:
@@ -38,9 +39,19 @@ def year(request, year=None):
 			}, context_instance=RequestContext(request), content_type='application/rss+xml; charset=UTF-8')
 
 	else:
+		customlinks = CustomLink.objects.filter(publication__in=publications)
+		customfiles = CustomFile.objects.filter(publication__in=publications)
+
+		publications_ = {}
 		for publication in publications:
-			publication.links = publication.customlink_set.all()
-			publication.files = publication.customfile_set.all()
+			publication.links = []
+			publication.files = []
+			publications_[publication.id] = publication
+
+		for link in customlinks:
+			publications_[link.publication_id].links.append(link)
+		for file in customfiles:
+			publications_[file.publication_id].files.append(file)
 
 		return render_to_response('publications/years.html', {
 				'years': years

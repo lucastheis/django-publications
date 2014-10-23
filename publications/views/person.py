@@ -4,9 +4,10 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
+from collections import defaultdict
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from publications.models import Type, Publication
+from publications.models import Type, Publication, CustomLink, CustomFile
 from string import capwords
 
 def person(request, name):
@@ -25,14 +26,6 @@ def person(request, name):
 	# split into forename, middlenames and surname
 	names = name.replace(' ', '+').split('+')
 
-	# find publications of this author
-	publications = []
-	types = Type.objects.all()
-	types_dict = {}
-
-	for t in types:
-		types_dict[t] = []
-
 	# construct a liberal query
 	surname = names[-1]
 	surname = surname.replace(u'ä', u'%%')
@@ -43,9 +36,16 @@ def person(request, name):
 	surname = surname.replace(u'ue', u'%%')
 	surname = surname.replace(u'ß', u'%%')
 	surname = surname.replace(u'ss', u'%%')
-	query_str = u'SELECT * FROM {table} WHERE lower(authors) LIKE lower(\'%%{surname}%%\') ORDER BY year DESC, month DESC, id DESC'
+	# INNER JOIN publications_type ON (publications_publication.type_id = publications_type.id) '
+	query_str = u'SELECT * FROM {table} ' \
+		'WHERE lower({table}.authors) LIKE lower(\'%%{surname}%%\') ' \
+		'ORDER BY {table}.year DESC, {table}.month DESC, {table}.id DESC'
 	query = Publication.objects.raw(
 		query_str.format(table=Publication._meta.db_table, surname=surname))
+
+	# find publications of this author
+	publications = []
+	publications_by_type = defaultdict(lambda: [])
 
 	# further filter results
 	if len(names) > 1:
@@ -53,22 +53,18 @@ def person(request, name):
 		for publication in query:
 			if name_simple in publication.authors_list_simple:
 				publications.append(publication)
-				types_dict[publication.type].append(publication)
+				publications_by_type[publication.type_id].append(publication)
 
 	elif len(names) > 0:
 		for publication in query:
 			if Publication.simplify_name(names[-1].lower()) in publication.authors_list_simple:
 				publications.append(publication)
-				types_dict[publication.type].append(publication)
-
-	# remove empty types
-	for t in types:
-		if not types_dict[t]:
-			types = types.exclude(pk=t.pk)
+				publications_by_type[publication.type_id].append(publication)
 
 	# attach publications to types
+	types = Type.objects.filter(id__in=publications_by_type.keys())
 	for t in types:
-		t.publications = types_dict[t]
+		t.publications = publications_by_type[t.id]
 
 	if 'ascii' in request.GET:
 		return render_to_response('publications/publications.txt', {
@@ -88,9 +84,19 @@ def person(request, name):
 			}, context_instance=RequestContext(request), content_type='application/rss+xml; charset=UTF-8')
 
 	else:
+		customlinks = CustomLink.objects.filter(publication__in=publications)
+		customfiles = CustomFile.objects.filter(publication__in=publications)
+
+		publications_ = {}
 		for publication in publications:
-			publication.links = publication.customlink_set.all()
-			publication.files = publication.customfile_set.all()
+			publication.links = []
+			publication.files = []
+			publications_[publication.id] = publication
+
+		for link in customlinks:
+			publications_[link.publication_id].links.append(link)
+		for file in customfiles:
+			publications_[file.publication_id].files.append(file)
 
 		return render_to_response('publications/person.html', {
 				'publications': publications,

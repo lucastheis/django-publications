@@ -4,6 +4,7 @@
 
 - Added support for Zotero/OpenURL.
 - Fixed a bug in BibTex parsing.
+- Improved performance.
 
 ## 0.6.0
 
