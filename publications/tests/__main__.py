@@ -17,12 +17,26 @@ DATABASES = {
 		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 	}
 }
+MIDDLEWARE_CLASSES = (
+	'django.middleware.common.CommonMiddleware',
+)
 
 settings.configure(
 	DEBUG=DEBUG,
 	INSTALLED_APPS=INSTALLED_APPS,
-	DATABASES=DATABASES)
+	DATABASES=DATABASES,
+	MIDDLEWARE_CLASSES=MIDDLEWARE_CLASSES)
 
-from django.test.simple import DjangoTestSuiteRunner
+import django
+from distutils.version import StrictVersion
 
-sys.exit(DjangoTestSuiteRunner().run_tests(['publications.Tests'], verbosity=1))
+if StrictVersion(django.get_version()) >= StrictVersion('1.7.0'):
+	from django import setup
+	from django.test.utils import setup_test_environment
+	from django.test.runner import DiscoverRunner
+	setup()
+	setup_test_environment()
+	sys.exit(DiscoverRunner().run_tests(['publications']))
+else:
+	from django.test.simple import DjangoTestSuiteRunner
+	sys.exit(DjangoTestSuiteRunner().run_tests(['publications.Tests'], verbosity=1))
