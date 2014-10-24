@@ -17,5 +17,8 @@ matrix:
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
+    - pip install -q coveralls
 script:
-    - python publications/tests
+    - coverage run --source publications publications/tests/__main__.py
+after_success:
+    - coveralls

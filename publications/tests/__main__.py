@@ -9,6 +9,7 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
+	'django.contrib.sessions',
 	'publications',
 )
 DATABASES = {
@@ -18,25 +19,28 @@ DATABASES = {
 	}
 }
 MIDDLEWARE_CLASSES = (
+	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
 )
+ROOT_URLCONF = 'publications.tests.urls'
 
 settings.configure(
 	DEBUG=DEBUG,
 	INSTALLED_APPS=INSTALLED_APPS,
 	DATABASES=DATABASES,
-	MIDDLEWARE_CLASSES=MIDDLEWARE_CLASSES)
+	MIDDLEWARE_CLASSES=MIDDLEWARE_CLASSES,
+	ROOT_URLCONF=ROOT_URLCONF)
 
 import django
 from distutils.version import StrictVersion
 
 if StrictVersion(django.get_version()) >= StrictVersion('1.7.0'):
 	from django import setup
-	from django.test.utils import setup_test_environment
 	from django.test.runner import DiscoverRunner
 	setup()
-	setup_test_environment()
-	sys.exit(DiscoverRunner().run_tests(['publications']))
+	sys.exit(DiscoverRunner(verbosity=1).run_tests(['publications']))
 else:
 	from django.test.simple import DjangoTestSuiteRunner
-	sys.exit(DjangoTestSuiteRunner().run_tests(['publications.Tests'], verbosity=1))
+	sys.exit(DjangoTestSuiteRunner(verbosity=1).run_tests(['publications.Tests']))

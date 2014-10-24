@@ -6,7 +6,8 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 __version__ = '1.2.0'
 
-import re, six
+import re
+import publications.six as six
 
 # special character mapping
 special_chars = (
