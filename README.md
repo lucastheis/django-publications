@@ -28,11 +28,9 @@ Features
 Requirements
 ------------
 
-* Python >= 2.7.0
-* Django >= 1.4.0
+* Python >= 2.6.0
+* Django >= 1.5.0
 * Pillow >= 2.4.0
-
-The app was tested with the versions above, but older versions might also work.
 
 Installation
 ------------

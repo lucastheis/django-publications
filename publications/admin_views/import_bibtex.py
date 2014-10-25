@@ -164,6 +164,6 @@ def import_bibtex(request):
 				'title': 'Import BibTex',
 				'types': Type.objects.all(),
 				'request': request},
-			RequestContext(request))
+			context_instance=RequestContext(request))
 
 import_bibtex = staff_member_required(import_bibtex)
