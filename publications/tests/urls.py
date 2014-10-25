@@ -8,6 +8,8 @@ except ImportError:
 	from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 
+admin.autodiscover()
+
 urlpatterns = patterns('',
 	url(r'^publications/', include('publications.urls')),
 	url(r'^admin/publications/publication/import_bibtex/$', 'publications.admin_views.import_bibtex'),

@@ -63,5 +63,19 @@
 		"authors": "A. S. Ecker, P. Berens, A. S. Tolias, and M. Bethge",
 		"doi": "10.1523/JNEUROSCI.2539-11.2011",
 		"url": "http://www.jneurosci.org/content/31/40/14272.full"}
+	},
+	{
+	"pk": 5,
+	"model": "publications.publication",
+	"fields": {
+		"citekey": "Gerhard2014a",
+		"year": 2014,
+		"keywords": "natural image statistics",
+		"title": "Modeling Natural Image Statistics",
+		"book_title": "Biologically-inspired Computer Vision—Fundamentals and Applications",
+		"type": 5,
+		"publisher": "Wiley VCH",
+		"external": false,
+		"authors": "H. Gerhard, L. Theis, and M. Bethge"}
 	}
 ]

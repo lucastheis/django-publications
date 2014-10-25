@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from publications.models import Publication, Type
+from publications.models import Publication, Type, CustomLink, CustomFile
 
 class Tests(TestCase):
 	fixtures = ['initial_data.json', 'test_data.json']
@@ -22,14 +22,78 @@ class Tests(TestCase):
 			year=2014,
 			journal=u'PLoS Computational Biology',
 			external=0)
+		publication.clean()
 		publication.save()
 
 		self.assertEqual(len(publication.authors_list), 3)
-		self.assertEqual(publication.authors_list[0], 'J.-P. Lies')
+		self.assertTrue('J.-P. Lies' in publication.authors_list)
+		self.assertTrue(('J.-P.', 'Lies') in publication.authors_list_split)
+
+
+	def test_citekey(self):
+		publication = Publication.objects.create(
+			type=Type.objects.get(pk=1),
+			authors=u'A. Unique and B. Common',
+			title=u'Title 1',
+			year=2014,
+			journal=u'Journal',
+			external=0)
+		publication.clean()
+		publication.save()
+
+		self.assertEqual(publication.citekey, 'Unique2014a')
+
+		publication = Publication.objects.create(
+			type=Type.objects.get(pk=1),
+			authors=u'A. Unique and C. Common',
+			title=u'Title 2',
+			year=2014,
+			journal=u'Journal',
+			external=0)
+		publication.clean()
+		publication.save()
+
+		self.assertEqual(publication.citekey, 'Unique2014b')
+
+		publication = Publication.objects.create(
+			type=Type.objects.get(pk=1),
+			authors=u'A. Unique and D. Uncommon',
+			title=u'Title 3',
+			year=2013,
+			journal=u'Journal',
+			external=0)
+		publication.clean()
+		publication.save()
+
+		self.assertEqual(publication.citekey, 'Unique2013a')
+
+
+
+	def test_custom_links(self):
+		link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
+		link.save()
+
+		self.assertEqual(self.client.get('/publications/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/1/').status_code, 200)
 
 
 	def test_publications(self):
 		self.assertEqual(self.client.get('/publications/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/?bibtex').status_code, 200)
+		self.assertEqual(self.client.get('/publications/?ascii').status_code, 200)
+		self.assertEqual(self.client.get('/publications/?mods').status_code, 200)
+		self.assertEqual(self.client.get('/publications/1/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/1/?ascii').status_code, 200)
+		self.assertEqual(self.client.get('/publications/1/?bibtex').status_code, 200)
+		self.assertEqual(self.client.get('/publications/1/?mods').status_code, 200)
+		self.assertEqual(self.client.get('/publications/j.-p.+lies/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/j.-p.+lies/?ascii').status_code, 200)
+		self.assertEqual(self.client.get('/publications/j.-p.+lies/?bibtex').status_code, 200)
+		self.assertEqual(self.client.get('/publications/tag/noise+correlations/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/list/highlights/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/year/2011/?ascii').status_code, 200)
+		self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
 
 
 	def test_bibtex_import(self):
@@ -41,8 +105,30 @@ class Tests(TestCase):
 
 		self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
 
+		publications = Publication.objects.filter(citekey='test:2009')
 
-TEST_BIBLIOGRAPHY_COUNT = 4
+		self.assertEqual(len(publications), 1)
+		self.assertTrue('F. Last-Name' in publications[0].authors_list)
+		self.assertTrue('P. van der Markt III' in publications[0].authors_list)
+		self.assertTrue('Test' in publications[0].authors_list)
+		self.assertTrue('C. F. Gauss II' in publications[0].authors_list)
+
+
+	def test_unapi(self):
+		self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
+		self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
+		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=mods').status_code, 200)
+
+
+	def test_admin(self):
+		self.client.login(username='admin', password='admin')
+
+		self.assertEqual(self.client.get('/publications/').status_code, 200)
+		self.assertEqual(self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code, 200)
+		self.assertEqual(self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code, 200)
+
+
+TEST_BIBLIOGRAPHY_COUNT = 5
 TEST_BIBLIOGRAPHY = r"""
 @article{Bethge2002c,
   author = "M. Bethge and D. Rotermund and K. Pawelzik",
@@ -89,5 +175,11 @@ TEST_BIBLIOGRAPHY = r"""
   pages={433--452},
   year={2000},
   publisher={Oxford University Press}
+}
+
+@misc{test:2009,
+    title = "Test",
+    author = {Last-Name, First and Peter van der Markt III and Test and Gauss II CF},
+    year = 2009
 }
 """

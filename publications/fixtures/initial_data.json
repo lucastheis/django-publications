@@ -88,6 +88,17 @@
 		}
 	},
 	{
+	"model": "publications.type",
+	"pk": 9,
+		"fields": {
+			"order": 8,
+			"type": "Patent",
+			"description": "Patents",
+			"bibtex_types": "patent,misc",
+			"hidden": 1
+		}
+	},
+	{
 	"model": "publications.list",
 	"pk": 1,
 		"fields": {
