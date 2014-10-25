@@ -100,6 +100,14 @@ class Publication(models.Model):
 		self.keywords = [s.strip().lower() for s in self.keywords.split(',')]
 		self.keywords = ', '.join(self.keywords).lower()
 
+		self._produce_author_lists()
+
+
+	def _produce_author_lists(self):
+		"""
+		Parse authors string to create lists of authors.
+		"""
+
 		# post-process author names
 		self.authors = self.authors.replace(', and ', ', ')
 		self.authors = self.authors.replace(',and ', ', ')
@@ -182,8 +190,6 @@ class Publication(models.Model):
 				sp = 1 + num_suffixes + num_prepositions
 				self.authors_list_split.append(
 					(' '.join(names[:-sp]), ' '.join(names[-sp:])))
-
-
 
 		# list of authors in BibTex format
 		self.authors_bibtex = ' and '.join(self.authors_list)
@@ -348,6 +354,7 @@ class Publication(models.Model):
 
 	def clean(self):
 		if not self.citekey:
+			self._produce_author_lists()
 			self.citekey = self.key()
 
 		# remove unnecessary whitespace

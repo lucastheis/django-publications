@@ -19,13 +19,9 @@
 		{% endfor %}
 		<relatedItem type="host">
 			<date>{{ publication.year }}</date>
-			{% if publication.journal %}
+			{% if publication.journal_or_book_title %}
 			<titleInfo>
-				<title>{{ publication.journal }}</title>
-			</titleInfo>
-			{% elif publication.book_title %}
-			<titleInfo>
-				<title>{{ publication.book_title }}</title>
+				<title>{{ publication.journal_or_book_title }}</title>
 			</titleInfo>
 			{% endif %}
 			<part>
