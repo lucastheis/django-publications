@@ -2,6 +2,8 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
+import re
+import publications.six as six
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
@@ -77,8 +79,17 @@ def import_bibtex(request):
 
 					# map integer fields to integers
 					entry['month'] = MONTHS.get(entry['month'].lower(), 0)
+
 					entry['volume'] = entry.get('volume', None)
 					entry['number'] = entry.get('number', None)
+
+					if isinstance(entry['volume'], six.text_type):
+						entry['volume'] = int(re.sub('[^0-9]', '', entry['volume']))
+					if isinstance(entry['number'], six.text_type):
+						entry['number'] = int(re.sub('[^0-9]', '', entry['number']))
+
+					# remove whitespace characters (likely due to line breaks)
+					entry['url'] = re.sub(r'\s', '', entry['url'])
 
 					# determine type
 					type_id = None

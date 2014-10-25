@@ -6,7 +6,8 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 __version__ = '1.2.0'
 
-import re, six
+import re
+import publications.six as six
 
 # special character mapping
 special_chars = (
@@ -74,6 +75,10 @@ def parse(string):
 				value = value[1:-1]
 			if key not in ['booktitle', 'title']:
 				value = value.replace('}', '').replace('{', '')
+			else:
+				if value.startswith('{') and value.endswith('}'):
+					value = value[1:]
+					value = value[:-1]
 			value = value.strip()
 			value = re.sub(r'\s+', ' ', value)
 

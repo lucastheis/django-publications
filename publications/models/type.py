@@ -16,7 +16,7 @@ class Type(OrderedModel):
 	bibtex_types = models.CharField(max_length=256, default='article',
 			verbose_name='BibTex types',
 			help_text='Possible BibTex types, separated by comma.')
-	hidden = models.BooleanField(
+	hidden = models.BooleanField(default=False,
 		help_text='Hide publications from main view.')
 
 	def __unicode__(self):

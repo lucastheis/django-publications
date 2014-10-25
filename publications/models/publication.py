@@ -82,7 +82,7 @@ class Publication(models.Model):
 	image = models.ImageField(upload_to='publications/images/', blank=True, null=True)
 	thumbnail = models.ImageField(upload_to='publications/thumbnails/', blank=True, null=True)
 	doi = models.CharField(max_length=128, verbose_name='DOI', blank=True)
-	external = models.BooleanField(
+	external = models.BooleanField(default=False,
 		help_text='If publication was written in another lab, mark as external.')
 	abstract = models.TextField(blank=True)
 	isbn = models.CharField(max_length=32, verbose_name="ISBN", blank=True,
@@ -361,8 +361,8 @@ class Publication(models.Model):
 	@staticmethod
 	def simplify_name(name):
 		name = name.lower()
-		name = name.replace( u'ä', u'ae')
-		name = name.replace( u'ö', u'oe')
-		name = name.replace( u'ü', u'ue')
-		name = name.replace( u'ß', u'ss')
+		name = name.replace(u'ä', u'ae')
+		name = name.replace(u'ö', u'oe')
+		name = name.replace(u'ü', u'ue')
+		name = name.replace(u'ß', u'ss')
 		return name
