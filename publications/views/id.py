@@ -19,6 +19,11 @@ def id(request, publication_id):
 				'publications': publications
 			}, context_instance=RequestContext(request), content_type='text/x-bibtex; charset=UTF-8')
 
+	elif 'mods' in request.GET:
+		return render_to_response('publications/publications.mods', {
+				'publications': publications
+			}, context_instance=RequestContext(request), content_type='application/xml; charset=UTF-8')
+
 	else:
 		for publication in publications:
 			publication.links = publication.customlink_set.all()

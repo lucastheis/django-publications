@@ -112,6 +112,9 @@ class Publication(models.Model):
 		# simplified representation of author names
 		self.authors_list_simple = []
 
+		# author names represented as a tuple of given and family name
+		self.authors_list_split = []
+
 		# tests if title already ends with a punctuation mark
 		self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] \
 			if len(self.title) > 0 else False
@@ -168,6 +171,19 @@ class Publication(models.Model):
 						self.authors_list_simple.append(name_simple)
 				else:
 					self.authors_list_simple.append(self.simplify_name(names[0]))
+
+				# number of prepositions
+				num_prepositions = 0
+				for name in names:
+					if name in prepositions:
+						num_prepositions += 1
+
+				# splitting point
+				sp = 1 + num_suffixes + num_prepositions
+				self.authors_list_split.append(
+					(' '.join(names[:-sp]), ' '.join(names[-sp:])))
+
+
 
 		# list of authors in BibTex format
 		self.authors_bibtex = ' and '.join(self.authors_list)
@@ -314,6 +330,20 @@ class Publication(models.Model):
 			contextObj.append('rft.isbn=' + urlquote_plus(self.isbn))
 
 		return '&'.join(contextObj)
+
+
+	def mods_genre(self):
+		"""
+		Guesses an appropriate MODS XML genre type.
+		"""
+
+		type2genre = {
+				'conference': 'conference publication',
+				'book chapter': 'bibliography',
+				'unpublished': 'article'
+			}
+		type = str(self.type).lower()
+		return type2genre.get(type, type)
 
 
 	def clean(self):
