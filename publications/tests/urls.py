@@ -12,6 +12,5 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	url(r'^publications/', include('publications.urls')),
-	url(r'^admin/publications/publication/import_bibtex/$', 'publications.admin_views.import_bibtex'),
 	url(r'^admin/', include(admin.site.urls)),
 )
