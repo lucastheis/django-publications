@@ -4,7 +4,7 @@ __docformat__ = 'epytext'
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from publications.models import Type, Publication, CustomLink, CustomFile
+from publications.models import Publication, CustomLink, CustomFile
 
 def year(request, year=None):
 	years = []

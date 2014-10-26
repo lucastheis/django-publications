@@ -8,7 +8,7 @@ from django.template import Library, Node, Context, RequestContext
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from publications.models import Publication, List
+from publications.models import Publication, List, CustomLink, CustomFile
 from re import sub
 
 register = Library()
@@ -44,9 +44,22 @@ def get_publication_list(context, list, template='publications/publications.html
 	if not publications:
 		return ''
 
+	# load custom links and files
+	customlinks = CustomLink.objects.filter(publication__in=publications)
+	customfiles = CustomFile.objects.filter(publication__in=publications)
+
+	# create map from ids to publications
+	publications_ = {}
 	for publication in publications:
-		publication.links = publication.customlink_set.all()
-		publication.files = publication.customfile_set.all()
+		publication.links = []
+		publication.files = []
+		publications_[publication.id] = publication
+
+	# assign custom links and files to publications
+	for link in customlinks:
+		publications_[link.publication_id].links.append(link)
+	for file in customfiles:
+		publications_[file.publication_id].files.append(file)
 
 	return get_template(template).render(
 			RequestContext(context['request'], {'list': list, 'publications': publications}))

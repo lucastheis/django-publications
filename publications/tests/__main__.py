@@ -2,6 +2,7 @@ import os
 import sys
 
 from django.conf import settings
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 BASE_DIR = os.path.dirname(__file__)
 DEBUG = False
@@ -24,6 +25,10 @@ MIDDLEWARE_CLASSES = (
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 )
+TEMPLATE_CONTEXT_PROCESSORS += (
+	'django.core.context_processors.request',
+)
+
 ROOT_URLCONF = 'publications.tests.urls'
 
 settings.configure(
@@ -31,6 +36,7 @@ settings.configure(
 	INSTALLED_APPS=INSTALLED_APPS,
 	DATABASES=DATABASES,
 	MIDDLEWARE_CLASSES=MIDDLEWARE_CLASSES,
+	TEMPLATE_CONTEXT_PROCESSORS=TEMPLATE_CONTEXT_PROCESSORS,
 	ROOT_URLCONF=ROOT_URLCONF)
 
 import django

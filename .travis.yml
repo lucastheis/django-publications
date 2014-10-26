@@ -16,6 +16,6 @@ install:
     - pip install -q -e .
     - pip install -q coveralls
 script:
-    - coverage run --source publications publications/tests/__main__.py
+    - coverage run --source publications --omit publications/six.py publications/tests/__main__.py
 after_success:
     - coveralls

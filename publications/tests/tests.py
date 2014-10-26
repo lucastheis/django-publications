@@ -4,7 +4,10 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from publications.models import Publication, Type, CustomLink, CustomFile
+from django.template import Template, RequestContext
+from django.http import HttpRequest
+from publications.models import Publication, Type, CustomLink, List
+from publications.templatetags.publication_extras import tex_parse
 
 class Tests(TestCase):
 	fixtures = ['initial_data.json', 'test_data.json']
@@ -126,6 +129,33 @@ class Tests(TestCase):
 		self.assertEqual(self.client.get('/publications/').status_code, 200)
 		self.assertEqual(self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code, 200)
 		self.assertEqual(self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code, 200)
+
+
+	def test_extras(self):
+		link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
+		link.save()
+
+		publication = Publication.objects.get(pk=1)
+		lists = List.objects.filter(list__iexact='highlights')
+
+		self.assertEqual(len(lists), 1)
+
+		# add publication to list
+		publication.lists.add(lists[0])
+
+		# render list
+		tpl = Template("""
+			{% load publication_extras %}
+			{% get_publication 1 %}
+			{% get_publication_list 'highlights' 'publications/publications_with_thumbnails.html' %}
+			{% get_publication 10 %}
+			""")
+
+		self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
+
+		# tex_parse is used to replace simple LaTeX code in publication titles
+		self.assertEqual(tex_parse(u'$L_p$-spherical'), u'L<sub>p</sub>-spherical')
+		self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
 
 
 TEST_BIBLIOGRAPHY_COUNT = 5
