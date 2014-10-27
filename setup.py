@@ -12,7 +12,7 @@ setup(
 	url='https://github.com/lucastheis/django-publications',
 	packages=find_packages(),
 	include_package_data=True,
-	install_requires=('Django>=1.4.0', 'Pillow>=2.3.0'),
+	install_requires=('Django>=1.5.0', 'Pillow>=2.3.0'),
 	zip_safe=False,
 	license='MIT',
 	classifiers=(

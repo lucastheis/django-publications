@@ -2,14 +2,15 @@
 
 ## 0.6.1
 
-- Added support for Zotero/OpenURL.
-- Fixed a bug in BibTex parsing.
+- Added support for Zotero/unAPI.
+- Bug fixes in BibTex parsing and rendering.
 - Improved performance.
+- Dropped support for Django 1.4.
 
 ## 0.6.0
 
 - Added the possibility to create lists of publications.
-- Added support for images (requires PIL).
+- Added support for images (requires Pillow).
 - Dropped support for Django 1.3.
 
 ## 0.5.1

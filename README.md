@@ -37,10 +37,10 @@ Installation
 
 1) Copy the `publications` folder to your project or run `pip install django-publications`.
 
-2) Add `publications` to `INSTALLED_APPS` in your project's `settings.py`.
+2) Add `'publications'` to `INSTALLED_APPS` in your project's `settings.py`.
 
 3) Add the following to your project's `urls.py`:
 
 	url(r'^publications/', include('publications.urls')),
 
-4) Run `./manage.py syncdb`
+4) Run `./manage.py syncdb`.

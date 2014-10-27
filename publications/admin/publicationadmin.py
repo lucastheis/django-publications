@@ -24,7 +24,7 @@ class CustomFileInline(admin.StackedInline):
 class PublicationAdmin(admin.ModelAdmin):
 	list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
 	list_display_links = ('title',)
-	change_list_template = 'admin/publications/change_list.html'
+	change_list_template = 'admin/publications/publication_change_list.html'
 	search_fields = ('title', 'journal', 'authors', 'keywords', 'year')
 	fieldsets = (
 		(None, {'fields':

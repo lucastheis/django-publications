@@ -158,7 +158,7 @@ class Tests(TestCase):
 		self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
 
 
-TEST_BIBLIOGRAPHY_COUNT = 5
+TEST_BIBLIOGRAPHY_COUNT = 6
 TEST_BIBLIOGRAPHY = r"""
 @article{Bethge2002c,
   author = "M. Bethge and D. Rotermund and K. Pawelzik",
@@ -211,5 +211,19 @@ TEST_BIBLIOGRAPHY = r"""
     title = "Test",
     author = {Last-Name, First and Peter van der Markt III and Test and Gauss II CF},
     year = 2009
+}
+
+@article{DBLP:journals/corr/KummererWB14,
+ author    = {Matthias K{\"{u}}mmerer and
+              Thomas Wallis and
+              Matthias Bethge},
+ title     = {How close are we to understanding image-based saliency?},
+ journal   = {CoRR},
+ year      = {2014},
+ volume    = {abs/1409.7686},
+ url       = {http://arxiv.org/abs/1409.7686},
+ timestamp = {Mon, 27 Oct 2014 13:50:21 +0100},
+ biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/KummererWB14},
+ bibsource = {dblp computer science bibliography, http://dblp.org}
 }
 """
