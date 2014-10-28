@@ -2,7 +2,7 @@
 <modsCollection xmlns="http://www.loc.gov/mods/v3">
 	{% for publication in publications %}
 	<mods version="3.2" ID="{{ publication.id }}">
-		<genre authority="marcgt">{{ publication.mods_genre }}</genre>
+		<genre authority="marcgt">{{ publication.type.mods_genre }}</genre>
 		<titleInfo>
 			<title>{{ publication.title }}</title>
 		</titleInfo>

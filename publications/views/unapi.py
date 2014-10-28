@@ -36,7 +36,7 @@ def unapi(request):
 					'publication': publications[0]
 				},
 				context_instance=RequestContext(request),
-				content_type='text/x-bibtex')
+				content_type='text/x-bibtex; charset=UTF-8')
 
 		if format == 'mods':
 			# return MODS encoded publication
@@ -44,7 +44,15 @@ def unapi(request):
 					'publications': publications
 				},
 				context_instance=RequestContext(request),
-				content_type='application/xml')
+				content_type='application/xml; charset=UTF-8')
+
+		if format == 'ris':
+			# return MODS encoded publication
+			return render_to_response('publications/publications.ris', {
+					'publications': publications
+				},
+				context_instance=RequestContext(request),
+				content_type='application/x-research-info-systems; charset=UTF-8')
 
 		# invalid format
 		return HttpResponse('\n'.join([
@@ -58,6 +66,7 @@ def unapi(request):
 			'<?xml version="1.0" encoding="UTF-8"?>',
 			'<formats id="{0}">'.format(id),
 			'<format name="bibtex" type="text/x-bibtex" />',
+			'<format name="ris" type="application/x-research-info-systems" />',
 			'<format name="mods" type="application/xml" />',
 			'</formats>']), content_type="application/xml")
 
@@ -65,5 +74,6 @@ def unapi(request):
 		'<?xml version="1.0" encoding="UTF-8"?>',
 		'<formats>',
 		'<format name="bibtex" type="text/x-bibtex" />',
+		'<format name="ris" type="application/x-research-info-systems" />',
 		'<format name="mods" type="application/xml" />',
 		'</formats>']), content_type="application/xml")

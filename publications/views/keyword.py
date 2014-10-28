@@ -15,37 +15,41 @@ def keyword(request, keyword):
 		if keyword in [k[1] for k in publication.keywords_escaped()]:
 			publications.append(publication)
 
-	if 'ascii' in request.GET:
+	if 'plain' in request.GET:
 		return render_to_response('publications/publications.txt', {
 				'publications': publications
 			}, context_instance=RequestContext(request), content_type='text/plain; charset=UTF-8')
 
-	elif 'bibtex' in request.GET:
+	if 'bibtex' in request.GET:
 		return render_to_response('publications/publications.bib', {
 				'publications': publications
 			}, context_instance=RequestContext(request), content_type='text/x-bibtex; charset=UTF-8')
 
-	elif 'mods' in request.GET:
+	if 'mods' in request.GET:
 		return render_to_response('publications/publications.mods', {
 				'publications': publications
 			}, context_instance=RequestContext(request), content_type='application/xml; charset=UTF-8')
 
-	else:
-		customlinks = CustomLink.objects.filter(publication__in=publications)
-		customfiles = CustomFile.objects.filter(publication__in=publications)
+	if 'ris' in request.GET:
+		return render_to_response('publications/publications.ris', {
+				'publications': publications
+			}, context_instance=RequestContext(request), content_type='application/x-research-info-systems; charset=UTF-8')
 
-		publications_ = {}
-		for publication in publications:
-			publication.links = []
-			publication.files = []
-			publications_[publication.id] = publication
+	customlinks = CustomLink.objects.filter(publication__in=publications)
+	customfiles = CustomFile.objects.filter(publication__in=publications)
 
-		for link in customlinks:
-			publications_[link.publication_id].links.append(link)
-		for file in customfiles:
-			publications_[file.publication_id].files.append(file)
+	publications_ = {}
+	for publication in publications:
+		publication.links = []
+		publication.files = []
+		publications_[publication.id] = publication
 
-		return render_to_response('publications/keyword.html', {
-				'publications': publications,
-				'keyword': keyword.replace('+', ' ')
-			}, context_instance=RequestContext(request))
+	for link in customlinks:
+		publications_[link.publication_id].links.append(link)
+	for file in customfiles:
+		publications_[file.publication_id].files.append(file)
+
+	return render_to_response('publications/keyword.html', {
+			'publications': publications,
+			'keyword': keyword.replace('+', ' ')
+		}, context_instance=RequestContext(request))

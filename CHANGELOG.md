@@ -3,6 +3,7 @@
 ## 0.6.1
 
 - Added support for Zotero/unAPI.
+- Added support for Endnote/RIS.
 - Bug fixes in BibTex parsing and rendering.
 - Improved performance.
 - Dropped support for Django 1.4.

@@ -33,3 +33,41 @@ class Type(OrderedModel):
 			for s in self.bibtex_types.split(',')]
 		self.bibtex_types = ', '.join(self.bibtex_type_list)
 		self.bibtex_type = self.bibtex_type_list[0]
+
+
+	def ris_type(self):
+		# convert bibtex type to RIS type
+		bibtex2ris = {
+				'article': 'JOUR',
+				'book': 'BOOK',
+				'booklet': 'PAMP',
+				'inbook': 'CHAP',
+				'conference': 'CHAP',
+				'inproceedings': 'CHAP',
+				'incollection': 'CHAP',
+				'manual': 'BOOK',
+				'masterthesis': 'THES',
+				'phdthesis': 'THES',
+				'misc': 'GEN',
+				'proceedings': 'CONF',
+				'techreport': 'RPRT',
+				'unpublished': 'UNPB',
+				'patent': 'PAT',
+				'abstract': 'ABST',
+			}
+		return bibtex2ris.get(self.bibtex_type, 'GEN')
+
+
+
+	def mods_genre(self):
+		"""
+		Guesses an appropriate MODS XML genre type.
+		"""
+
+		type2genre = {
+				'conference': 'conference publication',
+				'book chapter': 'bibliography',
+				'unpublished': 'article'
+			}
+		tp = str(self.type).lower()
+		return type2genre.get(tp, tp)

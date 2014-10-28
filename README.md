@@ -19,11 +19,12 @@ Features
 
 * automatically creates lists for individual authors or keywords
 * BibTex import/export
+* RIS export (EndNote, Reference Manager)
+* unAPI support (Zotero)
 * customizable publication categories/BibTex entry types
 * PDF upload
 * RSS feeds
 * support for images
-* support for Zotero (via unAPI)
 
 Requirements
 ------------

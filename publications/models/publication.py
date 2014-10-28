@@ -282,7 +282,7 @@ class Publication(models.Model):
 		contextObj = ['ctx_ver=Z39.88-2004']
 
 		if 'django.contrib.sites' in settings.INSTALLED_APPS:
-			domain = Site.objects.get_current()
+			domain = Site.objects.get_current().domain
 		else:
 			domain = 'example.com'
 
@@ -336,20 +336,6 @@ class Publication(models.Model):
 			contextObj.append('rft.isbn=' + urlquote_plus(self.isbn))
 
 		return '&'.join(contextObj)
-
-
-	def mods_genre(self):
-		"""
-		Guesses an appropriate MODS XML genre type.
-		"""
-
-		type2genre = {
-				'conference': 'conference publication',
-				'book chapter': 'bibliography',
-				'unpublished': 'article'
-			}
-		type = str(self.type).lower()
-		return type2genre.get(type, type)
 
 
 	def clean(self):

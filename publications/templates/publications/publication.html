@@ -40,6 +40,7 @@
 {% for link in publication.links %}
 	<a class="link" rel="external" href="{{ link.url }}">{{ link.description }}</a>,
 {% endfor %}
+<a href="/publications/{{ publication.pk }}/?ris">RIS</a>,
 <a href="/publications/{{ publication.pk }}/?bibtex">BibTex</a>
 <abbr class="unapi-id" title="{{ publication.id }}"></abbr>
 <span class="Z3988" title="{{ publication.z3988 }}"></span>
