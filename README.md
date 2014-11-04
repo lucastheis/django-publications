@@ -1,7 +1,7 @@
 django-publications
 ===================
 
-A Django app for managing publications.
+A Django app for managing scientific publications.
 
 Screenshots
 -----------
@@ -17,7 +17,7 @@ Screenshots
 Features
 --------
 
-* automatically creates lists for individual authors or keywords
+* automatically creates lists for individual authors and keywords
 * BibTex import/export
 * RIS export (EndNote, Reference Manager)
 * unAPI support (Zotero)
@@ -36,7 +36,7 @@ Requirements
 Installation
 ------------
 
-1) Copy the `publications` folder to your project or run `pip install django-publications`.
+1) Run `pip install django-publications`.
 
 2) Add `'publications'` to `INSTALLED_APPS` in your project's `settings.py`.
 
