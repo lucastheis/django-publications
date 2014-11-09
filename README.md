@@ -9,10 +9,10 @@ Screenshots
 [![frontend][3]][1]
 [![backend][4]][2]
 
-[1]: http://files.theis.io/django-publications/frontend.png
-[2]: http://files.theis.io/django-publications/backend.png
-[3]: http://files.theis.io/django-publications/frontend_small.png
-[4]: http://files.theis.io/django-publications/backend_small.png
+[1]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend.png
+[2]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend.png
+[3]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend_small.png
+[4]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend_small.png
 
 Features
 --------
