@@ -11,6 +11,9 @@ matrix:
     exclude:
         - python: "2.6"
           env: DJANGO_VERSION=1.7.1
+branches:
+    except:
+        - media
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
