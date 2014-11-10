@@ -17,6 +17,7 @@ branches:
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
+    - pip install -q selenium
     - pip install -q coveralls
 script:
     - coverage run --source publications --omit publications/six.py publications/tests/__main__.py

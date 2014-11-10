@@ -11,6 +11,7 @@ INSTALLED_APPS = (
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
+	'django.contrib.staticfiles',
 	'publications',
 )
 DATABASES = {
@@ -32,6 +33,10 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 ROOT_URLCONF = 'publications.tests.urls'
 
 settings.configure(
+	MEDIA_ROOT=os.path.join(BASE_DIR, 'media'),
+	MEDIA_URL='/media/',
+	STATIC_ROOT=os.path.join(BASE_DIR, 'static'),
+	STATIC_URL='/static/',
 	DEBUG=DEBUG,
 	INSTALLED_APPS=INSTALLED_APPS,
 	DATABASES=DATABASES,
@@ -49,4 +54,4 @@ if StrictVersion(django.get_version()) >= StrictVersion('1.7.0'):
 	sys.exit(DiscoverRunner(verbosity=1).run_tests(['publications']))
 else:
 	from django.test.simple import DjangoTestSuiteRunner
-	sys.exit(DjangoTestSuiteRunner(verbosity=1).run_tests(['publications.Tests']))
+	sys.exit(DjangoTestSuiteRunner(verbosity=1).run_tests(['publications.Tests', 'publications.LiveTests']))
