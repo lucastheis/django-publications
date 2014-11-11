@@ -47,3 +47,12 @@ class LiveTests(LiveServerTestCase):
 		self.selenium.find_element_by_xpath('//input[@value="Import"]').click()
 
 		self.assertEqual(Publication.objects.count() - count, tests.TEST_BIBLIOGRAPHY_COUNT)
+
+
+
+	def test_import_bibtex_button(self):
+		count = Publication.objects.count()
+
+		self.selenium.get('{0}{1}'.format(self.live_server_url, '/admin/publications/publication/'))
+		self.selenium.find_element_by_link_text('Import BibTex').click()
+		self.selenium.find_element_by_xpath('//input[@value="Import"]').click()

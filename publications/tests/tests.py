@@ -81,6 +81,16 @@ class Tests(TestCase):
 
 
 	def test_publications(self):
+		publication = Publication.objects.create(
+			type=Type.objects.get(pk=1),
+			authors=u'Jörn-Philipp Lies and Ralf M. Häfner and M. Bethge',
+			title=u'Slowness and sparseness have diverging effects on complex cell learning',
+			year=2014,
+			journal=u'PLoS Computational Biology',
+			external=0)
+		publication.clean()
+		publication.save()
+
 		self.assertEqual(self.client.get('/publications/').status_code, 200)
 		self.assertEqual(self.client.get('/publications/?plain').status_code, 200)
 		self.assertEqual(self.client.get('/publications/?bibtex').status_code, 200)
@@ -92,7 +102,9 @@ class Tests(TestCase):
 		self.assertEqual(self.client.get('/publications/1/?bibtex').status_code, 200)
 		self.assertEqual(self.client.get('/publications/1/?mods').status_code, 200)
 		self.assertEqual(self.client.get('/publications/1/?ris').status_code, 200)
-		self.assertEqual(self.client.get('/publications/j.-p.+lies/').status_code, 200)
+		response = self.client.get('/publications/j.-p.+lies/')
+		self.assertEqual(response.status_code, 200)
+		self.assertGreater(len(response.context['publications']), 0)
 		self.assertEqual(self.client.get('/publications/j.-p.+lies/?plain').status_code, 200)
 		self.assertEqual(self.client.get('/publications/j.-p.+lies/?bibtex').status_code, 200)
 		self.assertEqual(self.client.get('/publications/j.-p.+lies/?mods').status_code, 200)
@@ -103,6 +115,36 @@ class Tests(TestCase):
 		self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
 		self.assertEqual(self.client.get('/publications/year/2011/?plain').status_code, 200)
 		self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
+
+		publication = Publication.objects.create(
+			type=Type.objects.get(pk=1),
+			authors=u'A. Unique and B. Common',
+			title=u'Title 3',
+			year=2012,
+			journal=u'Journal',
+			external=0)
+		publication.clean()
+		publication.save()
+
+		publication = Publication.objects.create(
+			type=Type.objects.get(pk=1),
+			authors=u'A. Unique and C. Common and D. Someone',
+			title=u'Title 4',
+			year=2011,
+			journal=u'Journal',
+			external=0)
+		publication.clean()
+		publication.save()
+
+		link = CustomLink.objects.create(
+			publication_id=publication.id, description='Test', url='http://test.com')
+		link.save()
+
+		response = self.client.get('/publications/c.+common/')
+
+		self.assertTrue('C. Common' in str(response.content))
+		self.assertFalse('B. Common' in str(response.content))
+
 
 
 	def test_bibtex_import(self):
@@ -127,6 +169,10 @@ class Tests(TestCase):
 		self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
 		self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
 		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=mods').status_code, 200)
+		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=bibtex').status_code, 200)
+		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=ris').status_code, 200)
+		self.assertEqual(self.client.get('/publications/unapi/?id=99999&format=bibtex').status_code, 404)
+		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=foobar').status_code, 406)
 
 
 	def test_admin(self):

@@ -1,5 +1,9 @@
 # django-publications
 
+## 0.6.2
+
+- Minor bug fixes.
+
 ## 0.6.1
 
 - Added support for Zotero/unAPI.
