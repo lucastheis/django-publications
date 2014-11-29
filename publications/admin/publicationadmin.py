@@ -2,12 +2,13 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
+from django import forms
 from django.contrib import admin
 try:
 	from django.conf.urls import patterns, url
 except ImportError:
 	from django.conf.urls.defaults import patterns, url
-from publications.models import CustomLink, CustomFile
+from publications.models import Publication, CustomLink, CustomFile
 
 class CustomLinkInline(admin.StackedInline):
 	model = CustomLink
@@ -21,7 +22,21 @@ class CustomFileInline(admin.StackedInline):
 	max_num = 5
 
 
+
+class PublicationAdminForm(forms.ModelForm):
+	class Meta:
+		model = Publication
+
+	def __init__(self, *args, **kwargs):
+		super(PublicationAdminForm, self).__init__(*args, **kwargs)
+
+		# give volume and number fields appearance of IntegerField
+		self.fields['volume'].widget.attrs['class'] = 'vIntegerField'
+		self.fields['number'].widget.attrs['class'] = 'vIntegerField'
+
+
 class PublicationAdmin(admin.ModelAdmin):
+	form = PublicationAdminForm
 	list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
 	list_display_links = ('title',)
 	change_list_template = 'admin/publications/publication_change_list.html'

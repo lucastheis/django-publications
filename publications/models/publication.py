@@ -68,8 +68,8 @@ class Publication(models.Model):
 	book_title = models.CharField(max_length=256, blank=True)
 	publisher = models.CharField(max_length=256, blank=True)
 	institution = models.CharField(max_length=256, blank=True)
-	volume = models.IntegerField(blank=True, null=True)
-	number = models.IntegerField(blank=True, null=True, verbose_name='Issue number')
+	volume = models.CharField(blank=True, null=True, max_length=128)
+	number = models.CharField(blank=True, null=True, max_length=128, verbose_name='Issue number')
 	pages = PagesField(max_length=32, blank=True)
 	note = models.CharField(max_length=256, blank=True)
 	keywords = models.CharField(max_length=256, blank=True,
