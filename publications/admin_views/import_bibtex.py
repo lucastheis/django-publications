@@ -63,6 +63,7 @@ def import_bibtex(request):
 					keys = [
 						'journal',
 						'booktitle',
+						'address',
 						'publisher',
 						'institution',
 						'url',
@@ -109,6 +110,7 @@ def import_bibtex(request):
 						journal=entry['journal'],
 						book_title=entry['booktitle'],
 						publisher=entry['publisher'],
+						location=entry['address'],
 						institution=entry['institution'],
 						volume=entry['volume'],
 						number=entry['number'],
