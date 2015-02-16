@@ -210,7 +210,7 @@ class Tests(TestCase):
 		self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
 
 
-TEST_BIBLIOGRAPHY_COUNT = 6
+TEST_BIBLIOGRAPHY_COUNT = 7
 TEST_BIBLIOGRAPHY = r"""
 @article{Bethge2002c,
   author = "M. Bethge and D. Rotermund and K. Pawelzik",
@@ -277,5 +277,13 @@ TEST_BIBLIOGRAPHY = r"""
  timestamp = {Mon, 27 Oct 2014 13:50:21 +0100},
  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/KummererWB14},
  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+@incollection{dougan2014objective,
+  title={Objective Functions},
+  author={Do{\u{g}}an, Haluk and Otu, Hasan H},
+  booktitle={Multiple Sequence Alignment Methods},
+  pages={45--58},
+  year={2014},
+  publisher={Springer}
 }
 """

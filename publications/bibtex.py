@@ -30,6 +30,7 @@ special_chars = (
 	(r'\`u', 'ù'), (r'\`U', 'Ù'),
 	(r'\`o', 'ò'), (r'\`O', 'Ò'),
 	(r'\^o', 'ô'), (r'\^O', 'Ô'),
+	(r'\o', 'ø'), (r'\O', 'Ø'),
 	(r'\ss', 'ß'),
 	(r'\ae', 'æ'), (r'\AE', 'Æ'))
 
@@ -55,6 +56,7 @@ def parse(string):
 	# replace special characters
 	for key, value in special_chars:
 		string = string.replace(key, value)
+	string = re.sub(r'\\[cuHvs]{?([a-zA-Z])}?', r'\1', string)
 
 	# split into BibTex entries
 	entries = re.findall(r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,}]*),?\s*?)+)\s*}', string)
