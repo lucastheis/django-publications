@@ -33,15 +33,19 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
 from django.contrib import admin
-from django.contrib.admin.util import unquote
+try:
+    from django.contrib.admin.utils import unquote
+except ImportError:
+    # Django <= 1.6
+    from django.contrib.admin.util import unquote
 from django.contrib.admin.views.main import ChangeList
 from django.db.models.options import Options
 
 # Django <= 1.6
 if not getattr(Options, 'model_name', False):
-	Options.model_name = lambda self: self.module_name.lower()
+    Options.model_name = lambda self: self.module_name.lower()
 if not getattr(ChangeList, 'get_queryset', False):
-	ChangeList.get_queryset = ChangeList.get_query_set
+    ChangeList.get_queryset = ChangeList.get_query_set
 
 class OrderedModelAdmin(admin.ModelAdmin):
 
