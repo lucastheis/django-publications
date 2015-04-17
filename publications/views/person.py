@@ -8,6 +8,7 @@ from collections import defaultdict
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from publications.models import Type, Publication, CustomLink, CustomFile
+from publications.utils import populate
 from string import capwords
 
 def person(request, name):
@@ -93,19 +94,8 @@ def person(request, name):
 				'publications': publications
 			}, context_instance=RequestContext(request), content_type='application/rss+xml; charset=UTF-8')
 
-	customlinks = CustomLink.objects.filter(publication__in=publications)
-	customfiles = CustomFile.objects.filter(publication__in=publications)
-
-	publications_ = {}
-	for publication in publications:
-		publication.links = []
-		publication.files = []
-		publications_[publication.id] = publication
-
-	for link in customlinks:
-		publications_[link.publication_id].links.append(link)
-	for file in customfiles:
-		publications_[file.publication_id].files.append(file)
+	# load custom links and files
+	populate(publications)
 
 	return render_to_response('publications/person.html', {
 			'publications': publications,

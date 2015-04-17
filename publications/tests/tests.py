@@ -201,6 +201,7 @@ class Tests(TestCase):
 			{% get_publication 1 %}
 			{% get_publication_list 'highlights' 'publications/publications_with_thumbnails.html' %}
 			{% get_publication 10 %}
+			{% get_publications %}
 			""")
 
 		self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)

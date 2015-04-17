@@ -5,6 +5,7 @@ __docformat__ = 'epytext'
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from publications.models import Type, Publication, CustomFile, CustomLink
+from publications.utils import populate
 
 def keyword(request, keyword):
 	keyword = keyword.lower().replace(' ', '+')
@@ -35,19 +36,8 @@ def keyword(request, keyword):
 				'publications': publications
 			}, context_instance=RequestContext(request), content_type='application/x-research-info-systems; charset=UTF-8')
 
-	customlinks = CustomLink.objects.filter(publication__in=publications)
-	customfiles = CustomFile.objects.filter(publication__in=publications)
-
-	publications_ = {}
-	for publication in publications:
-		publication.links = []
-		publication.files = []
-		publications_[publication.id] = publication
-
-	for link in customlinks:
-		publications_[link.publication_id].links.append(link)
-	for file in customfiles:
-		publications_[file.publication_id].files.append(file)
+	# load custom links and files
+	populate(publications)
 
 	return render_to_response('publications/keyword.html', {
 			'publications': publications,
