@@ -19,3 +19,6 @@ class List(models.Model):
 
 	def __unicode__(self):
 		return self.list
+
+	def __str__(self):
+		return self.list

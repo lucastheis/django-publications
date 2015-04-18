@@ -208,6 +208,10 @@ class Publication(models.Model):
 
 
 	def __unicode__(self):
+		self.__str__()
+
+
+	def __str__(self):
 		if len(self.title) < 64:
 			return self.title
 		else:

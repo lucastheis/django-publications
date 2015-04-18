@@ -15,3 +15,6 @@ class CustomFile(models.Model):
 
 	def __unicode__(self):
 		return self.description
+
+	def __str__(self):
+		return self.description
