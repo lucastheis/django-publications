@@ -208,7 +208,7 @@ class Publication(models.Model):
 
 
 	def __unicode__(self):
-		self.__str__()
+		return self.__str__()
 
 
 	def __str__(self):

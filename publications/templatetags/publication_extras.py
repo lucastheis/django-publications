@@ -8,7 +8,7 @@ from django.template import Library, Node, Context, RequestContext
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from publications.models import Publication, List, CustomLink, CustomFile
+from publications.models import Publication, List, Type
 from publications.utils import populate
 from re import sub
 
@@ -24,8 +24,9 @@ def get_publications(context, template='publications/publications.html'):
 	Get all publications.
 	"""
 
+	types = Type.objects.filter(hidden=False)
 	publications = Publication.objects.select_related()
-	publications = publications.filter(external=False)
+	publications = publications.filter(external=False, type__in=types)
 	publications = publications.order_by('-year', '-month', '-id')
 
 	if not publications:
