@@ -34,8 +34,8 @@ class PagesForm(forms.MultiValueField):
 
 	def __init__(self, *args, **kwargs):
 		forms.MultiValueField.__init__(self, [
-			forms.IntegerField(),
-			forms.IntegerField()], *args, **kwargs)
+			forms.CharField(),
+			forms.CharField()], *args, **kwargs)
 
 
 	def compress(self, data_list):
