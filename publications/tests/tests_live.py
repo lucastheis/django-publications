@@ -49,7 +49,6 @@ class LiveTests(LiveServerTestCase):
 		self.assertEqual(Publication.objects.count() - count, tests.TEST_BIBLIOGRAPHY_COUNT)
 
 
-
 	def test_import_bibtex_button(self):
 		count = Publication.objects.count()
 

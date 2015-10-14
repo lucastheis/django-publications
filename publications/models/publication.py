@@ -254,6 +254,10 @@ class Publication(models.Model):
 		return self.authors_list[0].split(' ')[-1] + str(self.year) + chr(char)
 
 
+	def title_bibtex(self):
+		return self.title.replace('%', r'\%')
+
+
 	def month_bibtex(self):
 		return self.MONTH_BIBTEX.get(self.month, '')
 
