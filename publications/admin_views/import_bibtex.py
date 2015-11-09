@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.core import urlresolvers
 from publications.bibtex import parse
 from publications.models import Publication, Type
 
@@ -150,14 +151,20 @@ def import_bibtex(request):
 			else:
 				if len(publications) > 1:
 					msg = 'Successfully added ' + str(len(publications)) + ' publications.'
+					# redirect to publication listing
+					url = '../'
 				else:
 					msg = 'Successfully added ' + str(len(publications)) + ' publication.'
+					# redirect to change page
+					url = urlresolvers.reverse(
+						'admin:publications_publication_change',
+						args=(publications[0].id,)
+					)
 
 			# show message
 			messages.info(request, msg)
+			return HttpResponseRedirect(url)
 
-			# redirect to publication listing
-			return HttpResponseRedirect('../')
 	else:
 		return render_to_response(
 			'admin/publications/import_bibtex.html', {
