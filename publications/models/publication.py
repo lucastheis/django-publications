@@ -5,13 +5,19 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 import os
+from string import ascii_uppercase
 
 from django.db import models
 from django.utils.http import urlquote_plus
 from django.conf import settings
+from django.utils.text import slugify
+from django.contrib.contenttypes.models import ContentType
+
+from taggit.managers import TaggableManager
+from taggit.models import Tag, TaggedItem
+
 from publications.fields import PagesField
 from publications.models import Type, List
-from string import ascii_uppercase
 
 if 'django.contrib.sites' in settings.INSTALLED_APPS:
 	from django.contrib.sites.models import Site
@@ -74,8 +80,9 @@ class Publication(models.Model):
 	number = models.IntegerField(blank=True, null=True, verbose_name='Issue number')
 	pages = PagesField(max_length=32, blank=True)
 	note = models.CharField(max_length=256, blank=True)
-	keywords = models.CharField(max_length=256, blank=True,
-		help_text='List of keywords separated by commas.')
+
+	keywords = TaggableManager()
+
 	url = models.URLField(blank=True, verbose_name='URL',
 		help_text='Link to PDF or journal page.')
 	code = models.URLField(blank=True,
@@ -92,18 +99,32 @@ class Publication(models.Model):
 	lists = models.ManyToManyField(List, blank=True)
 
 	def __init__(self, *args, **kwargs):
+		# allow passing in a string of comma-separated keywords
+		self._keywords = kwargs.get('keywords', None)
+		if 'keywords' in kwargs:
+			del kwargs['keywords']
+
 		models.Model.__init__(self, *args, **kwargs)
-
-		# post-process keywords
-		self.keywords = self.keywords.replace(';', ',')
-		self.keywords = self.keywords.replace(', and ', ', ')
-		self.keywords = self.keywords.replace(',and ', ', ')
-		self.keywords = self.keywords.replace(' and ', ', ')
-		self.keywords = [s.strip().lower() for s in self.keywords.split(',')]
-		self.keywords = ', '.join(self.keywords).lower()
-
 		self._produce_author_lists()
 
+	def save(self, *args, **kwargs):
+		ret = super(Publication, self).save(*args, **kwargs)
+		if self._keywords:
+			for keyword in self._keywords.split(','):
+				self.keywords.add(keyword.strip())
+
+		ct = ContentType.objects.get_for_model(Publication)
+
+		# a bit of auto-tagging - only works on initial save
+		# TODO - do this on every save after m2m_changed ...
+		for word in self.title.split():
+			try:
+				tag = Tag.objects.get(slug=slugify(word))
+				self.keywords.add(tag.name)
+			except Tag.DoesNotExist:
+				pass
+
+		return ret
 
 	def _produce_author_lists(self):
 		"""
@@ -221,12 +242,6 @@ class Publication(models.Model):
 				return self.title[:61] + '...'
 			else:
 				return self.title[:index] + '...'
-
-
-	def keywords_escaped(self):
-		return [(keyword.strip(), urlquote_plus(keyword.strip()))
-			for keyword in self.keywords.split(',')]
-
 
 	def authors_escaped(self):
 		return [(author, author.lower().replace(' ', '+'))

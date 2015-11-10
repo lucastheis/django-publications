@@ -142,24 +142,20 @@ def import_bibtex(request):
 					'request': request},
 				RequestContext(request))
 		else:
-			try:
-				# save publications
-				for publication in publications:
-					publication.save()
-			except:
-				msg = 'Some error occured during saving of publications.'
+			for publication in publications:
+				publication.save()
+
+			if len(publications) > 1:
+				msg = 'Successfully added ' + str(len(publications)) + ' publications.'
+				# redirect to publication listing
+				url = '../'
 			else:
-				if len(publications) > 1:
-					msg = 'Successfully added ' + str(len(publications)) + ' publications.'
-					# redirect to publication listing
-					url = '../'
-				else:
-					msg = 'Successfully added ' + str(len(publications)) + ' publication.'
-					# redirect to change page
-					url = urlresolvers.reverse(
-						'admin:publications_publication_change',
-						args=(publications[0].id,)
-					)
+				msg = 'Successfully added ' + str(len(publications)) + ' publication.'
+				# redirect to change page
+				url = urlresolvers.reverse(
+					'admin:publications_publication_change',
+					args=(publications[0].id,)
+				)
 
 			# show message
 			messages.info(request, msg)

@@ -8,13 +8,7 @@ from publications.models import Type, Publication, CustomFile, CustomLink
 from publications.utils import populate
 
 def keyword(request, keyword):
-	keyword = keyword.lower().replace(' ', '+')
-	candidates = Publication.objects.filter(keywords__icontains=keyword.split('+')[0], external=False)
-	publications = []
-
-	for i, publication in enumerate(candidates):
-		if keyword in [k[1] for k in publication.keywords_escaped()]:
-			publications.append(publication)
+	publications = Publication.objects.filter(keywords__slug__in=[keyword])
 
 	if 'plain' in request.GET:
 		return render_to_response('publications/publications.txt', {
@@ -41,5 +35,5 @@ def keyword(request, keyword):
 
 	return render_to_response('publications/keyword.html', {
 			'publications': publications,
-			'keyword': keyword.replace('+', ' ')
+			'keyword': keyword,
 		}, context_instance=RequestContext(request))
