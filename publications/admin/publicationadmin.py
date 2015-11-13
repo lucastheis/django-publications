@@ -3,11 +3,20 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 from django.contrib import admin
+from django.forms import TextInput, Textarea
+from django.db import models
+from django import forms
+
 try:
 	from django.conf.urls import patterns, url
 except ImportError:
 	from django.conf.urls.defaults import patterns, url
+
+from taggit.forms import TagWidget
+from taggit.managers import TaggableManager
+
 from publications.models import CustomLink, CustomFile
+
 
 class CustomLinkInline(admin.StackedInline):
 	model = CustomLink
@@ -25,7 +34,7 @@ class PublicationAdmin(admin.ModelAdmin):
 	list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
 	list_display_links = ('title',)
 	change_list_template = 'admin/publications/publication_change_list.html'
-	search_fields = ('title', 'journal', 'authors', 'keywords', 'year')
+	search_fields = ('title', 'journal', 'authors', 'keywords__name', 'year')
 	fieldsets = (
 		(None, {'fields':
 			('type', 'title', 'authors', 'year', 'month')}),
@@ -40,6 +49,10 @@ class PublicationAdmin(admin.ModelAdmin):
 		(None, {'fields':
 			('lists',)}),
 	)
+	formfield_overrides = {
+		models.CharField: {'widget': TextInput(attrs={'size':'60'})},
+		TaggableManager: {'widget': TagWidget(attrs={'size': '60'})}
+	}
 	inlines = [CustomLinkInline, CustomFileInline]
 
 	def get_urls(self):
