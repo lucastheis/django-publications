@@ -3,8 +3,7 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
 from publications.models import Publication
 
 def unapi(request):
@@ -32,26 +31,23 @@ def unapi(request):
 
 		if format == 'bibtex':
 			# return BibTex encoded publication
-			return render_to_response('publications/publication.bib', {
+			return render(request, 'publications/publication.bib', {
 					'publication': publications[0]
 				},
-				context_instance=RequestContext(request),
 				content_type='text/x-bibtex; charset=UTF-8')
 
 		if format == 'mods':
 			# return MODS encoded publication
-			return render_to_response('publications/publications.mods', {
+			return render(request, 'publications/publications.mods', {
 					'publications': publications
 				},
-				context_instance=RequestContext(request),
 				content_type='application/xml; charset=UTF-8')
 
 		if format == 'ris':
 			# return MODS encoded publication
-			return render_to_response('publications/publications.ris', {
+			return render(request, 'publications/publications.ris', {
 					'publications': publications
 				},
-				context_instance=RequestContext(request),
 				content_type='application/x-research-info-systems; charset=UTF-8')
 
 		# invalid format
