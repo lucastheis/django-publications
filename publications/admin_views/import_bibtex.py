@@ -4,8 +4,7 @@ __docformat__ = 'epytext'
 
 import re
 import publications.six as six
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -133,13 +132,13 @@ def import_bibtex(request):
 
 		if errors:
 			# some error occurred
-			return render_to_response(
+			return render(
+				request,
 				'admin/publications/import_bibtex.html', {
 					'errors': errors,
 					'title': 'Import BibTex',
 					'types': Type.objects.all(),
-					'request': request},
-				RequestContext(request))
+					'request': request})
 		else:
 			try:
 				# save publications
@@ -159,11 +158,11 @@ def import_bibtex(request):
 			# redirect to publication listing
 			return HttpResponseRedirect('../')
 	else:
-		return render_to_response(
+		return render(
+			request,
 			'admin/publications/import_bibtex.html', {
 				'title': 'Import BibTex',
 				'types': Type.objects.all(),
-				'request': request},
-			context_instance=RequestContext(request))
+				'request': request})
 
 import_bibtex = staff_member_required(import_bibtex)

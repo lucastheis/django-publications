@@ -2,8 +2,7 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from publications.models import Publication, CustomLink, CustomFile
 from publications.utils import populate
 
@@ -24,34 +23,34 @@ def year(request, year=None):
 		years[-1][1].append(publication)
 
 	if 'plain' in request.GET:
-		return render_to_response('publications/publications.txt', {
+		return render(request, 'publications/publications.txt', {
 				'publications': sum([y[1] for y in years], [])
-			}, context_instance=RequestContext(request), content_type='text/plain; charset=UTF-8')
+			}, content_type='text/plain; charset=UTF-8')
 
 	if 'bibtex' in request.GET:
-		return render_to_response('publications/publications.bib', {
+		return render(request, 'publications/publications.bib', {
 				'publications': sum([y[1] for y in years], [])
-			}, context_instance=RequestContext(request), content_type='text/x-bibtex; charset=UTF-8')
+			}, content_type='text/x-bibtex; charset=UTF-8')
 
 	if 'mods' in request.GET:
-		return render_to_response('publications/publications.mods', {
+		return render(request, 'publications/publications.mods', {
 				'publications': sum([y[1] for y in years], [])
-			}, context_instance=RequestContext(request), content_type='application/xml; charset=UTF-8')
+			}, content_type='application/xml; charset=UTF-8')
 
 	if 'ris' in request.GET:
-		return render_to_response('publications/publications.ris', {
+		return render(request, 'publications/publications.ris', {
 				'publications': sum([y[1] for y in years], [])
-			}, context_instance=RequestContext(request), content_type='application/x-research-info-systems; charset=UTF-8')
+			}, content_type='application/x-research-info-systems; charset=UTF-8')
 
 	if 'rss' in request.GET:
-		return render_to_response('publications/publications.rss', {
+		return render(request, 'publications/publications.rss', {
 				'url': 'http://' + request.get_host() + request.path,
 				'publications': sum([y[1] for y in years], [])
-			}, context_instance=RequestContext(request), content_type='application/rss+xml; charset=UTF-8')
+			}, content_type='application/rss+xml; charset=UTF-8')
 
 	# load custom links and files
 	populate(publications)
 
-	return render_to_response('publications/years.html', {
+	return render(request, 'publications/years.html', {
 			'years': years
-		}, context_instance=RequestContext(request))
+		})
