@@ -35,8 +35,7 @@ def get_publications(context, template='publications/publications.html'):
 	# load custom links and files
 	populate(publications)
 
-	return get_template(template).render(
-		RequestContext(context['request'], {'publications': publications}))
+	return get_template(template).render({'publications': publications}, context['request'])
 
 
 def get_publication(context, id):
@@ -53,7 +52,7 @@ def get_publication(context, id):
 	pbl[0].files = pbl[0].customfile_set.all()
 
 	return get_template('publications/publication.html').render(
-		RequestContext(context['request'], {'publication': pbl[0]}))
+		{'publication': pbl[0]}, context['request'])
 
 
 def get_publication_list(context, list, template='publications/publications.html'):
@@ -77,7 +76,7 @@ def get_publication_list(context, list, template='publications/publications.html
 	populate(publications)
 
 	return get_template(template).render(
-		RequestContext(context['request'], {'list': list, 'publications': publications}))
+		{'list': list, 'publications': publications}, context['request'])
 
 
 def tex_parse(string):
