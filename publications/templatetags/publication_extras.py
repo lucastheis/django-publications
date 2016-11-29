@@ -3,7 +3,9 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 import os
+import django
 
+from distutils.version import StrictVersion
 from django.template import Library, Node, Context, RequestContext
 from django.template.loader import get_template
 from django.utils.html import escape
@@ -18,6 +20,13 @@ GREEK_LETTERS = \
 	'[Aa]lpha|[Bb]eta|[Gg]amma|[Dd]elta|[Ee]psilon|[Zz]eta|' + \
 	'[Ee]ta|[Tt]heta|[Ll]ambda|[Mm]u|[Nn]u|[Pp]i|[Ss]igma|[Tt]au|' + \
 	'[Pp]hi|[Pp]si|[Cc]hi|[Oo]mega|[Rr]ho|[Xx]i|[Kk]appa'
+
+
+def render_template(template, request, args):
+	if StrictVersion(django.get_version()) < StrictVersion('1.8.0'):
+		return get_template(template).render(RequestContext(request, args))
+	return get_template(template).render(args, request)
+
 
 def get_publications(context, template='publications/publications.html'):
 	"""
@@ -35,7 +44,7 @@ def get_publications(context, template='publications/publications.html'):
 	# load custom links and files
 	populate(publications)
 
-	return get_template(template).render({'publications': publications}, context['request'])
+	return render_template(template, context['request'], {'publications': publications})
 
 
 def get_publication(context, id):
@@ -51,8 +60,8 @@ def get_publication(context, id):
 	pbl[0].links = pbl[0].customlink_set.all()
 	pbl[0].files = pbl[0].customfile_set.all()
 
-	return get_template('publications/publication.html').render(
-		{'publication': pbl[0]}, context['request'])
+	return render_template(
+		'publications/publication.html', context['request'], {'publication': pbl[0]})
 
 
 def get_publication_list(context, list, template='publications/publications.html'):
@@ -75,8 +84,8 @@ def get_publication_list(context, list, template='publications/publications.html
 	# load custom links and files
 	populate(publications)
 
-	return get_template(template).render(
-		{'list': list, 'publications': publications}, context['request'])
+	return render_template(
+		template, context['request'], {'list': list, 'publications': publications})
 
 
 def tex_parse(string):
@@ -93,6 +102,7 @@ def tex_parse(string):
 			sub(r'\_\{(.*?)\}', r'<sub>\1</sub>',
 			sub(r'\\(' + GREEK_LETTERS + ')', r'&\1;', match.group(1))))))
 	return mark_safe(sub(r'\$([^\$]*)\$', tex_replace, escape(string)))
+
 
 register.simple_tag(get_publications, takes_context=True)
 register.simple_tag(get_publication, takes_context=True)
