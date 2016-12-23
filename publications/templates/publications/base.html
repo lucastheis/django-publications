@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications.views.unapi' %}"/>
+    {% block app_head %}
+    {% endblock %}
+{% endblock %}
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'publications/css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="publications-container">
+        {% if publication or publications %}
+            {% include 'publications/components/download_all.html' %}
+            {% block app_content %}
+                {% include 'publications/components/section.html' %}
+            {% endblock %}
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Sorry</h4>
+                <p>There are no {{ title|default:"publications" }}.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
