@@ -3,7 +3,7 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 from .year import year
-from .person import person
+from .author import author
 from .id import id
 from .keyword import keyword
 from .list import list

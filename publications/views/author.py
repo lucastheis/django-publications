@@ -13,18 +13,18 @@ from publications.models import Type, Publication
 from publications.utils import populate
 
 
-def person(request, name):
-    author = capwords(name.replace('+', ' '))
-    author = author.replace(' Von ', ' von ').replace(' Van ', ' van ')
-    author = author.replace(' Der ', ' der ')
+def author(request, name):
+    fullname = capwords(name.replace('+', ' '))
+    fullname = fullname.replace(' Von ', ' von ').replace(' Van ', ' van ')
+    fullname = fullname.replace(' Der ', ' der ')
 
     # take care of dashes
-    off = author.find('-')
+    off = fullname.find('-')
     while off > 0:
         off += 1
-        if off <= len(author):
-            author = author[:off] + author[off].upper() + author[off + 1:]
-        off = author.find('-', off)
+        if off <= len(fullname):
+            fullname = fullname[:off] + fullname[off].upper() + fullname[off + 1:]
+        off = fullname.find('-', off)
 
     # split into forename, middlenames and surname
     names = name.replace(' ', '+').split('+')
@@ -92,7 +92,7 @@ def person(request, name):
     if 'rss' in request.GET:
         return render(request, 'publications/export/publications.rss', {
             'url': 'http://' + request.get_host() + request.path,
-            'author': author,
+            'author': fullname,
             'publications': publications
         }, content_type='application/rss+xml; charset=UTF-8')
 
@@ -102,5 +102,5 @@ def person(request, name):
     return render(request, 'publications/pages/person.html', {
         'publications': publications,
         'types': types,
-        'author': author
+        'author': fullname
     })
