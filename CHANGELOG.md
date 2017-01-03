@@ -1,11 +1,21 @@
 # django-publications
 
+## 0.8.0
+- Used Bootstrap 4.0.0-alpha.5 for the layout
+  - Refactored file inclusions
+  - Integration in project's base layout
+- Renamed person to author
+- Added namespace to urls
+- Minor changes
+- Added migrations
+- WIP updated tests
+
 ## 0.6.2
 
 - Minor bug fixes
-– Added migrations
-– Allow non-numerical page entries
-– Fixed compatibility issues with Django 1.9
+- Added migrations
+- Allow non-numerical page entries
+- Fixed compatibility issues with Django 1.9
 
 ## 0.6.1
 

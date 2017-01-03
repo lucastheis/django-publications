@@ -9,9 +9,9 @@ Screenshots
 [![frontend][3]][1]
 [![backend][4]][2]
 
-[1]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend.png
+[1]: https://raw.githubusercontent.com/mbourqui/django-publications/media/frontend.png
 [2]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend.png
-[3]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend_small.png
+[3]: https://raw.githubusercontent.com/mbourqui/django-publications/media/frontend_small.png
 [4]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend_small.png
 
 Features
@@ -25,6 +25,7 @@ Features
 * PDF upload
 * RSS feeds
 * support for images
+* Bootstrap 4.0.0
 
 Requirements
 ------------
