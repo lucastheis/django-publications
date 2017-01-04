@@ -7,7 +7,8 @@ TI  - {{ publication.book_title }}{% endif %}{% if publication.isbn %}
 SN  - {{ publication.isbn }}{% endif %}
 PY  - {{ publication.year }}{% if publication.publisher %}
 PB  - {{ publication.publisher }}{% elif publication.institution %}
-PB  - {{ publication.institution }}{% endif %}{% if publication.volume %}
+PB  - {{ publication.institution }}{% endif %}{% if publication.location %}
+CY  - {{ publication.location }}{% endif %}{% if publication.volume %}
 VL  - {{ publication.volume }}{% endif %}{% if publication.number %}
 IS  - {{ publication.number }}{% endif %}{% if publication.pages %}
 SP  - {{ publication.first_page }}

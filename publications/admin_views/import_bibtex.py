@@ -62,6 +62,7 @@ def import_bibtex(request):
 					keys = [
 						'journal',
 						'booktitle',
+						'address',
 						'publisher',
 						'institution',
 						'url',
@@ -81,11 +82,6 @@ def import_bibtex(request):
 
 					entry['volume'] = entry.get('volume', None)
 					entry['number'] = entry.get('number', None)
-
-					if isinstance(entry['volume'], six.text_type):
-						entry['volume'] = int(re.sub('[^0-9]', '', entry['volume']))
-					if isinstance(entry['number'], six.text_type):
-						entry['number'] = int(re.sub('[^0-9]', '', entry['number']))
 
 					# remove whitespace characters (likely due to line breaks)
 					entry['url'] = re.sub(r'\s', '', entry['url'])
@@ -113,6 +109,7 @@ def import_bibtex(request):
 						journal=entry['journal'],
 						book_title=entry['booktitle'],
 						publisher=entry['publisher'],
+						location=entry['address'],
 						institution=entry['institution'],
 						volume=entry['volume'],
 						number=entry['number'],

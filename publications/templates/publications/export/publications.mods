@@ -9,7 +9,10 @@
 		<originInfo>
 			<dateIssued>{{ publication.year }}</dateIssued>{% if publication.publisher %}
 			<publisher>{{ publication.publisher }}</publisher>{% elif publication.institution %}
-			<publisher>{{ publication.institution }}</publisher>{% endif %}
+			<publisher>{{ publication.institution }}</publisher>{% endif %}{% if publication.location %}
+			<place>
+				<placeTerm type="text">{{ publication.location }}</placeTerm>
+			</place>{% endif %}
 		</originInfo>
 		{% for given_name, family_name in publication.authors_list_split %}
 		<name type="personal">

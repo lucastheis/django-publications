@@ -16,6 +16,10 @@
 - Added migrations
 - WIP updated tests
 
+## 0.7.0
+
+- Changed volume and issue number to CharField (requires migration).
+
 ## 0.6.2
 
 - Minor bug fixes

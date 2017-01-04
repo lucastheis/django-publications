@@ -2,13 +2,14 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
+from django import forms
 from django.contrib import admin
 
 try:
     from django.conf.urls import url
 except ImportError:
     from django.conf.urls.defaults import url
-from publications.models import CustomLink, CustomFile
+from publications.models import Publication, CustomLink, CustomFile
 
 import publications.admin_views
 
@@ -25,7 +26,22 @@ class CustomFileInline(admin.StackedInline):
     max_num = 5
 
 
+
+class PublicationAdminForm(forms.ModelForm):
+    class Meta:
+        model = Publication
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(PublicationAdminForm, self).__init__(*args, **kwargs)
+
+        # give volume and number fields appearance of IntegerField
+        self.fields['volume'].widget.attrs['class'] = 'vIntegerField'
+        self.fields['number'].widget.attrs['class'] = 'vIntegerField'
+
+
 class PublicationAdmin(admin.ModelAdmin):
+    form = PublicationAdminForm
     list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
     list_display_links = ('title',)
     change_list_template = 'admin/publications/publication_change_list.html'
@@ -36,7 +52,7 @@ class PublicationAdmin(admin.ModelAdmin):
               ('type', 'title', 'authors', 'year', 'month', 'external',)}),
         ('Publishing',
          {'fields':
-              ('journal', 'book_title', 'publisher', 'institution', 'volume', 'number', 'pages',
+              ('journal', 'book_title', 'publisher', 'institution', 'location', 'volume', 'number', 'pages',
                'url', 'doi', 'isbn',)}),
         ('References',
          {'fields':
