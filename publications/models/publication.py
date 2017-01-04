@@ -10,7 +10,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.http import urlquote_plus
 
-from publications.fields import PagesField
+from publications.fields import NullCharField, PagesField
 from publications.models import Type, List
 
 if 'django.contrib.sites' in settings.INSTALLED_APPS:
@@ -75,19 +75,18 @@ class Publication(models.Model):
     note = models.CharField(max_length=256, blank=True)
     keywords = models.CharField(max_length=256, blank=True,
                                 help_text='List of keywords separated by commas.')
-    url = models.URLField(blank=True, verbose_name='URL',
-                          help_text='Link to PDF or journal page.')
-    code = models.URLField(blank=True,
-                           help_text='Link to page with code.')
+    url = models.URLField(blank=True, verbose_name='URL', help_text='Link to PDF or journal page.')
+    code = models.URLField(blank=True, help_text='Link to page with code.')
     pdf = models.FileField(upload_to='publications/', verbose_name='PDF', blank=True, null=True)
     image = models.ImageField(upload_to='publications/images/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='publications/thumbnails/', blank=True, null=True)
-    doi = models.CharField(max_length=128, verbose_name='DOI', blank=True, unique=True)
     external = models.BooleanField(default=False,
-                                   help_text='If publication was written in another lab, mark as external.')
+                                   help_text='If publication was written in another lab, '
+                                             'mark as external.')
     abstract = models.TextField(blank=True)
-    isbn = models.CharField(max_length=32, verbose_name="ISBN", blank=True, help_text='Only for a book.',
-                            unique=True)  # A-B-C-D
+    doi = NullCharField(max_length=128, verbose_name='DOI', blank=True, null=True, unique=True)
+    isbn = NullCharField(max_length=32, verbose_name='ISBN', help_text='Only for a book.',
+                         blank=True, null=True, unique=True)  # A-B-C-D
     lists = models.ManyToManyField(List, blank=True)
 
     def __init__(self, *args, **kwargs):
@@ -115,7 +114,8 @@ class Publication(models.Model):
         self.authors = self.authors.replace(';', ',')
 
         # list of authors
-        self.authors_list = [author.strip() for author in self.authors.split(',')]
+        self.authors_list = [author.strip() for author in
+                             self.authors.split(',')]
 
         # simplified representation of author names
         self.authors_list_simple = []
@@ -127,7 +127,8 @@ class Publication(models.Model):
         self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] \
             if len(self.title) > 0 else False
 
-        suffixes = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', "Jr.", "Sr."]
+        suffixes = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', "Jr.",
+                    "Sr."]
         prefixes = ['Dr.']
         prepositions = ['van', 'von', 'der', 'de', 'den']
 
@@ -175,10 +176,12 @@ class Publication(models.Model):
                 # create simplified/normalized representation of author name
                 if len(names) > 1:
                     for name in names[0].split('-'):
-                        name_simple = self.simplify_name(' '.join([name, names[-1]]))
+                        name_simple = self.simplify_name(
+                            ' '.join([name, names[-1]]))
                         self.authors_list_simple.append(name_simple)
                 else:
-                    self.authors_list_simple.append(self.simplify_name(names[0]))
+                    self.authors_list_simple.append(
+                        self.simplify_name(names[0]))
 
                 # number of prepositions
                 num_prepositions = 0
@@ -274,7 +277,7 @@ class Publication(models.Model):
         return self.pages.split('-')[-1]
 
     def z3988(self):
-        contextObj = ['ctx_ver=Z39.88-2004']
+        context_obj = ['ctx_ver=Z39.88-2004']
 
         if 'django.contrib.sites' in settings.INSTALLED_APPS:
             domain = Site.objects.get_current().domain
@@ -291,45 +294,46 @@ class Publication(models.Model):
             rfr_id = ''
 
         if self.book_title and not self.journal:
-            contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:book')
-            contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
-            contextObj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
+            context_obj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:book')
+            context_obj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
+            context_obj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
 
-            contextObj.append('rft.btitle=' + urlquote_plus(self.title))
+            context_obj.append('rft.btitle=' + urlquote_plus(self.title))
 
             if self.publisher:
-                contextObj.append('rft.pub=' + urlquote_plus(self.publisher))
+                context_obj.append('rft.pub=' + urlquote_plus(self.publisher))
 
         else:
-            contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
-            contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
-            contextObj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
-            contextObj.append('rft.atitle=' + urlquote_plus(self.title))
+            context_obj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
+            context_obj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
+            context_obj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
+            context_obj.append('rft.atitle=' + urlquote_plus(self.title))
 
             if self.journal:
-                contextObj.append('rft.jtitle=' + urlquote_plus(self.journal))
+                context_obj.append('rft.jtitle=' + urlquote_plus(self.journal))
 
             if self.volume:
-                contextObj.append('rft.volume={0}'.format(self.volume))
+                context_obj.append('rft.volume={0}'.format(self.volume))
 
             if self.pages:
-                contextObj.append('rft.pages=' + urlquote_plus(self.pages))
+                context_obj.append('rft.pages=' + urlquote_plus(self.pages))
 
             if self.number:
-                contextObj.append('rft.issue={0}'.format(self.number))
+                context_obj.append('rft.issue={0}'.format(self.number))
 
         if self.month:
-            contextObj.append('rft.date={0}-{1}-1'.format(self.year, self.month))
+            context_obj.append(
+                'rft.date={0}-{1}-1'.format(self.year, self.month))
         else:
-            contextObj.append('rft.date={0}'.format(self.year))
+            context_obj.append('rft.date={0}'.format(self.year))
 
         for author in self.authors_list:
-            contextObj.append('rft.au=' + urlquote_plus(author))
+            context_obj.append('rft.au=' + urlquote_plus(author))
 
         if self.isbn:
-            contextObj.append('rft.isbn=' + urlquote_plus(self.isbn))
+            context_obj.append('rft.isbn=' + urlquote_plus(self.isbn))
 
-        return '&'.join(contextObj)
+        return '&'.join(context_obj)
 
     def clean(self):
         if not self.citekey:
