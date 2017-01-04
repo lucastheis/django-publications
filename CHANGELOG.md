@@ -1,6 +1,12 @@
 # django-publications
 
+## 0.8.1
+
+- FIX unique DOI and ISBN numbers
+- Minor changes in admin layout
+
 ## 0.8.0
+
 - Used Bootstrap 4.0.0-alpha.5 for the layout
   - Refactored file inclusions
   - Integration in project's base layout

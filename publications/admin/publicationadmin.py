@@ -1,5 +1,5 @@
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
+__authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
 from django.contrib import admin
