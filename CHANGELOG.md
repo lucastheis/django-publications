@@ -1,5 +1,13 @@
 # django-publications
 
+## 0.8.3
+
+- Add more accented characters for bibtex parser
+
+## 0.8.2
+
+- Merges v0.7.0 into v0.8
+
 ## 0.8.1
 
 - FIX unique DOI and ISBN numbers
