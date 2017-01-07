@@ -42,9 +42,9 @@ settings_dict = {
 
 if hasattr(global_settings, 'TEMPLATE_CONTEXT_PROCESSORS'):
 	settings_dict['TEMPLATE_CONTEXT_PROCESSORS'] = \
-		global_settings.TEMPLATE_CONTEXT_PROCESSORS + ('django.core.context_processors.request',)
+		tuple(global_settings.TEMPLATE_CONTEXT_PROCESSORS) + ('django.core.context_processors.request',)
 else:
-	global_settings.TEMPLATES = [
+	settings_dict['TEMPLATES'] = [
 		{
 			'BACKEND': 'django.template.backends.django.DjangoTemplates',
 			'DIRS': [],
