@@ -25,6 +25,7 @@ branches:
         - media
 install:
     - pip install -q django==$DJANGO_VERSION
+    - pip install Pillow
     - pip install -q -e .
     - pip install -q selenium
     - pip install -q coveralls
