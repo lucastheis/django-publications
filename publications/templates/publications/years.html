@@ -3,7 +3,7 @@
 {% block head %}
 	{{ block.super }}
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="?rss" />
-	<link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications.views.unapi' %}"/>
+	<link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications:unapi' %}"/>
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
 		<a href="?bibtex">BibTex</a>
 	</div>
 	{% for year, publications in years %}
-	<a href="{% url 'publications.views.year' year %}"><h1>{{ year }}</h1></a>
+	<a href="{% url 'publications:year' year %}"><h1>{{ year }}</h1></a>
 		<hr/>
 		<div{% if not forloop.last %} style="margin-bottom: 30px;"{% endif %}>
 		{% for publication in publications %}
