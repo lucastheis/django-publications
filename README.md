@@ -29,7 +29,7 @@ Features
 Requirements
 ------------
 
-* Python >= 2.6.0
+* Python >= 2.7.0
 * Django >= 1.5.0
 * Pillow >= 2.4.0
 
