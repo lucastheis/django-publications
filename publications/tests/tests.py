@@ -71,7 +71,6 @@ class Tests(TestCase):
 		self.assertEqual(publication.citekey, 'Unique2013a')
 
 
-
 	def test_custom_links(self):
 		link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
 		link.save()
@@ -146,7 +145,6 @@ class Tests(TestCase):
 		self.assertFalse('B. Common' in str(response.content))
 
 
-
 	def test_bibtex_import(self):
 		self.client.login(username='admin', password='admin')
 
@@ -163,6 +161,11 @@ class Tests(TestCase):
 		self.assertTrue('P. van der Markt III' in publications[0].authors_list)
 		self.assertTrue('Test' in publications[0].authors_list)
 		self.assertTrue('C. F. Gauss II' in publications[0].authors_list)
+
+		publications = Publication.objects.filter(citekey='kay2015good')
+
+		self.assertEqual(len(publications), 1)
+		self.assertTrue(publications[0].title.startswith('How Good is 85%?'))
 
 
 	def test_unapi(self):
@@ -201,6 +204,7 @@ class Tests(TestCase):
 			{% get_publication 1 %}
 			{% get_publication_list 'highlights' 'publications/publications_with_thumbnails.html' %}
 			{% get_publication 10 %}
+			{% get_publications %}
 			""")
 
 		self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
@@ -210,7 +214,7 @@ class Tests(TestCase):
 		self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
 
 
-TEST_BIBLIOGRAPHY_COUNT = 7
+TEST_BIBLIOGRAPHY_COUNT = 10
 TEST_BIBLIOGRAPHY = r"""
 @article{Bethge2002c,
   author = "M. Bethge and D. Rotermund and K. Pawelzik",
@@ -291,5 +295,44 @@ archivePrefix = "arXiv",
     month = nov,
    adsurl = {http://adsabs.harvard.edu/abs/2014arXiv1411.1045K},
   adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+@incollection{dougan2014objective,
+  title={Objective Functions},
+  author={Do{\u{g}}an, Haluk and Otu, Hasan H},
+  booktitle={Multiple Sequence Alignment Methods},
+  pages={45--58},
+  year={2014},
+  publisher={Springer}
+}
+
+@inproceedings{DBLP:conf/patmos/ShahWSB14,
+  author    = {Syed Abbas Ali Shah and
+               Jan Wagner and
+               Thomas Schuster and
+               Mladen Berekovic},
+  title     = {A lightweight-system-level power and area estimation methodology for
+               application specific instruction set processors},
+  booktitle = {24th International Workshop on Power and Timing Modeling, Optimization
+               and Simulation, PATMOS), Palma de Mallorca, Spain, September 29 -
+               Oct. 1, 2014},
+  pages     = {1--5},
+  publisher = {{IEEE}},
+  year      = {2014},
+  url       = {http://dx.doi.org/10.1109/PATMOS.2014.6951886},
+  doi       = {10.1109/PATMOS.2014.6951886},
+  timestamp = {Tue, 18 Nov 2014 12:34:31 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/patmos/ShahWSB14},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{kay2015good,
+  title={How Good is 85\%? A Survey Tool to Connect Classifier Evaluation to Acceptability of Accuracy},
+  author={Kay, Matthew and Patel, Shwetak N and Kientz, Julie A},
+  booktitle={Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems},
+  pages={347--356},
+  year={2015},
+  organization={ACM}
 }
 """

@@ -23,6 +23,10 @@ class Type(OrderedModel):
 		return self.type
 
 
+	def __str__(self):
+		return self.type
+
+
 	def __init__(self, *args, **kwargs):
 		OrderedModel.__init__(self, *args, **kwargs)
 

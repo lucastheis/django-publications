@@ -3,14 +3,14 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 try:
-	from django.conf.urls import patterns, include, url
+	from django.conf.urls import include, url
 except ImportError:
-	from django.conf.urls.defaults import patterns, include, url
+	from django.conf.urls.defaults import include, url
 from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
 	url(r'^publications/', include('publications.urls')),
 	url(r'^admin/', include(admin.site.urls)),
-)
+]

@@ -1,8 +1,7 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_modify %}
-{% load url from future %}
+{% load i18n admin_static admin_modify %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}admin/css/forms.css" />{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}" />{% endblock %}
 
 {% block breadcrumbs %}
 	<div class="breadcrumbs">
@@ -36,9 +35,9 @@
 						</div>
 					</div>
 				</fieldset>
-				<ul class="submit-row">
-					<li class="submit-button-container"><input type="submit" value="{% trans 'Import' %}" class="default" name="_save" /></li>
-				</ul><br clear="all" />
+				<div class="submit-row">
+					<input type="submit" value="{% trans 'Import' %}" class="default" name="_save" />
+				</div><br clear="all" />
 			</div>
 		</form>
 	</div>

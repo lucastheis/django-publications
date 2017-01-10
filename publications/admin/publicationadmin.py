@@ -5,10 +5,12 @@ __docformat__ = 'epytext'
 from django import forms
 from django.contrib import admin
 try:
-	from django.conf.urls import patterns, url
+	from django.conf.urls import url
 except ImportError:
-	from django.conf.urls.defaults import patterns, url
+	from django.conf.urls.defaults import url
 from publications.models import Publication, CustomLink, CustomFile
+
+import publications.admin_views
 
 class CustomLinkInline(admin.StackedInline):
 	model = CustomLink
@@ -20,7 +22,6 @@ class CustomFileInline(admin.StackedInline):
 	model = CustomFile
 	extra = 1
 	max_num = 5
-
 
 
 class PublicationAdminForm(forms.ModelForm):
@@ -58,7 +59,7 @@ class PublicationAdmin(admin.ModelAdmin):
 	inlines = [CustomLinkInline, CustomFileInline]
 
 	def get_urls(self):
-		return patterns('',
-				url(r'^import_bibtex/$', 'publications.admin_views.import_bibtex',
+		return [
+				url(r'^import_bibtex/$', publications.admin_views.import_bibtex,
 					name='publications_publication_import_bibtex'),
-			) + super(PublicationAdmin, self).get_urls()
+			] + super(PublicationAdmin, self).get_urls()

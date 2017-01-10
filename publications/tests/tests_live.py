@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import tests
 from django.test import LiveServerTestCase
 from django.contrib.auth.models import User
 from selenium import webdriver
 from time import sleep
+from publications.tests import tests
 from publications.models import Publication
 
 class LiveTests(LiveServerTestCase):
@@ -47,7 +47,6 @@ class LiveTests(LiveServerTestCase):
 		self.selenium.find_element_by_xpath('//input[@value="Import"]').click()
 
 		self.assertEqual(Publication.objects.count() - count, tests.TEST_BIBLIOGRAPHY_COUNT)
-
 
 
 	def test_import_bibtex_button(self):

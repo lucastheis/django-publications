@@ -9,10 +9,12 @@ import os
 from django.db import models
 from django.utils.http import urlquote_plus
 from django.conf import settings
-from django.contrib.sites.models import Site
 from publications.fields import PagesField
 from publications.models import Type, List
 from string import ascii_uppercase
+
+if 'django.contrib.sites' in settings.INSTALLED_APPS:
+	from django.contrib.sites.models import Site
 
 class Publication(models.Model):
 	"""
@@ -62,7 +64,7 @@ class Publication(models.Model):
 	title = models.CharField(max_length=512)
 	authors = models.CharField(max_length=2048,
 		help_text='List of authors separated by commas or <i>and</i>.')
-	year = models.PositiveIntegerField(max_length=4)
+	year = models.PositiveIntegerField()
 	month = models.IntegerField(choices=MONTH_CHOICES, blank=True, null=True)
 	journal = models.CharField(max_length=256, blank=True)
 	book_title = models.CharField(max_length=256, blank=True)
@@ -208,6 +210,10 @@ class Publication(models.Model):
 
 
 	def __unicode__(self):
+		return self.__str__()
+
+
+	def __str__(self):
 		if len(self.title) < 64:
 			return self.title
 		else:
@@ -248,6 +254,10 @@ class Publication(models.Model):
 				char += 1
 
 		return self.authors_list[0].split(' ')[-1] + str(self.year) + chr(char)
+
+
+	def title_bibtex(self):
+		return self.title.replace('%', r'\%')
 
 
 	def month_bibtex(self):

@@ -3,12 +3,15 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 import os
+import django
 
+from distutils.version import StrictVersion
 from django.template import Library, Node, Context, RequestContext
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from publications.models import Publication, List, CustomLink, CustomFile
+from publications.models import Publication, List, Type
+from publications.utils import populate
 from re import sub
 
 register = Library()
@@ -18,7 +21,37 @@ GREEK_LETTERS = \
 	'[Ee]ta|[Tt]heta|[Ll]ambda|[Mm]u|[Nn]u|[Pp]i|[Ss]igma|[Tt]au|' + \
 	'[Pp]hi|[Pp]si|[Cc]hi|[Oo]mega|[Rr]ho|[Xx]i|[Kk]appa'
 
+
+def render_template(template, request, args):
+	if StrictVersion(django.get_version()) < StrictVersion('1.8.0'):
+		return get_template(template).render(RequestContext(request, args))
+	return get_template(template).render(args, request)
+
+
+def get_publications(context, template='publications/publications.html'):
+	"""
+	Get all publications.
+	"""
+
+	types = Type.objects.filter(hidden=False)
+	publications = Publication.objects.select_related()
+	publications = publications.filter(external=False, type__in=types)
+	publications = publications.order_by('-year', '-month', '-id')
+
+	if not publications:
+		return ''
+
+	# load custom links and files
+	populate(publications)
+
+	return render_template(template, context['request'], {'publications': publications})
+
+
 def get_publication(context, id):
+	"""
+	Get a single publication.
+	"""
+
 	pbl = Publication.objects.filter(pk=int(id))
 
 	if len(pbl) < 1:
@@ -27,11 +60,15 @@ def get_publication(context, id):
 	pbl[0].links = pbl[0].customlink_set.all()
 	pbl[0].files = pbl[0].customfile_set.all()
 
-	return get_template('publications/publication.html').render(
-		RequestContext(context['request'], {'publication': pbl[0]}))
+	return render_template(
+		'publications/publication.html', context['request'], {'publication': pbl[0]})
 
 
 def get_publication_list(context, list, template='publications/publications.html'):
+	"""
+	Get a publication list.
+	"""
+
 	list = List.objects.filter(list__iexact=list)
 
 	if not list:
@@ -45,27 +82,17 @@ def get_publication_list(context, list, template='publications/publications.html
 		return ''
 
 	# load custom links and files
-	customlinks = CustomLink.objects.filter(publication__in=publications)
-	customfiles = CustomFile.objects.filter(publication__in=publications)
+	populate(publications)
 
-	# create map from ids to publications
-	publications_ = {}
-	for publication in publications:
-		publication.links = []
-		publication.files = []
-		publications_[publication.id] = publication
-
-	# assign custom links and files to publications
-	for link in customlinks:
-		publications_[link.publication_id].links.append(link)
-	for file in customfiles:
-		publications_[file.publication_id].files.append(file)
-
-	return get_template(template).render(
-			RequestContext(context['request'], {'list': list, 'publications': publications}))
+	return render_template(
+		template, context['request'], {'list': list, 'publications': publications})
 
 
 def tex_parse(string):
+	"""
+	Renders some basic TeX math to HTML.
+	"""
+
 	string = string.replace('{', '').replace('}', '')
 	def tex_replace(match):
 		return \
@@ -76,6 +103,8 @@ def tex_parse(string):
 			sub(r'\\(' + GREEK_LETTERS + ')', r'&\1;', match.group(1))))))
 	return mark_safe(sub(r'\$([^\$]*)\$', tex_replace, escape(string)))
 
+
+register.simple_tag(get_publications, takes_context=True)
 register.simple_tag(get_publication, takes_context=True)
 register.simple_tag(get_publication_list, takes_context=True)
 register.filter('tex_parse', tex_parse)
