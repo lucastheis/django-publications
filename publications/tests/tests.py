@@ -214,7 +214,7 @@ class Tests(TestCase):
 		self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
 
 
-TEST_BIBLIOGRAPHY_COUNT = 9
+TEST_BIBLIOGRAPHY_COUNT = 10
 TEST_BIBLIOGRAPHY = r"""
 @article{Bethge2002c,
   author = "M. Bethge and D. Rotermund and K. Pawelzik",
@@ -281,6 +281,20 @@ TEST_BIBLIOGRAPHY = r"""
  timestamp = {Mon, 27 Oct 2014 13:50:21 +0100},
  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/KummererWB14},
  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@ARTICLE{2014arXiv1411.1045K,
+   author = {{K{\"u}mmerer}, M. and {Theis}, L. and {Bethge}, M.},
+    title = "{Deep Gaze I: Boosting Saliency Prediction with Feature Maps Trained on ImageNet}",
+  journal = {ArXiv e-prints},
+archivePrefix = "arXiv",
+   eprint = {1411.1045},
+ primaryClass = "cs.CV",
+ keywords = {Computer Science - Computer Vision and Pattern Recognition, Quantitative Biology - Neurons and Cognition, Statistics - Applications},
+     year = 2014,
+    month = nov,
+   adsurl = {http://adsabs.harvard.edu/abs/2014arXiv1411.1045K},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 @incollection{dougan2014objective,
   title={Objective Functions},
