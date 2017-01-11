@@ -32,6 +32,7 @@ Requirements
 * Python >= 2.7.0
 * Django >= 1.5.0
 * Pillow >= 2.4.0
+* django-countries >= 4.0
 
 Installation
 ------------

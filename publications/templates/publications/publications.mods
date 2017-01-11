@@ -9,7 +9,13 @@
 		<originInfo>
 			<dateIssued>{{ publication.year }}</dateIssued>{% if publication.publisher %}
 			<publisher>{{ publication.publisher }}</publisher>{% elif publication.institution %}
-			<publisher>{{ publication.institution }}</publisher>{% endif %}
+			<publisher>{{ publication.institution }}</publisher>{% endif %}{% if publication.location %}
+			<place>
+			    <placeTerm type="text">{{ publication.location }}</placeTerm>
+			</place>{% endif %}
+			{% if publication.edition %}
+			<edition>{{ publication.edition }}</edition>
+			{% endif %}
 		</originInfo>
 		{% for given_name, family_name in publication.authors_list_split %}
 		<name type="personal">
@@ -26,14 +32,16 @@
 			{% endif %}
 			<part>
 				{% if publication.volume %}
-				<detail type="volume">
-					<number>{{ publication.volume }}</number>
-				</detail>
+				<detail type="volume">{{ publication.volume }}</detail>
 				{% endif %}
 				{% if publication.number %}
-				<detail type="issue">
-					<number>{{ publication.number }}</number>
-				</detail>
+				<detail type="issue">{{ publication.number }}</detail>
+				{% endif %}
+				{% if publication.chapter %}
+				<detail type="issue">{{ publication.chapter }}</detail>
+				{% endif %}
+				{% if publication.section %}
+				<detail type="issue">{{ publication.section }}</detail>
 				{% endif %}
 				{% if publication.pages %}
 				<extent unit="page">
@@ -43,6 +51,13 @@
 				{% endif %}
 			</part>
 		</relatedItem>
+		{% if publication.series %}
+        <relatedItem type="series">
+            <titleInfo>
+                <title>{{ publication.series }}</title>
+            </titleInfo>
+        </relatedItem>
+        {% endif %}
 		{% if publication.pdf %}
 		<location>
 			<url displayLabel="PDF" access="raw object">{{ MEDIA_URL }}{{ publication.pdf }}</url>
