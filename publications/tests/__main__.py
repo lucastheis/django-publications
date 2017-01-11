@@ -1,8 +1,8 @@
 import os
 import sys
 
-from django.conf import settings
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+from distutils.version import StrictVersion
+from django.conf import settings, global_settings
 
 BASE_DIR = os.path.dirname(__file__)
 DEBUG = False
@@ -26,26 +26,40 @@ MIDDLEWARE_CLASSES = (
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 )
-TEMPLATE_CONTEXT_PROCESSORS += (
-	'django.core.context_processors.request',
-)
 
 ROOT_URLCONF = 'publications.tests.urls'
 
-settings.configure(
-	MEDIA_ROOT=os.path.join(BASE_DIR, 'media'),
-	MEDIA_URL='/media/',
-	STATIC_ROOT=os.path.join(BASE_DIR, 'static'),
-	STATIC_URL='/static/',
-	DEBUG=DEBUG,
-	INSTALLED_APPS=INSTALLED_APPS,
-	DATABASES=DATABASES,
-	MIDDLEWARE_CLASSES=MIDDLEWARE_CLASSES,
-	TEMPLATE_CONTEXT_PROCESSORS=TEMPLATE_CONTEXT_PROCESSORS,
-	ROOT_URLCONF=ROOT_URLCONF)
+settings_dict = {
+	'MEDIA_ROOT': os.path.join(BASE_DIR, 'media'),
+	'MEDIA_URL': '/media/',
+	'STATIC_ROOT': os.path.join(BASE_DIR, 'static'),
+	'STATIC_URL': '/static/',
+	'DEBUG': DEBUG,
+	'INSTALLED_APPS': INSTALLED_APPS,
+	'DATABASES': DATABASES,
+	'MIDDLEWARE_CLASSES': MIDDLEWARE_CLASSES,
+	'ROOT_URLCONF': ROOT_URLCONF}
+
+if hasattr(global_settings, 'TEMPLATE_CONTEXT_PROCESSORS'):
+	settings_dict['TEMPLATE_CONTEXT_PROCESSORS'] = \
+		tuple(global_settings.TEMPLATE_CONTEXT_PROCESSORS) + ('django.core.context_processors.request',)
+else:
+	settings_dict['TEMPLATES'] = [
+		{
+			'BACKEND': 'django.template.backends.django.DjangoTemplates',
+			'DIRS': [],
+			'APP_DIRS': True,
+			'OPTIONS': {
+				'context_processors': [
+					'django.template.context_processors.request',
+				],
+			},
+		},
+	]
+
+settings.configure(**settings_dict)
 
 import django
-from distutils.version import StrictVersion
 
 if StrictVersion(django.get_version()) >= StrictVersion('1.7.0'):
 	from django import setup

@@ -30,10 +30,18 @@ special_chars = (
 	(r'\`u', 'ù'), (r'\`U', 'Ù'),
 	(r'\`o', 'ò'), (r'\`O', 'Ò'),
 	(r'\^o', 'ô'), (r'\^O', 'Ô'),
-	(r'\o', 'ø'), (r'\O', 'Ø'),
+	(r'\^a', 'â'), (r'\^A', 'Â'),
+	(r'\^e', 'ê'), (r'\^E', 'Ê'),
+	(r'\^i', 'î'), (r'\^I', 'Î'),
+	(r'\^u', 'û'), (r'\^U', 'Û'),
 	(r'\ss', 'ß'),
 	(r'\%', '%'),
-	(r'\ae', 'æ'), (r'\AE', 'Æ'))
+	(r'\ae', 'æ'), (r'\AE', 'Æ'), (r'\aa', 'å'), (r'\AA', 'Å'), (r'\o', 'ø'), (r'\O', 'Ø'), # swedish, danish, norwegian
+	(r'\c{c}', 'ç'), (r'\c{C}', 'Ç'),  # french, portuguese, etc
+	(r'\~a', 'ã'), (r'\~A', 'Ã'),  # portuguese
+	(r'\~o', 'õ'), (r'\~O', 'Õ'),
+	(r'{\i}', 'ı'), (r'\.{I}', 'İ'), ('\\u{g}', 'ğ'), ('\\u{G}', 'Ğ'), (r'\c{s}', 'ş'), (r'\c{S}', 'Ş'))  # turkish
+
 
 def parse(string):
 	"""
@@ -60,7 +68,9 @@ def parse(string):
 	string = re.sub(r'\\[cuHvs]{?([a-zA-Z])}?', r'\1', string)
 
 	# split into BibTex entries
-	entries = re.findall(r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,}]*),?\s*?)+)\s*}', string)
+	entries = re.findall(
+		r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,}]*),?\s*?)+)\s*}',
+		string)
 
 	for entry in entries:
 		# parse entry

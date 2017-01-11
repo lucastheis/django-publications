@@ -3,9 +3,9 @@
 ## 0.6.2
 
 - Minor bug fixes
-– Added migrations
-– Allow non-numerical page entries
-– Fixed compatibility issues with Django 1.9
+- Added migrations
+- Allow non-numerical page entries
+- Fixed compatibility issues with Django 1.9
 
 ## 0.6.1
 
