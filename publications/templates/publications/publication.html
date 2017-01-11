@@ -2,14 +2,14 @@
 
 {% if publication.authors_escaped|length > 8 %}
 	{% for author, author_escaped in publication.authors_escaped|slice:":8" %}
-	<a href="{% url 'publications.views.person' author_escaped %}" class="author">{{ author }}</a>,
+	<a href="{% url 'publications:author' author_escaped %}" class="author">{{ author }}</a>,
 	{% endfor %} <i>et al.</i><br />
 {% else %}
 	{% for author, author_escaped in publication.authors_escaped %}
-	<a href="{% url 'publications.views.person' author_escaped %}" class="author">{{ author }}</a>{% if not forloop.last %}{% if forloop.revcounter == 2 %}{% if not forloop.first %},{% endif %} and {% else %}, {% endif %}{% endif %}
+	<a href="{% url 'publications:author' author_escaped %}" class="author">{{ author }}</a>{% if not forloop.last %}{% if forloop.revcounter == 2 %}{% if not forloop.first %},{% endif %} and {% else %}, {% endif %}{% endif %}
 	{% endfor %}<br />
 {% endif %}
-<b><a href="{% url 'publications.views.id' publication.pk %}" class="title">{{ publication.title|tex_parse }}</a></b><br/>
+<b><a href="{% url 'publications:id' publication.pk %}" class="title">{{ publication.title|tex_parse }}</a></b><br/>
 {% if publication.journal %}
 	<i>{{ publication.journal }}{% if publication.note %} ({{ publication.note }}){% endif %},
 	{% if publication.volume %}<b>{{ publication.volume }}</b>{% if publication.number %}({{ publication.number }}){% endif %},{% endif %}
@@ -25,7 +25,7 @@
 {% endif %}
 {% if publication.keywords %}
 	{% for keyword, keyword_escaped in publication.keywords_escaped %}
-	<a class="keyword" href="{% url 'publications.views.keyword' keyword_escaped %}">{{ keyword }}</a>
+	<a class="keyword" href="{% url 'publications:keyword' keyword_escaped %}">{{ keyword }}</a>
 	{% endfor %}
 	<br />
 {% endif %}
@@ -40,7 +40,7 @@
 {% for link in publication.links %}
 	<a class="link" rel="external" href="{{ link.url }}">{{ link.description }}</a>,
 {% endfor %}
-<a href="{% url 'publications.views.id' publication.pk %}?ris">RIS</a>,
-<a href="{% url 'publications.views.id' publication.pk %}?bibtex">BibTex</a>
+<a href="{% url 'publications:id' publication.pk %}?ris">RIS</a>,
+<a href="{% url 'publications:id' publication.pk %}?bibtex">BibTex</a>
 <abbr class="unapi-id" title="{{ publication.id }}"></abbr>
 <span class="Z3988" title="{{ publication.z3988 }}"></span>
