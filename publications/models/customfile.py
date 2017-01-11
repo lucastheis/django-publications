@@ -6,8 +6,6 @@ from django.db import models
 from publications.models import Publication
 
 class CustomFile(models.Model):
-	class Meta:
-		app_label = 'publications'
 
 	publication = models.ForeignKey(Publication)
 	description = models.CharField(max_length=256)
