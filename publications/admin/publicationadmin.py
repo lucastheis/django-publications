@@ -2,6 +2,7 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
+import django
 from distutils.version import StrictVersion
 from django import forms
 from django.contrib import admin
