@@ -40,18 +40,6 @@ class PublicationAdminForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'vIntegerField'
 
 
-class PublicationAdminForm(forms.ModelForm):
-	class Meta:
-		model = Publication
-
-	def __init__(self, *args, **kwargs):
-		super(PublicationAdminForm, self).__init__(*args, **kwargs)
-
-		# give volume and number fields appearance of IntegerField
-		self.fields['volume'].widget.attrs['class'] = 'vIntegerField'
-		self.fields['number'].widget.attrs['class'] = 'vIntegerField'
-
-
 class PublicationAdmin(admin.ModelAdmin):
     form = PublicationAdminForm
     list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
