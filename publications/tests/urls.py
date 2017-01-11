@@ -10,8 +10,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-app_name = 'publications'
 urlpatterns = patterns('',
-	url(r'^publications/', include('publications.urls')),
+	url(r'^publications/', include('publications.urls', namespace='publications')),
 	url(r'^admin/', include(admin.site.urls)),
 )
