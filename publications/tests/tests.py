@@ -191,7 +191,7 @@ class Tests(TestCase):
 		link.save()
 
 		publication = Publication.objects.get(pk=1)
-		lists = List.objects.filter(list__iexact='highlights')
+		lists = List.objects.filter(title__iexact='highlights')
 
 		self.assertEqual(len(lists), 1)
 
