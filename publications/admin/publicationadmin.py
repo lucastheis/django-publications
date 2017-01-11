@@ -2,6 +2,7 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
+from distutils.version import StrictVersion
 from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
@@ -10,9 +11,9 @@ try:
     from django.conf.urls import url
 except ImportError:
     from django.conf.urls.defaults import url
-from publications.models import Publication, CustomLink, CustomFile
 
-import publications.admin_views
+from .models import Publication, CustomLink, CustomFile
+import .admin_views
 
 
 class CustomLinkInline(admin.StackedInline):
@@ -30,7 +31,9 @@ class CustomFileInline(admin.StackedInline):
 class PublicationAdminForm(forms.ModelForm):
     class Meta:
         model = Publication
-        fields = '__all__'
+        if StrictVersion(django.get_version()) >= StrictVersion('1.7.0'):
+            # Fix for Django<1.7
+            fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(PublicationAdminForm, self).__init__(*args, **kwargs)
