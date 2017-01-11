@@ -12,8 +12,8 @@ try:
 except ImportError:
     from django.conf.urls.defaults import url
 
-from . import admin_views
-from .models import Publication, CustomLink, CustomFile
+from .. import admin_views
+from ..models import Publication, CustomLink, CustomFile
 
 
 class CustomLinkInline(admin.StackedInline):
