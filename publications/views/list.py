@@ -8,7 +8,7 @@ from publications.models import List, Type, Publication, CustomLink, CustomFile
 from publications.utils import populate
 
 def list(request, list):
-	list = List.objects.filter(list__iexact=list)
+	list = List.objects.filter(title__iexact=list)
 
 	if not list:
 		raise Http404
