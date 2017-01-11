@@ -24,6 +24,7 @@ class Publication(models.Model):
 
     class Meta:
         ordering = ['-year', '-month', '-id']
+        app_label = 'publications'  # Fix for Django<1.7
 
     # names shown in admin area
     MONTH_CHOICES = (
