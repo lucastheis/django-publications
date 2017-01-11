@@ -113,7 +113,7 @@
 	"model": "publications.list",
 	"pk": 1,
 		"fields": {
-			"list": "Highlights",
+			"title": "Highlights",
 			"description": "Highlights"
 		}
 	}
