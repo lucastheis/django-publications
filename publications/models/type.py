@@ -10,6 +10,7 @@ from publications.models.orderedmodel import OrderedModel
 class Type(OrderedModel):
     class Meta:
         ordering = ('order',)
+        app_label = 'publications'  # Fix for Django<1.7
 
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=128)
