@@ -81,7 +81,7 @@ class PublicationAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         return [
-                   url(r'^import_bibtex/$', publications.admin_views.import_bibtex,
+                   url(r'^import_bibtex/$', admin_views.import_bibtex,
                        name='publications_publication_import_bibtex'),
                ] + super(PublicationAdmin, self).get_urls()
 
