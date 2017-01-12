@@ -191,7 +191,7 @@ class Tests(TestCase):
 		link.save()
 
 		publication = Publication.objects.get(pk=1)
-		lists = List.objects.filter(list__iexact='highlights')
+		lists = List.objects.filter(title__iexact='highlights')
 
 		self.assertEqual(len(lists), 1)
 
@@ -296,7 +296,6 @@ archivePrefix = "arXiv",
    adsurl = {http://adsabs.harvard.edu/abs/2014arXiv1411.1045K},
   adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
-
 @incollection{dougan2014objective,
   title={Objective Functions},
   author={Do{\u{g}}an, Haluk and Otu, Hasan H},

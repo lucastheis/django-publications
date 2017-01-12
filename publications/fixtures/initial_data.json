@@ -4,7 +4,7 @@
 	"pk": 1,
 		"fields": {
 			"order": 0,
-			"type": "Journal",
+			"title": "Journal",
 			"description": "Journal Articles",
 			"bibtex_types": "article",
 			"hidden": 0
@@ -15,9 +15,9 @@
 	"pk": 2,
 		"fields": {
 			"order": 1,
-			"type": "Conference",
+			"title": "Conference",
 			"description": "Conference Papers",
-			"bibtex_types": "inproceedings, conference, incollection",
+			"bibtex_types": "inproceedings, conference",
 			"hidden": 0
 		}
 	},
@@ -26,7 +26,7 @@
 	"pk": 3,
 		"fields": {
 			"order": 2,
-			"type": "Technical Report",
+			"title": "Technical Report",
 			"description": "Technical Reports",
 			"bibtex_types": "techreport",
 			"hidden": 0
@@ -37,7 +37,7 @@
 	"pk": 4,
 		"fields": {
 			"order": 3,
-			"type": "Book",
+			"title": "Book",
 			"description": "Books",
 			"bibtex_types": "book, manual",
 			"hidden": 0
@@ -48,31 +48,31 @@
 	"pk": 5,
 		"fields": {
 			"order": 4,
-			"type": "Book Chapter",
+			"title": "Book Chapter",
 			"description": "Book Chapters",
-			"bibtex_types": "inbook",
+			"bibtex_types": "inbook, incollection",
 			"hidden": 0
 		}
 	},
-	{
-	"model": "publications.type",
-	"pk": 6,
-		"fields": {
-			"order": 5,
-			"type": "Abstract",
-			"description": "Abstracts",
-			"bibtex_types": "abstract",
-			"hidden": 1
-		}
-	},
+	{ 
+        "model": "publications.type",
+        "pk": 6,
+                "fields": {   
+                        "order": 5,
+                        "title": "Online",
+                        "description": "Online publication",
+                        "bibtex_types": "online, misc",
+                        "hidden": 0
+                }
+        },
 	{
 	"model": "publications.type",
 	"pk": 7,
 		"fields": {
 			"order": 6,
-			"type": "Thesis",
-			"description": "Theses",
-			"bibtex_types": "phdthesis, mastersthesis",
+			"title": "Abstract",
+			"description": "Abstracts",
+			"bibtex_types": "abstract",
 			"hidden": 1
 		}
 	},
@@ -81,9 +81,9 @@
 	"pk": 8,
 		"fields": {
 			"order": 7,
-			"type": "Unpublished",
-			"description": "Unpublished Papers",
-			"bibtex_types": "unpublished",
+			"title": "Thesis",
+			"description": "Theses",
+			"bibtex_types": "phdthesis, mastersthesis",
 			"hidden": 1
 		}
 	},
@@ -92,7 +92,18 @@
 	"pk": 9,
 		"fields": {
 			"order": 8,
-			"type": "Patent",
+			"title": "Unpublished",
+			"description": "Unpublished Papers",
+			"bibtex_types": "unpublished",
+			"hidden": 1
+		}
+	},
+	{
+	"model": "publications.type",
+	"pk": 10,
+		"fields": {
+			"order": 9,
+			"title": "Patent",
 			"description": "Patents",
 			"bibtex_types": "patent,misc",
 			"hidden": 1
@@ -102,7 +113,7 @@
 	"model": "publications.list",
 	"pk": 1,
 		"fields": {
-			"list": "Highlights",
+			"title": "Highlights",
 			"description": "Highlights"
 		}
 	}

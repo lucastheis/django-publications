@@ -2,7 +2,33 @@
 
 ## 0.7.0
 
-- Changed volume and issue number to CharField (requires migration).
+- Update and extend models
+ * Renamed `List.list` to `List.title`
+ * Renamed `Type.type` to `Type.title`
+ * Publication
+   - New NullCharField to support nullable but unique CharFields (Fix for Django<1.11)
+   - Updated fields:
+     + `citekey ` is unique
+     + `doi` is unique
+     + `isbn` is unique
+     + `volume` is CharField
+     + issue `number` is CharField
+   - Added new fields, to support references to be cited in common formats like ACM or IEEE:
+      + editor
+      + edition
+      + school
+      + organization
+      + location
+      + country (requires django-counties)
+      + series
+      + volume
+      + number
+      + chapter
+      + section
+      + status
+   - Updated admin layout
+   - Updated Bibtex import to support new fields
+   - (Partially) updated export formats to support new fields
 
 ## 0.6.2
 
