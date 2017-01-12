@@ -11,7 +11,7 @@
 			<publisher>{{ publication.publisher }}</publisher>{% elif publication.institution %}
 			<publisher>{{ publication.institution }}</publisher>{% endif %}{% if publication.location %}
 			<place>
-				<placeTerm type="text">{{ publication.location }}</placeTerm>
+				<placeTerm type="text">{{ publication.location }}{% if publication.country %}, {{publication.country }}{% endif %}</placeTerm>
 			</place>{% endif %}
 			{% if publication.edition %}
 			<edition>{{ publication.edition }}</edition>

@@ -8,7 +8,7 @@ SN  - {{ publication.isbn }}{% endif %}
 PY  - {{ publication.year }}{% if publication.publisher %}
 PB  - {{ publication.publisher }}{% elif publication.institution %}
 PB  - {{ publication.institution }}{% endif %}{% if publication.location %}
-CY  - {{ publication.location }}{% endif %}{% if publication.editor %}
+CY  - {{ publication.location }}{% if publication.country %}, {{publication.country }}{% endif %}{% endif %}{% if publication.editor %}
 ED  - {{ publication.editor }}{% endif %}{% if publication.edition %}
 ET  - {{ publication.edition }}{% endif %}{% if publication.volume %}
 VL  - {{ publication.volume }}{% endif %}{% if publication.number %}

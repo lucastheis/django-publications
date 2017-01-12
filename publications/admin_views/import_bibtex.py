@@ -1,5 +1,5 @@
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
+__authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
 import re
@@ -7,10 +7,11 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django_countries import countries
 
-import publications.six as six
-from publications.bibtex import parse
-from publications.models import Publication, Type
+from .. import six as six
+from ..bibtex import parse
+from ..models import Publication, Type
 
 # mapping of months
 MONTHS = {
@@ -26,6 +27,15 @@ MONTHS = {
     'oct': 10, 'october': 10,
     'nov': 11, 'november': 11,
     'dec': 12, 'december': 12}
+
+COUNTRIES_BY_CODE = dict(countries)
+# Reversed dict
+try:
+    # Python 3+
+    COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.iteritems()}
+except:
+    # Python 2.7.x
+    COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.items()}
 
 
 def import_bibtex(request):
@@ -91,6 +101,16 @@ def import_bibtex(request):
                     # remove whitespace characters (likely due to line breaks)
                     entry['url'] = re.sub(r'\s', '', entry['url'])
 
+                    if 'country' not in entry:
+                        entry['country'] = ''
+                    else:
+                        if entry['country'].strip() in COUNTRIES_BY_NAME:
+                            entry['country'] = COUNTRIES_BY_NAME[entry['country'].strip()]
+                        elif entry['country'].upper() in COUNTRIES_BY_CODE:
+                            entry['country'] = entry['country'].upper()
+                        else:
+                            entry['country'] = ''
+
                     # determine type
                     type_id = None
 
@@ -115,6 +135,7 @@ def import_bibtex(request):
                         book_title=entry['booktitle'],
                         publisher=entry['publisher'],
                         location=entry['address'],
+                        country=entry['country'],
                         editor=entry['editor'],
                         edition=entry['edition'],
                         institution=entry['institution'],
