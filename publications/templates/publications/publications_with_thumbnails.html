@@ -6,7 +6,7 @@
 			{% if publication.code %}
 				<a href="{{ publication.code }}"><img src="{{ MEDIA_URL }}{{ publication.thumbnail }}" style="width: 100px; height: 100px;" /></a>
 			{% else %}
-			<a href="{% url 'publications.views.id' publication.pk %}"><img src="{{ MEDIA_URL }}{{ publication.thumbnail }}" style="width: 100px; height: 100px;" /></a>
+			<a href="{% url 'publications:id' publication.pk %}"><img src="{{ MEDIA_URL }}{{ publication.thumbnail }}" style="width: 100px; height: 100px;" /></a>
 			{% endif %}
 		{% endif %}
 		</td>
