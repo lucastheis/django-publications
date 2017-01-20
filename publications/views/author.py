@@ -69,27 +69,27 @@ def author(request, name):
         t.publications = publications_by_type[t.id]
 
     if 'plain' in request.GET:
-        return render(request, 'publications/publications.txt', {
+        return render(request, 'publications/export/publications.txt', {
             'publications': publications
         }, content_type='text/plain; charset=UTF-8')
 
     if 'bibtex' in request.GET:
-        return render(request, 'publications/publications.bib', {
+        return render(request, 'publications/export/publications.bib', {
             'publications': publications
         }, content_type='text/x-bibtex; charset=UTF-8')
 
     if 'mods' in request.GET:
-        return render(request, 'publications/publications.mods', {
+        return render(request, 'publications/export/publications.mods', {
             'publications': publications
         }, content_type='application/xml; charset=UTF-8')
 
     if 'ris' in request.GET:
-        return render(request, 'publications/publications.ris', {
+        return render(request, 'publications/export/publications.ris', {
             'publications': publications
         }, content_type='application/x-research-info-systems; charset=UTF-8')
 
     if 'rss' in request.GET:
-        return render(request, 'publications/publications.rss', {
+        return render(request, 'publications/export/publications.rss', {
             'url': 'http://' + request.get_host() + request.path,
             'author': fullname,
             'publications': publications
@@ -98,7 +98,7 @@ def author(request, name):
     # load custom links and files
     populate(publications)
 
-    return render(request, 'publications/author.html', {
+    return render(request, 'publications/pages/author.html', {
         'publications': publications,
         'types': types,
         'author': fullname

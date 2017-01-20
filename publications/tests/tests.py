@@ -202,7 +202,8 @@ class Tests(TestCase):
 		tpl = Template("""
 			{% load publication_extras %}
 			{% get_publication 1 %}
-			{% get_publication_list 'highlights' 'publications/publications_with_thumbnails.html' %}
+			{% get_publication_list 'highlights'
+			'publications/pages/publications_with_thumbnails.html' %}
 			{% get_publication 10 %}
 			{% get_publications %}
 			""")

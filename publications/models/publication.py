@@ -72,7 +72,7 @@ class Publication(models.Model):
 
     type = models.ForeignKey(Type)
     citekey = NullCharField(max_length=512, blank=True, null=True, unique=True,
-                                   help_text='BibTex citation key. Leave blank if unsure.')
+                            help_text='BibTex citation key. Leave blank if unsure.')
     title = models.CharField(max_length=512)
     authors = models.CharField(max_length=2048,
                                help_text='List of authors separated by commas or <i>and</i>.')
