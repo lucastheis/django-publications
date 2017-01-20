@@ -5,12 +5,12 @@
         <p class="card-text">
             {% if publication.authors_escaped|length > 8 %}
                 {% for author, author_escaped in publication.authors_escaped|slice:":8" %}
-                    <a href="{% url 'publications:person' author_escaped %}">{{ author }}</a>
+                    <a href="{% url 'publications:author' author_escaped %}">{{ author }}</a>
                     ,
                 {% endfor %} <i>et al.</i>
             {% else %}
                 {% for author, author_escaped in publication.authors_escaped %}
-                    <a href="{% url 'publications:person' author_escaped %}">{{ author }}</a>
+                    <a href="{% url 'publications:author' author_escaped %}">{{ author }}</a>
                     {% if not forloop.last %}
                         {% if forloop.revcounter == 2 %}
                             {% if not forloop.first %},{% endif %} and {% else %},
