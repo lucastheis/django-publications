@@ -250,7 +250,8 @@ TEST_BIBLIOGRAPHY = r"""
   booktitle={Proceedings of the 21st Annual Conference on Neural Information Processing Systems},
   number={EPFL-CONF-161311},
   pages={529--536},
-  year={2008}
+  year={2008},
+  country={CH}
 }
 
 @article{hafner2000dynamical,
@@ -267,7 +268,8 @@ TEST_BIBLIOGRAPHY = r"""
 @misc{test:2009,
     title = "Test",
     author = {Last-Name, First and Peter van der Markt III and Test and Gauss II CF},
-    year = 2009
+    year = 2009,
+    country = {Wallis and Futuna}
 }
 
 @article{DBLP:journals/corr/KummererWB14,
@@ -333,6 +335,8 @@ archivePrefix = "arXiv",
   booktitle={Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems},
   pages={347--356},
   year={2015},
-  organization={ACM}
+  organization={ACM},
+  address = {New York, NY},
+  country = {USA}
 }
 """

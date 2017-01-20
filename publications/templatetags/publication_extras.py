@@ -66,18 +66,18 @@ def get_publication(context, id):
 
 
 @register.simple_tag(takes_context=True)
-def get_publication_list(context, list, template='publications/pages/publications.html'):
+def get_publication_list(context, list_title, template='publications/pages/publications.html'):
     """
     Get a publication list.
     """
 
-    list = List.objects.filter(title__iexact=list)
+    list_title = List.objects.filter(title__iexact=list_title)
 
-    if not list:
+    if not list_title:
         return ''
 
-    list = list[0]
-    publications = list.publication_set.all()
+    list_title = list_title[0]
+    publications = list_title.publication_set.all()
     publications = publications.order_by('-year', '-month', '-id')
 
     if not publications:
@@ -87,7 +87,7 @@ def get_publication_list(context, list, template='publications/pages/publication
     populate(publications)
 
     return render_template(template, context['request'],
-                           {'list': list, 'publications': publications})
+                           {'list': list_title, 'publications': publications})
 
 
 @register.filter()
