@@ -71,7 +71,7 @@ def get_publication_list(context, list, template='publications/pages/publication
     Get a publication list.
     """
 
-    list = List.objects.filter(list__iexact=list)
+    list = List.objects.filter(title__iexact=list)
 
     if not list:
         return ''
