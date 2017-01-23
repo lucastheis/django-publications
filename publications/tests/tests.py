@@ -193,6 +193,7 @@ class Tests(TestCase):
             data = {'action': action,
                     ACTION_CHECKBOX_NAME: [str(f.pk) for f in Publication.objects.all()]}
             response = self.client.post(change_url, data, follow=True)
+            print(response)
             self.assertContains(response, "successfully")
 
     def test_extras(self):
@@ -213,6 +214,7 @@ class Tests(TestCase):
 {% load publication_extras %}
 {% get_publication 1 %}
 {% get_publication_list 'highlights' 'publications/components/publications_with_thumbnails.html' %}
+{% get_publication_list 'foobar' %}
 {% get_publication 100 %}
 {% get_publications %}
 """)
