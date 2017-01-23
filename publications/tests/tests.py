@@ -212,7 +212,7 @@ class Tests(TestCase):
         tpl = Template("""
 {% load publication_extras %}
 {% get_publication 1 %}
-{% get_publication_list 'highlights' 'publications/pages/publications_with_thumbnails.html' %}
+{% get_publication_list 'highlights' 'publications/components/publications_with_thumbnails.html' %}
 {% get_publication 100 %}
 {% get_publications %}
 """)
