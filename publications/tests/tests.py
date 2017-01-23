@@ -191,7 +191,7 @@ class Tests(TestCase):
         for action in ['set_status_draft', 'set_status_submitted', 'set_status_accepted',
                        'set_status_published', ]:
             data = {'action': action,
-                    ACTION_CHECKBOX_NAME: [str(f.pk) for f in [Publication.objects.all()]]}
+                    ACTION_CHECKBOX_NAME: [str(f.pk) for f in Publication.objects.all()]}
             response = self.client.post(change_url, data, follow=True)
             self.assertContains(response, "successfully")
 
