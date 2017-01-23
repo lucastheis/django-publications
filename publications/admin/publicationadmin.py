@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 try:
     from django.conf.urls import url
 except ImportError:
+    # Fix for Django<1.6
     from django.conf.urls.defaults import url
 
 from .. import admin_views

@@ -21,10 +21,7 @@
                 {% include 'publications/components/section.html' %}
             {% endblock %}
         {% else %}
-            <div class="alert alert-info" role="alert">
-                <h4 class="alert-heading">Sorry</h4>
-                <p>There are no {{ title|default:"publications" }}.</p>
-            </div>
+            {% include 'publications/components/empty.html' %}
         {% endif %}
     </div>
 {% endblock %}

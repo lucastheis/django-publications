@@ -1,0 +1,4 @@
+<div class="alert alert-{% if error %}danger{% else %}info{% endif %}" role="alert">
+    <h4 class="alert-heading">{{ alert.heading|default:"Sorry" }}</h4>
+    <p>{{ alert.message|default:"There are no publications." }}</p>
+</div>

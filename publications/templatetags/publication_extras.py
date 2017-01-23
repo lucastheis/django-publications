@@ -2,13 +2,14 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
-import django
 from distutils.version import StrictVersion
+from re import sub
+
+import django
 from django.template import Library, RequestContext
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from re import sub
 
 from publications.models import Publication, List, Type
 from publications.utils import populate
@@ -39,7 +40,7 @@ def get_publications(context, template='publications/pages/publications.html'):
     publications = publications.order_by('-year', '-month', '-id')
 
     if not publications:
-        return ''
+        return render_template('publications/components/empty.html', context['request'], {})
 
     # load custom links and files
     populate(publications)
@@ -48,46 +49,48 @@ def get_publications(context, template='publications/pages/publications.html'):
 
 
 @register.simple_tag(takes_context=True)
-def get_publication(context, id):
+def get_publication(context, p_id):
     """
     Get a single publication.
     """
+    try:
+        pbl = Publication.objects.get(pk=int(p_id))
 
-    pbl = Publication.objects.filter(pk=int(id))
+        pbl.links = pbl.customlink_set.all()
+        pbl.files = pbl.customfile_set.all()
 
-    if len(pbl) < 1:
-        return ''
-
-    pbl[0].links = pbl[0].customlink_set.all()
-    pbl[0].files = pbl[0].customfile_set.all()
-
-    return render_template('publications/components/publication.html', context['request'],
-                           {'publication': pbl[0]})
+        return render_template('publications/components/publication.html', context['request'],
+                               {'publication': pbl})
+    except Publication.DoesNotExist:
+        return render_template('publications/components/empty.html', context['request'], {})
 
 
 @register.simple_tag(takes_context=True)
-def get_publication_list(context, list_title, template='publications/pages/publications.html'):
+def get_publication_list(context, list_title, template='publications/components/section.html'):
     """
     Get a publication list.
     """
+    try:
+        publications_list = List.objects.get(title__iexact=list_title)
 
-    list_title = List.objects.filter(title__iexact=list_title)
+        publications = publications_list.publication_set.all()
+        if not publications:
+            raise Publication.DoesNotExist
+        publications = publications.order_by('-year', '-month', '-id')
 
-    if not list_title:
-        return ''
+        # load custom links and files
+        populate(publications)
 
-    list_title = list_title[0]
-    publications = list_title.publication_set.all()
-    publications = publications.order_by('-year', '-month', '-id')
-
-    if not publications:
-        return ''
-
-    # load custom links and files
-    populate(publications)
-
-    return render_template(template, context['request'],
-                           {'list': list_title, 'publications': publications})
+        return render_template(template, context['request'],
+                               {'title': list_title, 'publications': publications})
+    except List.DoesNotExist:
+        return render_template('publications/components/empty.html', context['request'],
+                               {'error': True, 'alert':
+                                   {'heading': 'Zut!',
+                                    'message': 'There is no such list named "%"'.format(
+                                        list_title)}})
+    except Publication.DoesNotExist:
+        return render_template('publications/components/empty.html', context['request'], {})
 
 
 @register.filter()
