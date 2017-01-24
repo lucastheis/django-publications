@@ -200,11 +200,16 @@ class Tests(TestCase):
             # Test UI
             if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
                 # For some reason, the <ul class="messagelist"> is not shown on D1.10
-                self.assertContains(response, "successfully")
+                expected = 'successfully'
+                self.assertContains(response, expected,
+                                    "AssertionError: '{}' not found for {}".format(expected,
+                                                                                   action))
             # Test effective change in DB
-            self.assertEqual(Publication.objects.filter(status=db_value,
-                                                        pk__in=data[ACTION_CHECKBOX_NAME]).count(),
-                             0)
+            measured = Publication.objects.filter(status=db_value,
+                                                  pk__in=data[ACTION_CHECKBOX_NAME]).count()
+            expected = Publication.objects.count()
+            self.assertEqual(measured, expected,
+                             "AssertionError: {} != {} for {}".format(measured, expected, action))
 
     def test_extras(self):
         link = CustomLink.objects.create(publication_id=1, description='Test',
