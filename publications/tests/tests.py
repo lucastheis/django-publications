@@ -111,12 +111,21 @@ class Tests(TestCase):
         self.assertEqual(self.client.get('/publications/j.-p.+lies/?ris').status_code, 200)
         self.assertEqual(self.client.get('/publications/j.-p.+lies/?rss').status_code, 200)
         self.assertEqual(self.client.get('/publications/tag/noise+correlations/').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?plain').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?mods').status_code,
+                         200)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?ris').status_code,
+                         200)
         self.assertEqual(self.client.get('/publications/list/highlights/').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?plain').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?bibtex').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?mods').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?ris').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/foobar/').status_code, 200)
         self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
         self.assertEqual(self.client.get('/publications/year/2011/?plain').status_code, 200)
         self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
@@ -202,18 +211,26 @@ class Tests(TestCase):
                                  ('set_status_published', Publication.PUBLISHED), ]:
             data = {'action': action,
                     ACTION_CHECKBOX_NAME: Publication.objects.all().values_list('pk', flat=True)}
-            response = self.client.post(change_url, data, follow=True)
-            # Test UI
-            if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
-                # For some reason, the <ul class="messagelist"> is not shown on D1.10
-                self.assertContains(response, 'successfully',
-                                    msg_prefix="AssertionError in {}: ".format(action))
+
             # Test effective change in DB
             measured = Publication.objects.filter(status=db_value,
                                                   pk__in=data[ACTION_CHECKBOX_NAME]).count()
             expected = Publication.objects.count()
             self.assertEqual(measured, expected,
                              "AssertionError in {}: {} != {}".format(action, measured, expected, ))
+            # Test UI
+            # For some reason, the <ul class="messagelist"> is not shown on D1.10
+            if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
+                response = self.client.post(change_url, data, follow=True)
+                self.assertContains(response, '{} publications were successfully marked as '
+                                              ''.format(expected),
+                                    msg_prefix="AssertionError in {}: ".format(action))
+                # Test on a single object
+                data[ACTION_CHECKBOX_NAME] = Publication.objects.first().values_list('pk',
+                                                                                     flat=True)
+                response = self.client.post(change_url, data, follow=True)
+                self.assertContains(response, '1 publication was successfully marked as ',
+                                    msg_prefix="AssertionError in {}: ".format(action))
 
     def test_extras(self):
         link = CustomLink.objects.create(publication_id=1, description='Test',

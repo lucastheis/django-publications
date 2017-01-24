@@ -34,8 +34,8 @@ class CustomFileInline(admin.StackedInline):
 class PublicationAdminForm(forms.ModelForm):
     class Meta:
         model = Publication
+        # Fix for Django<1.7
         if StrictVersion(django.get_version()) >= StrictVersion('1.7.0'):
-            # Fix for Django<1.7
             fields = '__all__'
 
     def __init__(self, *args, **kwargs):
@@ -116,44 +116,33 @@ class PublicationAdmin(admin.ModelAdmin):
                        name='publications_publication_import_bibtex'),
                ] + super(PublicationAdmin, self).get_urls()
 
-    def set_status_draft(self, request, queryset):
-        rows_updated = queryset.update(status=Publication.DRAFT)
+    def _set_status(self, request, queryset, new_status):
+        rows_updated = queryset.update(status=new_status)
         if rows_updated == 1:
             message_bit = "1 publication was"
         else:
-            message_bit = "%s publications were" % rows_updated
-        self.message_user(request, "%s successfully marked as draft." % message_bit)
+            message_bit = "{:d} publications were".format(rows_updated)
+        self.message_user(request, "{} successfully marked as {}.".
+                          format(message_bit, Publication.STATUS_CHOICES_DICT[new_status]))
+
+    def set_status_draft(self, request, queryset):
+        self._set_status(request, queryset, Publication.DRAFT)
 
     set_status_draft.short_description = _("Mark selected %(verbose_name_plural)s as drafts")
 
     def set_status_submitted(self, request, queryset):
-        rows_updated = queryset.update(status=Publication.SUBMITTED)
-        if rows_updated == 1:
-            message_bit = "1 publication was"
-        else:
-            message_bit = "%s publications were" % rows_updated
-        self.message_user(request, "%s successfully marked as submitted." % message_bit)
+        self._set_status(request, queryset, Publication.SUBMITTED)
 
     set_status_submitted.short_description = _("Mark selected %(verbose_name_plural)s as "
                                                "submitted")
 
     def set_status_accepted(self, request, queryset):
-        rows_updated = queryset.update(status=Publication.ACCEPTED)
-        if rows_updated == 1:
-            message_bit = "1 publication was"
-        else:
-            message_bit = "%s publications were" % rows_updated
-        self.message_user(request, "%s successfully marked as accepted." % message_bit)
+        self._set_status(request, queryset, Publication.ACCEPTED)
 
     set_status_accepted.short_description = _("Mark selected %(verbose_name_plural)s as accepted")
 
     def set_status_published(self, request, queryset):
-        rows_updated = queryset.update(status=Publication.PUBLISHED)
-        if rows_updated == 1:
-            message_bit = "1 publication was"
-        else:
-            message_bit = "%s publications were" % rows_updated
-        self.message_user(request, "%s successfully marked as published." % message_bit)
+        self._set_status(request, queryset, Publication.PUBLISHED)
 
     set_status_published.short_description = _("Mark selected %(verbose_name_plural)s as "
                                                "published")

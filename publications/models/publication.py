@@ -70,6 +70,7 @@ class Publication(models.Model):
         (ACCEPTED, 'Accepted'),
         (PUBLISHED, 'Published'),
     )
+    STATUS_CHOICES_DICT = dict(STATUS_CHOICES)
 
     type = models.ForeignKey(Type)
     citekey = NullCharField(max_length=512, blank=True, null=True, unique=True,
