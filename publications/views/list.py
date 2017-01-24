@@ -49,8 +49,8 @@ def list(request, title):
             'title': "publications for list {}".format(title)
         })
     except List.DoesNotExist:
-        return render(request, 'publications/pages/base.html', {
+        return render(request, 'publications/base.html', {
             'error': True,
             'alert': {
                 'message': "There is no publication list with this name: {}".format(title)},
-        })
+        }, status=404)

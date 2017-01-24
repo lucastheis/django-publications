@@ -40,6 +40,7 @@ def get_publications(context, template='publications/pages/publications.html'):
     publications = publications.order_by('-year', '-month', '-id')
 
     if not publications:
+        # TODO: set status to 404
         return render_template('publications/components/empty.html', context['request'], {})
 
     # load custom links and files
@@ -62,6 +63,7 @@ def get_publication(context, p_id):
         return render_template('publications/components/publication.html', context['request'],
                                {'publication': pbl})
     except Publication.DoesNotExist:
+        # TODO: set status to 404
         return render_template('publications/components/empty.html', context['request'], {})
 
 
@@ -90,6 +92,7 @@ def get_publication_list(context, list_title, template='publications/components/
                                     'message': 'There is no such list named "%"'.format(
                                         list_title)}})
     except Publication.DoesNotExist:
+        # TODO: set status to 404
         return render_template('publications/components/empty.html', context['request'], {})
 
 

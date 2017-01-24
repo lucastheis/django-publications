@@ -39,8 +39,8 @@ def id(request, publication_id):
             'title': publication.type,
         })
     except Publication.DoesNotExist:
-        return render(request, 'publications/pages/base.html', {
+        return render(request, 'publications/base.html', {
             'error': True,
             'alert': {
                 'message': "There is no publication with this id: {}".format(publication_id)},
-        })
+        }, status=404)
