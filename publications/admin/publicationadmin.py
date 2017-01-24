@@ -119,7 +119,7 @@ class PublicationAdmin(admin.ModelAdmin):
     set_status_accepted.short_description = _("Mark selected %(verbose_name_plural)s as accepted")
 
     def set_status_published(self, request, queryset):
-        rows_updated = queryset.update(status=Publication.DRAFT)
+        rows_updated = queryset.update(status=Publication.PUBLISHED)
         if rows_updated == 1:
             message_bit = "1 publication was"
         else:
