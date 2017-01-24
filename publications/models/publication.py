@@ -4,11 +4,12 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
+from string import ascii_uppercase
+
 from django.conf import settings
 from django.db import models
 from django.utils.http import urlquote_plus
 from django_countries.fields import CountryField
-from string import ascii_uppercase
 
 from publications.fields import NullCharField, PagesField
 from publications.models import Type, List
@@ -82,20 +83,20 @@ class Publication(models.Model):
     book_title = models.CharField(max_length=256, blank=True,
                                   help_text='Title of a book, part of which is being cited. See '
                                             'the LATEX book for how to type titles. For book '
-                                            'entries, use the <title> field instead')
+                                            'entries, use the `title` field instead')
     publisher = models.CharField(max_length=256, blank=True)
     editor = models.CharField(max_length=256, blank=True,
                               help_text='Name(s) of editor(s), typed as indicated in the LATEX '
-                                        'book. If there is also an <author> field, then the '
-                                        '<editor> field gives the editor of the book or '
+                                        'book. If there is also an `author` field, then the '
+                                        '`editor` field gives the editor of the book or '
                                         'collection in which the reference appears.')
     edition = models.CharField(max_length=256, blank=True,
                                help_text='The edition of a book -- for example, "Second". This '
                                          'should be an ordinal, and should have the first letter '
                                          'capitalized.')
     institution = models.CharField(max_length=256, blank=True)
-    school = models.CharField(max_length=256, blank=True, help_text='The name of the school where '
-                                                                    'a thesis was written.')
+    school = models.CharField(max_length=256, blank=True,
+                              help_text='The name of the school where a thesis was written.')
     organization = models.CharField(max_length=256, blank=True,
                                     help_text='The organization that sponsors a conference or '
                                               'that publishes a manual.')
@@ -105,12 +106,11 @@ class Publication(models.Model):
     country = CountryField(blank=True)
     series = models.CharField(blank=True, max_length=256,
                               verbose_name='The name of a series or set of books. When citing an '
-                                           'entire book, the <title> field gives its title and an '
-                                           'optional <series> field gives the name of a series or '
+                                           'entire book, the `title` field gives its title and an '
+                                           'optional `series` field gives the name of a series or '
                                            'multi-volume set in which the book is published.')
     volume = models.CharField(blank=True, null=True, max_length=128)
-    number = models.CharField(blank=True, null=True, max_length=128, verbose_name='Issue '
-                                                                                  'number',
+    number = models.CharField(blank=True, null=True, max_length=128, verbose_name='Issue number',
                               help_text='The number of a journal, magazine, technical report, or '
                                         'of a work in a series. An issue of a journal or magazine '
                                         'is usually identified by its volume and number; the '
@@ -121,10 +121,9 @@ class Publication(models.Model):
     section = models.CharField(blank=True, null=True, max_length=128)  # Not officially
     # recognized as Bibtex Field Type
     pages = PagesField(max_length=32, blank=True)
-    note = models.CharField(max_length=256, blank=True, help_text='Any additional information '
-                                                                  'that can help the reader. The '
-                                                                  'first word should be '
-                                                                  'capitalized.')
+    note = models.CharField(max_length=256, blank=True,
+                            help_text='Any additional information that can help the reader. The '
+                                      'first word should be capitalized.')
     keywords = models.CharField(max_length=256, blank=True,
                                 help_text='List of keywords separated by commas.')
     url = models.URLField(blank=True, verbose_name='URL', help_text='Link to PDF or journal page.')
@@ -132,9 +131,8 @@ class Publication(models.Model):
     pdf = models.FileField(upload_to='publications/', verbose_name='PDF', blank=True, null=True)
     image = models.ImageField(upload_to='publications/images/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='publications/thumbnails/', blank=True, null=True)
-    external = models.BooleanField(default=False,
-                                   help_text='If publication was written in another lab, '
-                                             'mark as external.')
+    external = models.BooleanField(default=False, help_text='If publication was written in '
+                                                            'another lab, mark as external.')
     abstract = models.TextField(blank=True)
     doi = NullCharField(max_length=128, verbose_name='DOI', blank=True, null=True, unique=True)
     isbn = NullCharField(max_length=32, verbose_name='ISBN', help_text='Only for a book.',
