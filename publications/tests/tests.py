@@ -212,7 +212,7 @@ class Tests(TestCase):
             data = {'action': action,
                     ACTION_CHECKBOX_NAME: Publication.objects.all().values_list('pk', flat=True)}
             response = self.client.post(change_url, data, follow=True)
-            
+
             # Test effective change in DB
             measured = Publication.objects.filter(status=db_value,
                                                   pk__in=data[ACTION_CHECKBOX_NAME]).count()
@@ -226,8 +226,9 @@ class Tests(TestCase):
                                               ''.format(expected),
                                     msg_prefix="AssertionError in {}: ".format(action))
                 # Test on a single object
-                data[ACTION_CHECKBOX_NAME] = Publication.objects.first().values_list('pk',
-                                                                                     flat=True)
+                # Django<1.6 does not support QuerySet.first()
+                data[ACTION_CHECKBOX_NAME] = Publication.objects.all()[0].values_list('pk',
+                                                                                      flat=True)
                 response = self.client.post(change_url, data, follow=True)
                 self.assertContains(response, '1 publication was successfully marked as ',
                                     msg_prefix="AssertionError in {}: ".format(action))
