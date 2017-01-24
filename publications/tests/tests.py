@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from distutils.version import StrictVersion
 
+import django
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
@@ -188,13 +190,21 @@ class Tests(TestCase):
         # Test admin actions
         from django.contrib.admin import ACTION_CHECKBOX_NAME
         change_url = reverse('admin:publications_publication_changelist')
-        for action in ['set_status_draft', 'set_status_submitted', 'set_status_accepted',
-                       'set_status_published', ]:
+        for action, db_value in [('set_status_draft', Publication.DRAFT),
+                                 ('set_status_submitted', Publication.SUBMITTED),
+                                 ('set_status_accepted', Publication.ACCEPTED),
+                                 ('set_status_published', Publication.PUBLISHED), ]:
             data = {'action': action,
                     ACTION_CHECKBOX_NAME: [str(f.pk) for f in Publication.objects.all()]}
             response = self.client.post(change_url, data, follow=True)
-            print(response)
-            self.assertContains(response, "successfully")
+            # Test UI
+            if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
+                # For some reason, the <ul class="messagelist"> is not shown on D1.10
+                self.assertContains(response, "successfully")
+            # Test effective change in DB
+            self.assertEqual(Publication.objects.filter(status=db_value,
+                                                        pk__in=data[ACTION_CHECKBOX_NAME]).count(),
+                             Publication.objects.count())
 
     def test_extras(self):
         link = CustomLink.objects.create(publication_id=1, description='Test',

@@ -47,7 +47,8 @@ class PublicationAdminForm(forms.ModelForm):
 
 class PublicationAdmin(admin.ModelAdmin):
     form = PublicationAdminForm
-    list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
+    list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title',
+                    'status',)
     list_display_links = ('title',)
     list_filter = ('year', 'journal', 'status', 'lists',)
     change_list_template = 'admin/publications/publication_change_list.html'
