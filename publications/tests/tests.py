@@ -227,8 +227,7 @@ class Tests(TestCase):
                                     msg_prefix="AssertionError in {}: ".format(action))
                 # Test on a single object
                 # Django<1.6 does not support QuerySet.first()
-                data[ACTION_CHECKBOX_NAME] = Publication.objects.all()[0].values_list('pk',
-                                                                                      flat=True)
+                data[ACTION_CHECKBOX_NAME] = [Publication.objects.all()[0].pk]
                 response = self.client.post(change_url, data, follow=True)
                 self.assertContains(response, '1 publication was successfully marked as ',
                                     msg_prefix="AssertionError in {}: ".format(action))
