@@ -115,10 +115,10 @@ class Tests(TestCase):
             self.client.get('/publications/tag/noise+correlations/?plain').status_code, 200)
         self.assertEqual(
             self.client.get('/publications/tag/noise+correlations/?bibtex').status_code, 200)
-        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?mods').status_code,
-                         200)
-        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?ris').status_code,
-                         200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?mods').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?ris').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?plain').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?bibtex').status_code, 200)
@@ -211,7 +211,8 @@ class Tests(TestCase):
                                  ('set_status_published', Publication.PUBLISHED), ]:
             data = {'action': action,
                     ACTION_CHECKBOX_NAME: Publication.objects.all().values_list('pk', flat=True)}
-
+            response = self.client.post(change_url, data, follow=True)
+            
             # Test effective change in DB
             measured = Publication.objects.filter(status=db_value,
                                                   pk__in=data[ACTION_CHECKBOX_NAME]).count()
@@ -221,7 +222,6 @@ class Tests(TestCase):
             # Test UI
             # For some reason, the <ul class="messagelist"> is not shown on D1.10
             if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
-                response = self.client.post(change_url, data, follow=True)
                 self.assertContains(response, '{} publications were successfully marked as '
                                               ''.format(expected),
                                     msg_prefix="AssertionError in {}: ".format(action))
