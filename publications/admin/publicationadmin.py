@@ -2,8 +2,9 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
-import django
 from distutils.version import StrictVersion
+
+import django
 from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
@@ -59,23 +60,51 @@ class PublicationAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'type', 'title', 'authors', 'year', 'month', 'external',)}),
-        ('Publishing', {
+                'type', 'title', 'authors', 'year', 'month', 'status', 'external',)}),
+        ('All available fields (overridden if set below)', {
+            'classes': ('collapse',),
             'fields': (
-                'journal', 'book_title', 'publisher', 'editor', 'edition', 'institution',
-                'school', 'organization', 'location', 'country', 'volume', 'number',
-                'chapter', 'section', 'pages', 'url', 'doi', 'isbn', 'status',)}),
+                'book_title', 'publisher', 'editor', 'edition', 'institution', 'school',
+                'organization', 'location', 'country', 'volume', 'number', 'series',
+                'chapter', 'section', 'pages', 'url',)}),
+        ('Journal', {
+            'classes': ('collapse',),
+            'fields': (
+                'journal', 'volume', 'number', 'pages',)}),
+        ('Conference', {
+            'classes': ('collapse',),
+            'fields': (
+                'book_title', 'editor', 'volume', 'number', 'series', 'pages', 'location',
+                'country', 'organization', 'publisher',)}),
+        ('Technical Report', {
+            'classes': ('collapse',),
+            'fields': (
+                'institution', 'number', 'location', 'country',)}),
+        ('Book or Manual', {
+            'classes': ('collapse',),
+            'fields': (
+                'editor', 'publisher', 'volume', 'number', 'series', 'organization', 'location',
+                'country', 'edition',)}),
+        ('In Book or Collection', {
+            'classes': ('collapse',),
+            'fields': (
+                'book_title', 'editor', 'chapter', 'pages', 'publisher', 'volume', 'number',
+                'series', 'location', 'country', 'edition',)}),
+        ('Thesis', {
+            'classes': ('collapse',),
+            'fields': (
+                'school', 'location', 'country',)}),
         ('References', {
             'fields': (
-                'citekey', 'keywords', 'code',)}),
-        (None, {
+                'citekey', 'keywords', 'code', 'url', 'doi', 'isbn',)}),
+        ('Description', {
             'fields': (
                 'abstract', 'note',)}),
         ('Media', {
             'classes': ('collapse',),
             'fields': (
                 'pdf', 'image', 'thumbnail')}),
-        (None, {
+        ('Lists', {
             'fields': (
                 'lists',)}),
     )

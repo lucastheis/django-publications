@@ -105,10 +105,10 @@ class Publication(models.Model):
                                           "or publisher's address.")
     country = CountryField(blank=True)
     series = models.CharField(blank=True, max_length=256,
-                              verbose_name='The name of a series or set of books. When citing an '
-                                           'entire book, the `title` field gives its title and an '
-                                           'optional `series` field gives the name of a series or '
-                                           'multi-volume set in which the book is published.')
+                              help_text='The name of a series or set of books. When citing an '
+                                        'entire book, the `title` field gives its title and an '
+                                        'optional `series` field gives the name of a series or '
+                                        'multi-volume set in which the book is published.')
     volume = models.CharField(blank=True, null=True, max_length=128)
     number = models.CharField(blank=True, null=True, max_length=128, verbose_name='Issue number',
                               help_text='The number of a journal, magazine, technical report, or '
