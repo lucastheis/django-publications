@@ -238,18 +238,21 @@ class Tests(TestCase):
         link.save()
 
         publication = Publication.objects.get(pk=1)
-        lists = List.objects.filter(title__iexact='highlights')
-
-        self.assertEqual(len(lists), 1)
+        highlights_list = List.objects.get(title__iexact='highlights')
 
         # add publication to list
-        publication.lists.add(lists[0])
+        publication.lists.add(highlights_list)
+
+        # Create empty List
+        naughty_list = List(title="Naughty")
+        naughty_list.save()
 
         # render list
         tpl = Template("""
 {% load publication_extras %}
 {% get_publication 1 %}
 {% get_publication_list 'highlights' 'publications/components/publications_with_thumbnails.html' %}
+{% get_publication_list 'naughty' %}
 {% get_publication_list 'foobar' %}
 {% get_publication 100 %}
 {% get_publications %}
@@ -316,7 +319,8 @@ TEST_BIBLIOGRAPHY = r"""
     title = "Test",
     author = {Last-Name, First and Peter van der Markt III and Test and Gauss II CF},
     year = 2009,
-    country = {Wallis and Futuna}
+    country = {Wallis and Futuna},
+    pages = {1-2}
 }
 
 @article{DBLP:journals/corr/KummererWB14,
@@ -372,7 +376,8 @@ archivePrefix = "arXiv",
   doi       = {10.1109/PATMOS.2014.6951886},
   timestamp = {Tue, 18 Nov 2014 12:34:31 +0100},
   biburl    = {http://dblp.uni-trier.de/rec/bib/conf/patmos/ShahWSB14},
-  bibsource = {dblp computer science bibliography, http://dblp.org}
+  bibsource = {dblp computer science bibliography, http://dblp.org},
+  isbn      = {978-1-4799-5412-4}
 }
 
 
