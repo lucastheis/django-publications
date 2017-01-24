@@ -125,7 +125,7 @@ class Tests(TestCase):
         self.assertEqual(self.client.get('/publications/list/highlights/?mods').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?ris').status_code, 200)
         self.assertEqual(self.client.get('/publications/list/highlights/?rss').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/foobar/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/foobar/').status_code, 404)
         self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
         self.assertEqual(self.client.get('/publications/year/2011/?plain').status_code, 200)
         self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
