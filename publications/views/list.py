@@ -2,16 +2,15 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
-from django.http import Http404
 from django.shortcuts import render
 
 from publications.models import List
 from publications.utils import populate
 
 
-def list(request, list_title):
+def list(request, title):
     try:
-        publication_list = List.objects.get(title__iexact=list_title)
+        publication_list = List.objects.get(title__iexact=title)
 
         publications = publication_list.publication_set.all()
         publications = publications.order_by('-year', '-month', '-id')
@@ -46,13 +45,12 @@ def list(request, list_title):
         populate(publications)
 
         return render(request, 'publications/pages/list.html', {
-            'list': list_title,
             'publications': publications,
-            'title': "publications for list {}".format(list_title)
+            'title': "publications for list {}".format(title)
         })
     except List.DoesNotExist:
         return render(request, 'publications/pages/base.html', {
             'error': True,
             'alert': {
-                'message': "There is no publication list with this name: {}".format(list_title)},
+                'message': "There is no publication list with this name: {}".format(title)},
         })
