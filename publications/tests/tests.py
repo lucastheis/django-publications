@@ -195,7 +195,7 @@ class Tests(TestCase):
                                  ('set_status_accepted', Publication.ACCEPTED),
                                  ('set_status_published', Publication.PUBLISHED), ]:
             data = {'action': action,
-                    ACTION_CHECKBOX_NAME: [str(f.pk) for f in Publication.objects.all()]}
+                    ACTION_CHECKBOX_NAME: Publication.objects.all().values_list('pk', flat=True)}
             response = self.client.post(change_url, data, follow=True)
             # Test UI
             if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
@@ -204,7 +204,7 @@ class Tests(TestCase):
             # Test effective change in DB
             self.assertEqual(Publication.objects.filter(status=db_value,
                                                         pk__in=data[ACTION_CHECKBOX_NAME]).count(),
-                             Publication.objects.count())
+                             0)
 
     def test_extras(self):
         link = CustomLink.objects.create(publication_id=1, description='Test',
