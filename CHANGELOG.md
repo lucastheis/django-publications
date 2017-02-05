@@ -2,6 +2,12 @@
 
 ## 0.7.0
 
+- Use Bootstrap 4.0.0-alpha.5 for the layout
+  - Refactor file inclusions
+  - Integration in project's base layout
+- Rename person to author
+- Add namespace for urls
+- WIP update tests
 - Update and extend models
  * Renamed `List.list` to `List.title`
  * Renamed `Type.type` to `Type.title`

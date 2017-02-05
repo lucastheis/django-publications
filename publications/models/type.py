@@ -12,7 +12,7 @@ class Type(OrderedModel):
         ordering = ('order',)
         app_label = 'publications'  # Fix for Django<1.7
 
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=128, unique=True)
     description = models.CharField(max_length=128)
     bibtex_types = models.CharField(max_length=256, default='article',
                                     verbose_name='BibTex types',

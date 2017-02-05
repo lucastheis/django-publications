@@ -1,217 +1,268 @@
 # -*- coding: utf-8 -*-
+from distutils.version import StrictVersion
 
-from django.test import TestCase
+import django
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.db import transaction
-from django.template import Template, RequestContext
 from django.http import HttpRequest
+from django.template import Template, RequestContext
+from django.test import TestCase
+
 from publications.models import Publication, Type, CustomLink, List
 from publications.templatetags.publication_extras import tex_parse
 
+
 class Tests(TestCase):
-	fixtures = ['initial_data.json', 'test_data.json']
-	urls = 'publications.tests.urls'
+    fixtures = ['initial_data.json', 'test_data.json']
+    urls = 'publications.tests.urls'
 
-	def setUp(self):
-		User.objects.create_superuser('admin', 'admin@test.de', 'admin')
+    def setUp(self):
+        User.objects.create_superuser('admin', 'admin@test.de', 'admin')
 
+    def test_authors(self):
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'Jörn-Philipp Lies and Ralf M. Häfner and M. Bethge',
+            title=u'Slowness and sparseness have diverging effects on complex cell learning',
+            year=2014,
+            journal=u'PLoS Computational Biology',
+            external=0)
+        publication.clean()
+        publication.save()
 
-	def test_authors(self):
-		publication = Publication.objects.create(
-			type=Type.objects.get(pk=1),
-			authors=u'Jörn-Philipp Lies and Ralf M. Häfner and M. Bethge',
-			title=u'Slowness and sparseness have diverging effects on complex cell learning',
-			year=2014,
-			journal=u'PLoS Computational Biology',
-			external=0)
-		publication.clean()
-		publication.save()
+        self.assertEqual(len(publication.authors_list), 3)
+        self.assertTrue('J.-P. Lies' in publication.authors_list)
+        self.assertTrue(('J.-P.', 'Lies') in publication.authors_list_split)
 
-		self.assertEqual(len(publication.authors_list), 3)
-		self.assertTrue('J.-P. Lies' in publication.authors_list)
-		self.assertTrue(('J.-P.', 'Lies') in publication.authors_list_split)
+    def test_citekey(self):
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and B. Common',
+            title=u'Title 1',
+            year=2014,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
 
+        self.assertEqual(publication.citekey, 'Unique2014a')
 
-	def test_citekey(self):
-		publication = Publication.objects.create(
-			type=Type.objects.get(pk=1),
-			authors=u'A. Unique and B. Common',
-			title=u'Title 1',
-			year=2014,
-			journal=u'Journal',
-			external=0)
-		publication.clean()
-		publication.save()
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and C. Common',
+            title=u'Title 2',
+            year=2014,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
 
-		self.assertEqual(publication.citekey, 'Unique2014a')
+        self.assertEqual(publication.citekey, 'Unique2014b')
 
-		publication = Publication.objects.create(
-			type=Type.objects.get(pk=1),
-			authors=u'A. Unique and C. Common',
-			title=u'Title 2',
-			year=2014,
-			journal=u'Journal',
-			external=0)
-		publication.clean()
-		publication.save()
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and D. Uncommon',
+            title=u'Title 3',
+            year=2013,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
 
-		self.assertEqual(publication.citekey, 'Unique2014b')
+        self.assertEqual(publication.citekey, 'Unique2013a')
 
-		publication = Publication.objects.create(
-			type=Type.objects.get(pk=1),
-			authors=u'A. Unique and D. Uncommon',
-			title=u'Title 3',
-			year=2013,
-			journal=u'Journal',
-			external=0)
-		publication.clean()
-		publication.save()
+    def test_custom_links(self):
+        link = CustomLink.objects.create(publication_id=1, description='Test',
+                                         url='http://test.com')
+        link.save()
 
-		self.assertEqual(publication.citekey, 'Unique2013a')
+        self.assertEqual(self.client.get('/publications/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/').status_code, 200)
 
+    def test_publications(self):
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'Jörn-Philipp Lies and Ralf M. Häfner and M. Bethge',
+            title=u'Slowness and sparseness have diverging effects on complex cell learning',
+            year=2014,
+            journal=u'PLoS Computational Biology',
+            external=0)
+        publication.clean()
+        publication.save()
 
-	def test_custom_links(self):
-		link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
-		link.save()
+        self.assertEqual(self.client.get('/publications/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/100/').status_code, 404)
+        response = self.client.get('/publications/j.-p.+lies/')
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(len(response.context['publications']), 0)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?plain').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?bibtex').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?mods').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/tag/noise+correlations/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/foobar/').status_code, 404)
+        self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/year/2011/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
 
-		self.assertEqual(self.client.get('/publications/').status_code, 200)
-		self.assertEqual(self.client.get('/publications/1/').status_code, 200)
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and B. Common',
+            title=u'Title 3',
+            year=2012,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
 
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and C. Common and D. Someone',
+            title=u'Title 4',
+            year=2011,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
 
-	def test_publications(self):
-		publication = Publication.objects.create(
-			type=Type.objects.get(pk=1),
-			authors=u'Jörn-Philipp Lies and Ralf M. Häfner and M. Bethge',
-			title=u'Slowness and sparseness have diverging effects on complex cell learning',
-			year=2014,
-			journal=u'PLoS Computational Biology',
-			external=0)
-		publication.clean()
-		publication.save()
+        link = CustomLink.objects.create(
+            publication_id=publication.id, description='Test', url='http://test.com')
+        link.save()
 
-		self.assertEqual(self.client.get('/publications/').status_code, 200)
-		self.assertEqual(self.client.get('/publications/?plain').status_code, 200)
-		self.assertEqual(self.client.get('/publications/?bibtex').status_code, 200)
-		self.assertEqual(self.client.get('/publications/?mods').status_code, 200)
-		self.assertEqual(self.client.get('/publications/?ris').status_code, 200)
-		self.assertEqual(self.client.get('/publications/?rss').status_code, 200)
-		self.assertEqual(self.client.get('/publications/1/').status_code, 200)
-		self.assertEqual(self.client.get('/publications/1/?plain').status_code, 200)
-		self.assertEqual(self.client.get('/publications/1/?bibtex').status_code, 200)
-		self.assertEqual(self.client.get('/publications/1/?mods').status_code, 200)
-		self.assertEqual(self.client.get('/publications/1/?ris').status_code, 200)
-		response = self.client.get('/publications/j.-p.+lies/')
-		self.assertEqual(response.status_code, 200)
-		self.assertGreater(len(response.context['publications']), 0)
-		self.assertEqual(self.client.get('/publications/j.-p.+lies/?plain').status_code, 200)
-		self.assertEqual(self.client.get('/publications/j.-p.+lies/?bibtex').status_code, 200)
-		self.assertEqual(self.client.get('/publications/j.-p.+lies/?mods').status_code, 200)
-		self.assertEqual(self.client.get('/publications/j.-p.+lies/?ris').status_code, 200)
-		self.assertEqual(self.client.get('/publications/j.-p.+lies/?rss').status_code, 200)
-		self.assertEqual(self.client.get('/publications/tag/noise+correlations/').status_code, 200)
-		self.assertEqual(self.client.get('/publications/list/highlights/').status_code, 200)
-		self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
-		self.assertEqual(self.client.get('/publications/year/2011/?plain').status_code, 200)
-		self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
+        response = self.client.get('/publications/c.+common/')
 
-		publication = Publication.objects.create(
-			type=Type.objects.get(pk=1),
-			authors=u'A. Unique and B. Common',
-			title=u'Title 3',
-			year=2012,
-			journal=u'Journal',
-			external=0)
-		publication.clean()
-		publication.save()
+        self.assertTrue('C. Common' in str(response.content))
+        self.assertFalse('B. Common' in str(response.content))
 
-		publication = Publication.objects.create(
-			type=Type.objects.get(pk=1),
-			authors=u'A. Unique and C. Common and D. Someone',
-			title=u'Title 4',
-			year=2011,
-			journal=u'Journal',
-			external=0)
-		publication.clean()
-		publication.save()
+    def test_bibtex_import(self):
+        self.client.login(username='admin', password='admin')
 
-		link = CustomLink.objects.create(
-			publication_id=publication.id, description='Test', url='http://test.com')
-		link.save()
+        count = Publication.objects.count()
+        response = self.client.post('/admin/publications/publication/import_bibtex/',
+                                    {'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
 
-		response = self.client.get('/publications/c.+common/')
+        self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
 
-		self.assertTrue('C. Common' in str(response.content))
-		self.assertFalse('B. Common' in str(response.content))
+        publications = Publication.objects.filter(citekey='test:2009')
 
+        self.assertEqual(len(publications), 1)
+        self.assertTrue('F. Last-Name' in publications[0].authors_list)
+        self.assertTrue('P. van der Markt III' in publications[0].authors_list)
+        self.assertTrue('Test' in publications[0].authors_list)
+        self.assertTrue('C. F. Gauss II' in publications[0].authors_list)
 
-	def test_bibtex_import(self):
-		self.client.login(username='admin', password='admin')
+        publications = Publication.objects.filter(citekey='kay2015good')
 
-		count = Publication.objects.count()
-		response = self.client.post('/admin/publications/publication/import_bibtex/',
-			{'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
+        self.assertEqual(len(publications), 1)
+        self.assertTrue(publications[0].title.startswith('How Good is 85%?'))
 
-		self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
+    def test_unapi(self):
+        self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=bibtex').status_code,
+                         200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=ris').status_code, 200)
+        self.assertEqual(
+            self.client.get('/publications/unapi/?id=99999&format=bibtex').status_code, 404)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=foobar').status_code,
+                         406)
 
-		publications = Publication.objects.filter(citekey='test:2009')
+    def test_admin(self):
+        self.client.login(username='admin', password='admin')
 
-		self.assertEqual(len(publications), 1)
-		self.assertTrue('F. Last-Name' in publications[0].authors_list)
-		self.assertTrue('P. van der Markt III' in publications[0].authors_list)
-		self.assertTrue('Test' in publications[0].authors_list)
-		self.assertTrue('C. F. Gauss II' in publications[0].authors_list)
+        self.assertEqual(self.client.get('/publications/').status_code, 200)
+        self.assertEqual(
+            self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code, 200)
+        self.assertEqual(
+            self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code, 200)
 
-		publications = Publication.objects.filter(citekey='kay2015good')
+        # Test admin actions
+        from django.contrib.admin import ACTION_CHECKBOX_NAME
+        change_url = reverse('admin:publications_publication_changelist')
+        for action, db_value in [('set_status_draft', Publication.DRAFT),
+                                 ('set_status_submitted', Publication.SUBMITTED),
+                                 ('set_status_accepted', Publication.ACCEPTED),
+                                 ('set_status_published', Publication.PUBLISHED), ]:
+            data = {'action': action,
+                    ACTION_CHECKBOX_NAME: Publication.objects.all().values_list('pk', flat=True)}
+            response = self.client.post(change_url, data, follow=True)
 
-		self.assertEqual(len(publications), 1)
-		self.assertTrue(publications[0].title.startswith('How Good is 85%?'))
+            # Test effective change in DB
+            measured = Publication.objects.filter(status=db_value,
+                                                  pk__in=data[ACTION_CHECKBOX_NAME]).count()
+            expected = Publication.objects.count()
+            self.assertEqual(measured, expected,
+                             "AssertionError in {}: {} != {}".format(action, measured, expected, ))
+            # Test UI
+            # For some reason, the <ul class="messagelist"> is not shown on D1.10
+            if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
+                self.assertContains(response, '{} publications were successfully marked as '
+                                              ''.format(expected),
+                                    msg_prefix="AssertionError in {}: ".format(action))
+                # Test on a single object
+                # Django<1.6 does not support QuerySet.first()
+                data[ACTION_CHECKBOX_NAME] = [Publication.objects.all()[0].pk]
+                response = self.client.post(change_url, data, follow=True)
+                self.assertContains(response, '1 publication was successfully marked as ',
+                                    msg_prefix="AssertionError in {}: ".format(action))
 
+    def test_extras(self):
+        link = CustomLink.objects.create(publication_id=1, description='Test',
+                                         url='http://test.com')
+        link.save()
 
-	def test_unapi(self):
-		self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
-		self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
-		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=mods').status_code, 200)
-		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=bibtex').status_code, 200)
-		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=ris').status_code, 200)
-		self.assertEqual(self.client.get('/publications/unapi/?id=99999&format=bibtex').status_code, 404)
-		self.assertEqual(self.client.get('/publications/unapi/?id=1&format=foobar').status_code, 406)
+        publication = Publication.objects.get(pk=1)
+        highlights_list = List.objects.get(title__iexact='highlights')
 
+        # add publication to list
+        publication.lists.add(highlights_list)
 
-	def test_admin(self):
-		self.client.login(username='admin', password='admin')
+        # Create empty List
+        naughty_list = List(title="Naughty")
+        naughty_list.save()
 
-		self.assertEqual(self.client.get('/publications/').status_code, 200)
-		self.assertEqual(self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code, 200)
-		self.assertEqual(self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code, 200)
+        # render list
+        tpl = Template("""
+{% load publication_extras %}
+{% get_publication 1 %}
+{% get_publication_list 'highlights' 'publications/components/publications_with_thumbnails.html' %}
+{% get_publication_list 'naughty' %}
+{% get_publication_list 'foobar' %}
+{% get_publication 100 %}
+{% get_publications %}
+""")
 
+        self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
 
-	def test_extras(self):
-		link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
-		link.save()
-
-		publication = Publication.objects.get(pk=1)
-		lists = List.objects.filter(title__iexact='highlights')
-
-		self.assertEqual(len(lists), 1)
-
-		# add publication to list
-		publication.lists.add(lists[0])
-
-		# render list
-		tpl = Template("""
-			{% load publication_extras %}
-			{% get_publication 1 %}
-			{% get_publication_list 'highlights' 'publications/publications_with_thumbnails.html' %}
-			{% get_publication 10 %}
-			{% get_publications %}
-			""")
-
-		self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
-
-		# tex_parse is used to replace simple LaTeX code in publication titles
-		self.assertEqual(tex_parse(u'$L_p$-spherical'), u'L<sub>p</sub>-spherical')
-		self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
+        # tex_parse is used to replace simple LaTeX code in publication titles
+        self.assertEqual(tex_parse(u'$L_p$-spherical'), u'L<sub>p</sub>-spherical')
+        self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
 
 
 TEST_BIBLIOGRAPHY_COUNT = 10
@@ -249,7 +300,8 @@ TEST_BIBLIOGRAPHY = r"""
   booktitle={Proceedings of the 21st Annual Conference on Neural Information Processing Systems},
   number={EPFL-CONF-161311},
   pages={529--536},
-  year={2008}
+  year={2008},
+  country={CH}
 }
 
 @article{hafner2000dynamical,
@@ -266,7 +318,9 @@ TEST_BIBLIOGRAPHY = r"""
 @misc{test:2009,
     title = "Test",
     author = {Last-Name, First and Peter van der Markt III and Test and Gauss II CF},
-    year = 2009
+    year = 2009,
+    country = {Wallis and Futuna},
+    pages = {1-2}
 }
 
 @article{DBLP:journals/corr/KummererWB14,
@@ -322,7 +376,8 @@ archivePrefix = "arXiv",
   doi       = {10.1109/PATMOS.2014.6951886},
   timestamp = {Tue, 18 Nov 2014 12:34:31 +0100},
   biburl    = {http://dblp.uni-trier.de/rec/bib/conf/patmos/ShahWSB14},
-  bibsource = {dblp computer science bibliography, http://dblp.org}
+  bibsource = {dblp computer science bibliography, http://dblp.org},
+  isbn      = {978-1-4799-5412-4}
 }
 
 
@@ -332,6 +387,8 @@ archivePrefix = "arXiv",
   booktitle={Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems},
   pages={347--356},
   year={2015},
-  organization={ACM}
+  organization={ACM},
+  address = {New York, NY},
+  country = {USA}
 }
 """

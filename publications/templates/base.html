@@ -1,93 +1,49 @@
-<?xml version="1.1" encoding="utf-8"?> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		{% block head %}
-		<title>django-publications</title>
-		<style type="text/css">
-			body {
-				font-family: "Hiragino Sans GB", "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
-				font-size: 10pt;
-				line-height: 14pt;
-				padding: 20px;
-			}
+<?xml version="1.1" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>django-publications</title>
+    <meta name="description" content="A Django app for managing scientific publications">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-			h1 {
-				font-size: 14pt;
-				font-weight: normal;
-				line-height: 24pt;
-				margin: 0px;
-				padding: 0px;
-				color: #aaa;
-			}
+    {% block head %}
+    {% endblock head %}
 
-			h2 {
-				font-size: 14pt;
-				font-weight: bold;
-			}
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <![endif]-->
 
-			a {
-				text-decoration: none;
-				color: #999;
-			}
+    <!-- Latest compiled and minified Bootstrap 4 Alpha 5 CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
+          integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi"
+          crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            font-family: "Hiragino Sans GB", "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 14pt;
+            padding: 20px;
+        }
+    </style>
 
-			.special_links {
-				vertical-align: middle;
-				float: right;
-				text-align: right;
-			}
-
-			.special_links a {
-				line-height: 24pt;
-				vertical-align: middle;
-			}
-
-			a.author, a.title {
-				color: black;
-			}
-
-			a.keyword {
-				color: #777;
-				background: #ddd;
-				padding: 2px 4px;
-				font-size: 9pt;
-				line-height: 18pt;
-				text-shadow: #eee 0px 1px 0px;
-
-				border-bottom: 1px solid #aaa;
-				border-right: 1px solid #ccc;
-
-				border-radius: 4px;
-				-moz-border-radius: 4px;
-				-webkit-border-radius: 4px;
-			}
-
-			a.keyword:hover {
-				color: #666;
-				background: #ccc;
-			}
-
-			hr {
-				border: 0px;
-				border-top: 1px solid #ddd;
-				margin: 5px 0px 15px;
-				height: 0px;
-				padding: 0px;
-			}
-
-			pre {
-				white-space: pre-wrap;
-				white-space: -moz-pre-wrap !important;
-				white-space: -pre-wrap;
-				white-space: -o-pre-wrap;
-				word-wrap: break-word;
-			}
-		</style>
-		{% endblock %}
-	</head>
-	<body>
-		{% block content %}
-		{% endblock %}
-	</body>
+    {% block css %}
+        {# Additional CSS overriden by the pages #}
+    {% endblock %}
+</head>
+<body>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+<div class="container">
+    {% block content %}
+        <p>Use this document as a way to quick start any new project.</p>
+    {% endblock content %}
+</div> <!-- /container -->
+</body>
 </html>

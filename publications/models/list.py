@@ -14,7 +14,7 @@ class List(models.Model):
         ordering = ('title',)
         app_label = 'publications'  # Fix for Django<1.7
 
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=128, unique=True)
     description = models.CharField(max_length=128)
 
     def __unicode__(self):

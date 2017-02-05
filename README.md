@@ -3,16 +3,22 @@ django-publications
 
 A Django app for managing scientific publications.
 
+
+[![Build Status](https://travis-ci.org/lucastheis/django-publications.svg?branch=v0.7.0)](https://travis-ci.org/lucastheis/django-publications)
+[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)
+
+
 Screenshots
 -----------
 
 [![frontend][3]][1]
 [![backend][4]][2]
 
-[1]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend.png
+[1]: https://raw.githubusercontent.com/mbourqui/django-publications/media/frontend.png
 [2]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend.png
-[3]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend_small.png
+[3]: https://raw.githubusercontent.com/mbourqui/django-publications/media/frontend_small.png
 [4]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend_small.png
+
 
 Features
 --------
@@ -26,6 +32,7 @@ Features
 * RSS feeds
 * support for images
 
+
 Requirements
 ------------
 
@@ -33,16 +40,24 @@ Requirements
 * Django >= 1.5.0
 * Pillow >= 2.4.0
 * django-countries >= 4.0
+* Bootstrap v4.0.0-alpha.5
+
 
 Installation
 ------------
 
-1) Run `pip install django-publications`.
+1. Run `pip install django-publications`.
 
-2) Add `'publications'` to `INSTALLED_APPS` in your project's `settings.py`.
+1. Add `'publications'` to `INSTALLED_APPS` in your project's `settings.py`.
 
-3) Add the following to your project's `urls.py`:
+1. Add the following to your project's `urls.py`:
 
-	url(r'^publications/', include('publications.urls')),
+        url(r'^publications/', include('publications.urls')),
 
-4) Run `./manage.py syncdb`.
+1. In your project's base template, make sure the following blocks are available in the `<head>` tag:
+  * `head`, to provide xml content
+  * `css`, to provide CSS specific to this application
+
+  The content itself will be inserted in the `content` block.
+
+1. Run `./manage.py syncdb`.
