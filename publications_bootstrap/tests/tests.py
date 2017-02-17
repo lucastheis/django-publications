@@ -14,7 +14,7 @@ from ..templatetags.publication_extras import tex_parse
 
 class Tests(TestCase):
     fixtures = ['initial_data.json', 'test_data.json']
-    urls = 'publications-bootstrap.tests.urls'
+    urls = 'publications_bootstrap.tests.urls'
 
     def setUp(self):
         User.objects.create_superuser('admin', 'admin@test.de', 'admin')
@@ -76,8 +76,8 @@ class Tests(TestCase):
                                          url='http://test.com')
         link.save()
 
-        self.assertEqual(self.client.get('/publications-bootstrap/').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/1/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/').status_code, 200)
 
     def test_publications(self):
         publication = Publication.objects.create(
@@ -90,45 +90,45 @@ class Tests(TestCase):
         publication.clean()
         publication.save()
 
-        self.assertEqual(self.client.get('/publications-bootstrap/').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/?plain').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/?bibtex').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/?mods').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/?ris').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/?rss').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/1/').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/1/?plain').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/1/?bibtex').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/1/?mods').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/1/?ris').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/100/').status_code, 404)
-        response = self.client.get('/publications-bootstrap/j.-p.+lies/')
+        self.assertEqual(self.client.get('/publications/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/1/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/100/').status_code, 404)
+        response = self.client.get('/publications/j.-p.+lies/')
         self.assertEqual(response.status_code, 200)
-        self.assertGreater(len(response.context['publications-bootstrap']), 0)
-        self.assertEqual(self.client.get('/publications-bootstrap/j.-p.+lies/?plain').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/j.-p.+lies/?bibtex').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/j.-p.+lies/?mods').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/j.-p.+lies/?ris').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/j.-p.+lies/?rss').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/tag/noise+correlations/').status_code, 200)
+        self.assertGreater(len(response.context['publications']), 0)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/j.-p.+lies/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/').status_code, 200)
         self.assertEqual(
-            self.client.get('/publications-bootstrap/tag/noise+correlations/?plain').status_code, 200)
+            self.client.get('/publications/tag/noise+correlations/?plain').status_code, 200)
         self.assertEqual(
-            self.client.get('/publications-bootstrap/tag/noise+correlations/?bibtex').status_code, 200)
+            self.client.get('/publications/tag/noise+correlations/?bibtex').status_code, 200)
         self.assertEqual(
-            self.client.get('/publications-bootstrap/tag/noise+correlations/?mods').status_code, 200)
+            self.client.get('/publications/tag/noise+correlations/?mods').status_code, 200)
         self.assertEqual(
-            self.client.get('/publications-bootstrap/tag/noise+correlations/?ris').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/list/highlights/').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/list/highlights/?plain').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/list/highlights/?bibtex').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/list/highlights/?mods').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/list/highlights/?ris').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/list/highlights/?rss').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/list/foobar/').status_code, 404)
-        self.assertEqual(self.client.get('/publications-bootstrap/year/2011/').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/year/2011/?plain').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/year/2011/?bibtex').status_code, 200)
+            self.client.get('/publications/tag/noise+correlations/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/highlights/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/list/foobar/').status_code, 404)
+        self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/year/2011/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
 
         publication = Publication.objects.create(
             type=Type.objects.get(pk=1),
@@ -154,7 +154,7 @@ class Tests(TestCase):
             publication_id=publication.id, description='Test', url='http://test.com')
         link.save()
 
-        response = self.client.get('/publications-bootstrap/c.+common/')
+        response = self.client.get('/publications/c.+common/')
 
         self.assertTrue('C. Common' in str(response.content))
         self.assertFalse('B. Common' in str(response.content))
@@ -163,7 +163,7 @@ class Tests(TestCase):
         self.client.login(username='admin', password='admin')
 
         count = Publication.objects.count()
-        response = self.client.post('/admin/publications-bootstrap/publication/import_bibtex/',
+        response = self.client.post('/admin/publications/publication/import_bibtex/',
                                     {'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
 
         self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
@@ -182,25 +182,25 @@ class Tests(TestCase):
         self.assertTrue(publications[0].title.startswith('How Good is 85%?'))
 
     def test_unapi(self):
-        self.assertEqual(self.client.get('/publications-bootstrap/unapi/').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/unapi/?id=1').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/unapi/?id=1&format=mods').status_code, 200)
-        self.assertEqual(self.client.get('/publications-bootstrap/unapi/?id=1&format=bibtex').status_code,
+        self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=bibtex').status_code,
                          200)
-        self.assertEqual(self.client.get('/publications-bootstrap/unapi/?id=1&format=ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=ris').status_code, 200)
         self.assertEqual(
-            self.client.get('/publications-bootstrap/unapi/?id=99999&format=bibtex').status_code, 404)
-        self.assertEqual(self.client.get('/publications-bootstrap/unapi/?id=1&format=foobar').status_code,
+            self.client.get('/publications/unapi/?id=99999&format=bibtex').status_code, 404)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=foobar').status_code,
                          406)
 
     def test_admin(self):
         self.client.login(username='admin', password='admin')
 
-        self.assertEqual(self.client.get('/publications-bootstrap/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/').status_code, 200)
         self.assertEqual(
-            self.client.get('/admin/publications-bootstrap/type/6/move-up/', follow=True).status_code, 200)
+            self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code, 200)
         self.assertEqual(
-            self.client.get('/admin/publications-bootstrap/type/6/move-down/', follow=True).status_code, 200)
+            self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code, 200)
 
         # Test admin actions
         from django.contrib.admin import ACTION_CHECKBOX_NAME
@@ -222,7 +222,7 @@ class Tests(TestCase):
             # Test UI
             # For some reason, the <ul class="messagelist"> is not shown on D1.10
             if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
-                self.assertContains(response, '{} publications-bootstrap were successfully marked as '
+                self.assertContains(response, '{} publications were successfully marked as '
                                               ''.format(expected),
                                     msg_prefix="AssertionError in {}: ".format(action))
                 # Test on a single object
@@ -251,7 +251,7 @@ class Tests(TestCase):
         tpl = Template("""
 {% load publication_extras %}
 {% get_publication 1 %}
-{% get_publication_list 'highlights' 'publications-bootstrap/components/publications_with_thumbnails.html' %}
+{% get_publication_list 'highlights' 'publications_bootstrap/components/publications_with_thumbnails.html' %}
 {% get_publication_list 'naughty' %}
 {% get_publication_list 'foobar' %}
 {% get_publication 100 %}
