@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
@@ -25,7 +24,7 @@ class Publication(models.Model):
 
     class Meta:
         ordering = ['-year', '-month', '-id']
-        app_label = 'publications-bootstrap'  # Fix for Django<1.7
+        app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
     # names shown in admin area
     MONTH_CHOICES = (
@@ -129,9 +128,11 @@ class Publication(models.Model):
                                 help_text='List of keywords separated by commas.')
     url = models.URLField(blank=True, verbose_name='URL', help_text='Link to PDF or journal page.')
     code = models.URLField(blank=True, help_text='Link to page with code.')
-    pdf = models.FileField(upload_to='publications-bootstrap/', verbose_name='PDF', blank=True, null=True)
+    pdf = models.FileField(upload_to='publications-bootstrap/', verbose_name='PDF', blank=True,
+                           null=True)
     image = models.ImageField(upload_to='publications-bootstrap/images/', blank=True, null=True)
-    thumbnail = models.ImageField(upload_to='publications-bootstrap/thumbnails/', blank=True, null=True)
+    thumbnail = models.ImageField(upload_to='publications-bootstrap/thumbnails/', blank=True,
+                                  null=True)
     external = models.BooleanField(default=False, help_text='If publication was written in '
                                                             'another lab, mark as external.')
     abstract = models.TextField(blank=True)

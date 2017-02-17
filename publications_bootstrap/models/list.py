@@ -1,6 +1,4 @@
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
-__docformat__ = 'epytext'
+# -*- coding: utf-8 -*-
 
 from django.db import models
 
@@ -12,7 +10,7 @@ class List(models.Model):
 
     class Meta:
         ordering = ('title',)
-        app_label = 'publications-bootstrap'  # Fix for Django<1.7
+        app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
     title = models.CharField(max_length=128, unique=True)
     description = models.CharField(max_length=128)
