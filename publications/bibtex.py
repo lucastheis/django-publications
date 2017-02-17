@@ -6,7 +6,8 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 __version__ = '1.2.0'
 
-import re, six
+import re
+import publications.six as six
 
 # special character mapping
 special_chars = (
@@ -29,9 +30,18 @@ special_chars = (
 	(r'\`u', 'ù'), (r'\`U', 'Ù'),
 	(r'\`o', 'ò'), (r'\`O', 'Ò'),
 	(r'\^o', 'ô'), (r'\^O', 'Ô'),
+	(r'\^a', 'â'), (r'\^A', 'Â'),
+	(r'\^e', 'ê'), (r'\^E', 'Ê'),
+	(r'\^i', 'î'), (r'\^I', 'Î'),
+	(r'\^u', 'û'), (r'\^U', 'Û'),
 	(r'\ss', 'ß'),
-	(r'\ae', 'æ'), (r'\AE', 'Æ'),
-	(r'{{', '{'), (r'}}', '}'))
+	(r'\%', '%'),
+	(r'\ae', 'æ'), (r'\AE', 'Æ'), (r'\aa', 'å'), (r'\AA', 'Å'), (r'\o', 'ø'), (r'\O', 'Ø'), # swedish, danish, norwegian
+	(r'\c{c}', 'ç'), (r'\c{C}', 'Ç'),  # french, portuguese, etc
+	(r'\~a', 'ã'), (r'\~A', 'Ã'),  # portuguese
+	(r'\~o', 'õ'), (r'\~O', 'Õ'),
+	(r'{\i}', 'ı'), (r'\.{I}', 'İ'), ('\\u{g}', 'ğ'), ('\\u{G}', 'Ğ'), (r'\c{s}', 'ş'), (r'\c{S}', 'Ş'))  # turkish
+
 
 def parse(string):
 	"""
@@ -55,9 +65,12 @@ def parse(string):
 	# replace special characters
 	for key, value in special_chars:
 		string = string.replace(key, value)
+	string = re.sub(r'\\[cuHvs]{?([a-zA-Z])}?', r'\1', string)
 
 	# split into BibTex entries
-	entries = re.findall(r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,}]*),?\s*?)+)\s*}', string)
+	entries = re.findall(
+		r'(?u)@(\w+)[ \t]?{[ \t]*([^,\s]*)[ \t]*,?\s*((?:[^=,\s]+\s*\=\s*(?:"[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,}]*),?\s*?)+)\s*}',
+		string)
 
 	for entry in entries:
 		# parse entry
@@ -75,6 +88,10 @@ def parse(string):
 				value = value[1:-1]
 			if key not in ['booktitle', 'title']:
 				value = value.replace('}', '').replace('{', '')
+			else:
+				if value.startswith('{') and value.endswith('}'):
+					value = value[1:]
+					value = value[:-1]
 			value = value.strip()
 			value = re.sub(r'\s+', ' ', value)
 

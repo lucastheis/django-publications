@@ -3,15 +3,19 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 try:
-	from django.conf.urls import patterns
+    from django.conf.urls import url
 except ImportError:
-	from django.conf.urls.defaults import patterns
+    from django.conf.urls.defaults import url
 
-urlpatterns = patterns('',
-	(r'^$', 'publications.views.year'),
-	(r'^(?P<publication_id>\d+)/$', 'publications.views.id'),
-	(r'^year/(?P<year>\d+)/$', 'publications.views.year'),
-	(r'^tag/(?P<keyword>.+)/$', 'publications.views.keyword'),
-	(r'^list/(?P<list>.+)/$', 'publications.views.list'),
-	(r'^(?P<name>.+)/$', 'publications.views.person'),
-)
+from publications import views
+
+app_name = 'publications'
+urlpatterns = [
+    url(r'^$', views.year, name='index'),
+    url(r'^(?P<publication_id>\d+)/$', views.id, name='id'),
+    url(r'^year/(?P<year>\d+)/$', views.year, name='year'),
+    url(r'^tag/(?P<keyword>.+)/$', views.keyword, name='keyword'),
+    url(r'^list/(?P<title>.+)/$', views.list, name='list'),
+    url(r'^unapi/$', views.unapi, name='unapi'),
+    url(r'^(?P<name>.+)/$', views.author, name='author'),
+]

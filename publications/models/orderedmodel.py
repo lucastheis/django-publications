@@ -54,7 +54,7 @@ class OrderedModel(models.Model):
         )
 
     def get_ordering_queryset(self, qs=None):
-        qs = qs or self._default_manager.all()
+        qs = qs or self.__class__._default_manager.all()
         order_with_respect_to = self.order_with_respect_to
         if order_with_respect_to:
             value = self._get_order_with_respect_to()

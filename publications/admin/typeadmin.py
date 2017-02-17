@@ -5,4 +5,4 @@ __docformat__ = 'epytext'
 from .orderedmodeladmin import OrderedModelAdmin
 
 class TypeAdmin(OrderedModelAdmin):
-	list_display = ('type', 'description', 'hidden', 'move_up_down_links')
+	list_display = ('title', 'description', 'hidden', 'move_up_down_links')

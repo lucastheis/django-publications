@@ -1,0 +1,81 @@
+[
+	{
+	"pk": 1,
+	"model": "publications.publication",
+	"fields": {
+		"month": 1,
+		"citekey": "Ecker2014a",
+		"year": 2014,
+		"keywords": "noise correlations, gpfa, population, anesthezia",
+		"title": "State dependence of noise correlations in macaque primary visual cortex",
+		"note": "accepted",
+		"type": 1,
+		"journal": "Neuron (accepted)",
+		"external": false,
+		"authors": "A. S. Ecker, P. Berens, R. J. Cotton, M. Subramaniyan, G. H. Denfield, C. R. Cadwell, S. M. Smirnakis, M. Bethge, and A. S. Tolias"}
+	},
+	{
+	"pk": 2,
+	"model": "publications.publication",
+	"fields": {
+		"number": 190,
+		"month": 12,
+		"citekey": "Chagas2013a",
+		"year": 2013,
+		"title": "Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents",
+		"type": 1,
+		"journal": "Frontiers in Neural Circuits",
+		"volume": 7,
+		"external": false,
+		"authors": "A. Chagas, L. Theis, B. Sengupta, M. Stüttgen, M. Bethge, and C. Schwarz",
+		"url": "http://www.frontiersin.org/Journal/10.3389/fncir.2013.00190/abstract"}
+	},
+	{
+	"pk": 3,
+	"model": "publications.publication",
+	"fields": {
+		"month": 11,
+		"citekey": "Theis2011a",
+		"year": 2011,
+		"keywords": "natural image statistics, deep belief networks, boltzmann machines",
+		"title": "In All Likelihood, Deep Belief Is Not Enough",
+		"type": 1,
+		"journal": "Journal of Machine Learning Research",
+		"volume": 12,
+		"external": false,
+		"authors": "L. Theis, S. Gerwinn, F. Sinz, and M. Bethge"}
+	},
+	{
+	"pk": 4,
+	"model": "publications.publication",
+	"fields": {
+		"number": 40,
+		"month": 9,
+		"citekey": "Ecker2011a",
+		"year": 2011,
+		"keywords": "noise correlations, population coding, fisher information",
+		"book_title": "",
+		"title": "The effect of noise correlations in populations of diversely tuned neurons",
+		"type": 1,
+		"journal": "The Journal of Neuroscience",
+		"volume": 31,
+		"external": false,
+		"authors": "A. S. Ecker, P. Berens, A. S. Tolias, and M. Bethge",
+		"doi": "10.1523/JNEUROSCI.2539-11.2011",
+		"url": "http://www.jneurosci.org/content/31/40/14272.full"}
+	},
+	{
+	"pk": 5,
+	"model": "publications.publication",
+	"fields": {
+		"citekey": "Gerhard2014a",
+		"year": 2014,
+		"keywords": "natural image statistics",
+		"title": "Modeling Natural Image Statistics",
+		"book_title": "Biologically-inspired Computer Vision—Fundamentals and Applications",
+		"type": 5,
+		"publisher": "Wiley VCH",
+		"external": false,
+		"authors": "H. Gerhard, L. Theis, and M. Bethge"}
+	}
+]
