@@ -1,14 +1,21 @@
 language: python
 python:
     - "2.7"
+    - "3.3"
     - "3.4"
+    - "3.5"
 env:
-    - DJANGO_VERSION=1.5.11
-    - DJANGO_VERSION=1.6.8
-    - DJANGO_VERSION=1.7.8
-    - DJANGO_VERSION=1.8.0
-    - DJANGO_VERSION=1.9.9
+    - DJANGO_VERSION=1.5.12
+    - DJANGO_VERSION=1.6.11
+    - DJANGO_VERSION=1.7.11
+    - DJANGO_VERSION=1.8.17
+    - DJANGO_VERSION=1.9.12
+    - DJANGO_VERSION=1.10.0
+    - DJANGO_VERSION=1.10.1
     - DJANGO_VERSION=1.10.2
+    - DJANGO_VERSION=1.10.3
+    - DJANGO_VERSION=1.10.4
+    - DJANGO_VERSION=1.10.5
 branches:
     except:
         - media

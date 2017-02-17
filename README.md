@@ -1,7 +1,10 @@
+[![Python](https://img.shields.io/badge/Python-2.7,3.3,3.4,3.5-blue.svg?style=flat-square)](/)
+[![Django](https://img.shields.io/badge/Django-1.5,1.6,1.7,1.8,1.9,1.10-blue.svg?style=flat-square)](/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](/LICENSE)
 <!--[![Build Status](https://travis-ci.org/lucastheis/django-publications.svg?branch=v0.7.0)](https://travis-ci.org/lucastheis/django-publications)-->
 <!--[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)-->
 
-# django-publications
+# django-publications-bootstrap
 
 A Django app for managing scientific publications, providing a Bootstrap-powered UI.
 
@@ -12,9 +15,9 @@ Screenshots
 [![frontend][3]][1]
 [![backend][4]][2]
 
-[1]: https://raw.githubusercontent.com/mbourqui/django-publications/media/frontend.png
+[1]: https://raw.githubusercontent.com/mbourqui/django-publications-bootstrap/media/frontend.png
 [2]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend.png
-[3]: https://raw.githubusercontent.com/mbourqui/django-publications/media/frontend_small.png
+[3]: https://raw.githubusercontent.com/mbourqui/django-publications-bootstrap/media/frontend_small.png
 [4]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend_small.png
 
 
