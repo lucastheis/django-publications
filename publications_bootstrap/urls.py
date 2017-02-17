@@ -1,6 +1,4 @@
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
-__docformat__ = 'epytext'
+# -*- coding: utf-8 -*-
 
 try:
     from django.conf.urls import url
@@ -9,7 +7,7 @@ except ImportError:
 
 from . import views
 
-app_name = 'publications-bootstrap'
+app_name = 'publications_bootstrap'
 urlpatterns = [
     url(r'^$', views.year, name='index'),
     url(r'^(?P<publication_id>\d+)/$', views.id, name='id'),

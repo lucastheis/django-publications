@@ -29,9 +29,9 @@ def render_template(template, request, args):
 
 
 @register.simple_tag(takes_context=True)
-def get_publications(context, template='publications-bootstrap/pages/publications-bootstrap.html'):
+def get_publications(context, template='publications_bootstrap/pages/publications_bootstrap.html'):
     """
-    Get all publications-bootstrap.
+    Get all publications.
     """
 
     types = Type.objects.filter(hidden=False)
@@ -40,12 +40,13 @@ def get_publications(context, template='publications-bootstrap/pages/publication
     publications = publications.order_by('-year', '-month', '-id')
 
     if not publications:
-        return render_template('publications-bootstrap/components/empty.html', context['request'], {})
+        return render_template('publications_bootstrap/components/empty.html',
+                               context['request'], {})
 
     # load custom links and files
     populate(publications)
 
-    return render_template(template, context['request'], {'publications-bootstrap': publications})
+    return render_template(template, context['request'], {'publications_bootstrap': publications})
 
 
 @register.simple_tag(takes_context=True)
@@ -59,14 +60,17 @@ def get_publication(context, p_id):
         pbl.links = pbl.customlink_set.all()
         pbl.files = pbl.customfile_set.all()
 
-        return render_template('publications-bootstrap/components/publication.html', context['request'],
+        return render_template('publications_bootstrap/components/publication.html',
+                               context['request'],
                                {'publication': pbl})
     except Publication.DoesNotExist:
-        return render_template('publications-bootstrap/components/empty.html', context['request'], {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'],
+                               {})
 
 
 @register.simple_tag(takes_context=True)
-def get_publication_list(context, list_title, template='publications-bootstrap/components/section.html'):
+def get_publication_list(context, list_title,
+                         template='publications_bootstrap/components/section.html'):
     """
     Get a publication list.
     """
@@ -82,15 +86,16 @@ def get_publication_list(context, list_title, template='publications-bootstrap/c
         populate(publications)
 
         return render_template(template, context['request'],
-                               {'title': list_title, 'publications-bootstrap': publications})
+                               {'title': list_title, 'publications': publications})
     except List.DoesNotExist:
-        return render_template('publications-bootstrap/components/empty.html', context['request'],
+        return render_template('publications_bootstrap/components/empty.html', context['request'],
                                {'error': True, 'alert':
                                    {'heading': 'Zut!',
                                     'message': 'There is no such list named "%"'.format(
                                         list_title)}})
     except Publication.DoesNotExist:
-        return render_template('publications-bootstrap/components/empty.html', context['request'], {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'],
+                               {})
 
 
 @register.filter()

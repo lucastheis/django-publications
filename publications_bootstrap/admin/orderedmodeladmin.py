@@ -27,12 +27,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from functools import update_wrapper
 
+from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
-from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+
 try:
     from django.contrib.admin.utils import unquote
 except ImportError:
@@ -47,8 +48,8 @@ if not getattr(Options, 'model_name', False):
 if not getattr(ChangeList, 'get_queryset', False):
     ChangeList.get_queryset = ChangeList.get_query_set
 
-class OrderedModelAdmin(admin.ModelAdmin):
 
+class OrderedModelAdmin(admin.ModelAdmin):
     def get_model_info(self):
         return dict(app=self.model._meta.app_label,
                     model=self.model._meta.model_name)
@@ -62,13 +63,15 @@ class OrderedModelAdmin(admin.ModelAdmin):
         def wrap(view):
             def wrapper(*args, **kwargs):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
+
             return update_wrapper(wrapper, view)
+
         return [
-            url(r'^(.+)/move-(up)/$', wrap(self.move_view),
-                name='{app}_{model}_order_up'.format(**self.get_model_info())),
-            url(r'^(.+)/move-(down)/$', wrap(self.move_view),
-                name='{app}_{model}_order_down'.format(**self.get_model_info())),
-        ] + super(OrderedModelAdmin, self).get_urls()
+                   url(r'^(.+)/move-(up)/$', wrap(self.move_view),
+                       name='{app}_{model}_order_up'.format(**self.get_model_info())),
+                   url(r'^(.+)/move-(down)/$', wrap(self.move_view),
+                       name='{app}_{model}_order_down'.format(**self.get_model_info())),
+               ] + super(OrderedModelAdmin, self).get_urls()
 
     def _get_changelist(self, request):
         list_display = self.get_list_display(request)
@@ -99,15 +102,18 @@ class OrderedModelAdmin(admin.ModelAdmin):
         return HttpResponseRedirect('../../%s' % self.request_query_string)
 
     def move_up_down_links(self, obj):
-        return render_to_string("admin/publications-bootstrap/order_controls.html", {
+        return render_to_string("admin/publications_bootstrap/order_controls.html", {
             'app_label': self.model._meta.app_label,
             'module_name': self.model._meta.model_name,
             'object_id': obj.id,
             'urls': {
-                'up': reverse("admin:{app}_{model}_order_up".format(**self.get_model_info()), args=[obj.id, 'up']),
-                'down': reverse("admin:{app}_{model}_order_down".format(**self.get_model_info()), args=[obj.id, 'down']),
+                'up': reverse("admin:{app}_{model}_order_up".format(**self.get_model_info()),
+                              args=[obj.id, 'up']),
+                'down': reverse("admin:{app}_{model}_order_down".format(**self.get_model_info()),
+                                args=[obj.id, 'down']),
             },
             'query_string': self.request_query_string
         })
+
     move_up_down_links.allow_tags = True
     move_up_down_links.short_description = _(u'Move')

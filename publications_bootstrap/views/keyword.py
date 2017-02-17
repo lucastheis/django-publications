@@ -19,30 +19,30 @@ def keyword(request, keyword):
             publications.append(publication)
 
     if 'plain' in request.GET:
-        return render(request, 'publications-bootstrap/export/publications-bootstrap.txt', {
-            'publications-bootstrap': publications
+        return render(request, 'publications_bootstrap/export/publications.txt', {
+            'publications': publications
         }, content_type='text/plain; charset=UTF-8')
 
     if 'bibtex' in request.GET:
-        return render(request, 'publications-bootstrap/export/publications-bootstrap.bib', {
-            'publications-bootstrap': publications
+        return render(request, 'publications_bootstrap/export/publications.bib', {
+            'publications': publications
         }, content_type='text/x-bibtex; charset=UTF-8')
 
     if 'mods' in request.GET:
-        return render(request, 'publications-bootstrap/export/publications-bootstrap.mods', {
-            'publications-bootstrap': publications
+        return render(request, 'publications_bootstrap/export/publications.mods', {
+            'publications': publications
         }, content_type='application/xml; charset=UTF-8')
 
     if 'ris' in request.GET:
-        return render(request, 'publications-bootstrap/export/publications-bootstrap.ris', {
-            'publications-bootstrap': publications
+        return render(request, 'publications_bootstrap/export/publications.ris', {
+            'publications': publications
         }, content_type='application/x-research-info-systems; charset=UTF-8')
 
     # load custom links and files
     populate(publications)
 
-    return render(request, 'publications-bootstrap/pages/keyword.html', {
-        'publications-bootstrap': publications,
+    return render(request, 'publications_bootstrap/pages/keyword.html', {
+        'publications': publications,
         'keyword': keyword.replace('+', ' '),
-        'title': "publications-bootstrap for keyword {}".format(keyword.replace('+', ' ')),
+        'title': "publications for keyword {}".format(keyword.replace('+', ' ')),
     })

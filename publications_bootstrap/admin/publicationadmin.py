@@ -52,7 +52,7 @@ class PublicationAdmin(admin.ModelAdmin):
                     'status',)
     list_display_links = ('title',)
     list_filter = ('year', 'journal', 'status', 'lists',)
-    change_list_template = 'admin/publications-bootstrap/publication_change_list.html'
+    change_list_template = 'admin/publications_bootstrap/publication_change_list.html'
     search_fields = ('title', 'journal', 'book_title', 'authors', 'keywords', 'year',
                      'institution', 'school', 'organization',)
     actions = ['set_status_draft', 'set_status_submitted', 'set_status_accepted',
@@ -121,7 +121,7 @@ class PublicationAdmin(admin.ModelAdmin):
         if rows_updated == 1:
             message_bit = "1 publication was"
         else:
-            message_bit = "{:d} publications-bootstrap were".format(rows_updated)
+            message_bit = "{:d} publications were".format(rows_updated)
         self.message_user(request, "{} successfully marked as {}.".
                           format(message_bit, Publication.STATUS_CHOICES_DICT[new_status]))
 

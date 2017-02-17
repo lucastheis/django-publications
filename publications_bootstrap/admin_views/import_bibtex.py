@@ -57,7 +57,7 @@ def import_bibtex(request):
         if not errors:
             publications = []
 
-            # try adding publications-bootstrap
+            # try adding publications
             for entry in bib:
                 if 'title' in entry and 'author' in entry and 'year' in entry:
                     # parse authors
@@ -166,21 +166,21 @@ def import_bibtex(request):
             # some error occurred
             return render(
                 request,
-                'admin/publications-bootstrap/import_bibtex.html', {
+                'admin/publications_bootstrap/import_bibtex.html', {
                     'errors': errors,
                     'title': 'Import BibTex',
                     'types': Type.objects.all(),
                     'request': request})
         else:
             try:
-                # save publications-bootstrap
+                # save publications
                 for publication in publications:
                     publication.save()
             except:
-                msg = 'Some error occured during saving of publications-bootstrap.'
+                msg = 'Some error occured during saving of publications.'
             else:
                 if len(publications) > 1:
-                    msg = 'Successfully added ' + str(len(publications)) + ' publications-bootstrap.'
+                    msg = 'Successfully added ' + str(len(publications)) + ' publications.'
                 else:
                     msg = 'Successfully added ' + str(len(publications)) + ' publication.'
 
@@ -192,7 +192,7 @@ def import_bibtex(request):
     else:
         return render(
             request,
-            'admin/publications-bootstrap/import_bibtex.html', {
+            'admin/publications_bootstrap/import_bibtex.html', {
                 'title': 'Import BibTex',
                 'types': Type.objects.all(),
                 'request': request})

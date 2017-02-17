@@ -5,7 +5,7 @@ from django.db import models
 
 class List(models.Model):
     """
-    Model representing a list of publications-bootstrap.
+    Model representing a list of publications.
     """
 
     class Meta:

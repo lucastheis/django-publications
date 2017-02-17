@@ -11,7 +11,7 @@ class CustomFile(models.Model):
 
     publication = models.ForeignKey(Publication)
     description = models.CharField(max_length=256)
-    file = models.FileField(upload_to='publications-bootstrap/')
+    file = models.FileField(upload_to='publications_bootstrap/')
 
     def __unicode__(self):
         return self.description

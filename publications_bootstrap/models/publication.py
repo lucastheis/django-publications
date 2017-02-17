@@ -128,10 +128,10 @@ class Publication(models.Model):
                                 help_text='List of keywords separated by commas.')
     url = models.URLField(blank=True, verbose_name='URL', help_text='Link to PDF or journal page.')
     code = models.URLField(blank=True, help_text='Link to page with code.')
-    pdf = models.FileField(upload_to='publications-bootstrap/', verbose_name='PDF', blank=True,
+    pdf = models.FileField(upload_to='publications_bootstrap/', verbose_name='PDF', blank=True,
                            null=True)
-    image = models.ImageField(upload_to='publications-bootstrap/images/', blank=True, null=True)
-    thumbnail = models.ImageField(upload_to='publications-bootstrap/thumbnails/', blank=True,
+    image = models.ImageField(upload_to='publications_bootstrap/images/', blank=True, null=True)
+    thumbnail = models.ImageField(upload_to='publications_bootstrap/thumbnails/', blank=True,
                                   null=True)
     external = models.BooleanField(default=False, help_text='If publication was written in '
                                                             'another lab, mark as external.')

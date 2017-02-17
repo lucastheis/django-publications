@@ -33,22 +33,22 @@ def unapi(request):
 
         if format == 'bibtex':
             # return BibTex encoded publication
-            return render(request, 'publications-bootstrap/export/publication.bib', {
+            return render(request, 'publications_bootstrap/export/publication.bib', {
                 'publication': publications[0]
             },
                           content_type='text/x-bibtex; charset=UTF-8')
 
         if format == 'mods':
             # return MODS encoded publication
-            return render(request, 'publications-bootstrap/export/publications-bootstrap.mods', {
-                'publications-bootstrap': publications
+            return render(request, 'publications_bootstrap/export/publications.mods', {
+                'publications': publications
             },
                           content_type='application/xml; charset=UTF-8')
 
         if format == 'ris':
             # return MODS encoded publication
-            return render(request, 'publications-bootstrap/export/publications-bootstrap.ris', {
-                'publications-bootstrap': publications
+            return render(request, 'publications_bootstrap/export/publications.ris', {
+                'publications': publications
             },
                           content_type='application/x-research-info-systems; charset=UTF-8')
 

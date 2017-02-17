@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
-__docformat__ = 'epytext'
-
 from django import forms
 from django.db import models
 from django.forms import widgets
@@ -64,7 +60,7 @@ class PagesField(models.Field):
 try:
     from south.modelsinspector import add_introspection_rules
 
-    add_introspection_rules([], ["^publications-bootstrap\.fields\.PagesField"])
+    add_introspection_rules([], ["^publications_bootstrap\.fields\.PagesField"])
 except:
     pass
 
