@@ -1,4 +1,9 @@
-# django-publications
+# django-publications-bootstrap
+
+## 1.0.0 - 17.02.2017
+
+- Rename project from `django-publications` to `django-publications-bootstrap`
+- Merge new features to `master`
 
 ## 0.7.0
 

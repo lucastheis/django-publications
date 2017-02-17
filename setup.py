@@ -2,7 +2,7 @@
 
 import os
 from setuptools import setup, find_packages
-from publications import __version__
+from publications_bootstrap import __version__
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
@@ -11,13 +11,13 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='django-publications',
+    name='django-publications-bootstrap',
     version=__version__,
-    author='Lucas Theis',
-    author_email='lucas@theis.io',
-    description='A Django app for managing scientific publications.',
+    author='Marc Bourqui',
+    author_email='https://github.com/mbourqui',
+    description='A Django app for managing scientific publications with a Bootstrap-powered UI.',
     long_description=README,
-    url='https://github.com/mbourqui/django-publications',
+    url='https://github.com/mbourqui/django-publications-bootstrap',
     packages=find_packages(),
     include_package_data=True,
     install_requires=('Django>=1.5.0', 'Pillow>=2.4.0', 'django-countries>=4.0'),
