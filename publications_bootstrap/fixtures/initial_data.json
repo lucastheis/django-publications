@@ -1,6 +1,6 @@
 [
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 1,
 		"fields": {
 			"order": 0,
@@ -11,7 +11,7 @@
 		}
 	},
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 2,
 		"fields": {
 			"order": 1,
@@ -22,7 +22,7 @@
 		}
 	},
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 3,
 		"fields": {
 			"order": 2,
@@ -33,7 +33,7 @@
 		}
 	},
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 4,
 		"fields": {
 			"order": 3,
@@ -44,7 +44,7 @@
 		}
 	},
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 5,
 		"fields": {
 			"order": 4,
@@ -54,10 +54,10 @@
 			"hidden": 0
 		}
 	},
-	{ 
-        "model": "publications.type",
+	{
+        "model": "publications_bootstrap.type",
         "pk": 6,
-                "fields": {   
+                "fields": {
                         "order": 5,
                         "title": "Online",
                         "description": "Online publication",
@@ -66,7 +66,7 @@
                 }
         },
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 7,
 		"fields": {
 			"order": 6,
@@ -77,7 +77,7 @@
 		}
 	},
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 8,
 		"fields": {
 			"order": 7,
@@ -88,7 +88,7 @@
 		}
 	},
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 9,
 		"fields": {
 			"order": 8,
@@ -99,7 +99,7 @@
 		}
 	},
 	{
-	"model": "publications.type",
+	"model": "publications_bootstrap.type",
 	"pk": 10,
 		"fields": {
 			"order": 9,
@@ -110,7 +110,7 @@
 		}
 	},
 	{
-	"model": "publications.list",
+	"model": "publications_bootstrap.list",
 	"pk": 1,
 		"fields": {
 			"title": "Highlights",

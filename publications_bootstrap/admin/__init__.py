@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 from django.contrib import admin
-from publications.models import Type, List, Publication
+from ..models import Type, List, Publication
 from .publicationadmin import PublicationAdmin
 from .typeadmin import TypeAdmin
 from .listadmin import ListAdmin
