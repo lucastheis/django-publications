@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui <https://github.com/mbourqui>']
 __docformat__ = 'epytext'
