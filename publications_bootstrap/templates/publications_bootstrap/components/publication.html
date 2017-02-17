@@ -5,12 +5,13 @@
         <p class="card-text">
             {% if publication.authors_escaped|length > 8 %}
                 {% for author, author_escaped in publication.authors_escaped|slice:":8" %}
-                    <a href="{% url 'publications-bootstrap:author' author_escaped %}">{{ author }}</a>
-                    ,
+                    <a href="{% url 'publications_bootstrap:author' author_escaped %}">
+                        {{ author }}</a>,
                 {% endfor %} <i>et al.</i>
             {% else %}
                 {% for author, author_escaped in publication.authors_escaped %}
-                    <a href="{% url 'publications-bootstrap:author' author_escaped %}">{{ author }}</a>
+                    <a href="{% url 'publications_bootstrap:author' author_escaped %}">
+                        {{ author }}</a>
                     {% if not forloop.last %}
                         {% if forloop.revcounter == 2 %}
                             {% if not forloop.first %},{% endif %} and {% else %},
@@ -21,7 +22,7 @@
         </p>
     </div>
     <h3 class="card-header">
-        <a href="{% url 'publications-bootstrap:id' publication.pk %}"
+        <a href="{% url 'publications_bootstrap:id' publication.pk %}"
            class="title">{{ publication.title|tex_parse }}</a>
     </h3>
     <div class="card-block">
@@ -58,7 +59,7 @@
             <li class="list-group-item">
                 {% for keyword, keyword_escaped in publication.keywords_escaped %}
                     <a class="keyword"
-                       href="{% url 'publications-bootstrap:keyword' keyword_escaped %}"><span
+                       href="{% url 'publications_bootstrap:keyword' keyword_escaped %}"><span
                             class="tag tag-default">{{ keyword }}</span></a>
                 {% endfor %}
             </li>
@@ -159,9 +160,11 @@
                         </button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item"
-                               href="{% url 'publications-bootstrap:id' publication.pk %}?ris">RIS</a>
+                               href="{% url 'publications_bootstrap:id' publication.pk %}?ris">
+                                RIS</a>
                             <a class="dropdown-item"
-                               href="{% url 'publications-bootstrap:id' publication.pk %}?bibtex">BibTex</a>
+                               href="{% url 'publications_bootstrap:id' publication.pk %}?bibtex">
+                                BibTex</a>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-{% extends "publications-bootstrap/base.html" %}
+{% extends "publications_bootstrap/base.html" %}
 {% load publication_extras %}
 
 {% block app_head %}
@@ -36,8 +36,8 @@
 {% endblock %}
 
 {% block app_content %}
-    {% include 'publications-bootstrap/components/section.html' with publications=publication|as_list %}
+    {% include 'publications_bootstrap/components/section.html' with publications=publication|as_list %}
     <h1>Reference</h1>
     <hr/>
-    <pre lang="bibtex">{% include "publications-bootstrap/export/publication.bib" %}</pre>
+    <pre lang="bibtex">{% include "publications_bootstrap/export/publication.bib" %}</pre>
 {% endblock %}

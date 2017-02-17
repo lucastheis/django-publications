@@ -4,24 +4,24 @@
 
 {% block head %}
     {{ block.super }}
-    <link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications-bootstrap:unapi' %}"/>
+    <link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications_bootstrap:unapi' %}"/>
     {% block app_head %}
     {% endblock %}
 {% endblock %}
 
 {% block css %}
-    <link href="{% static 'publications-bootstrap/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'publications_bootstrap/css/style.css' %}" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
     <div class="publications-container">
         {% if publication or publications %}
-            {% include 'publications-bootstrap/components/download_all.html' %}
+            {% include 'publications_bootstrap/components/download_all.html' %}
             {% block app_content %}
-                {% include 'publications-bootstrap/components/section.html' %}
+                {% include 'publications_bootstrap/components/section.html' %}
             {% endblock %}
         {% else %}
-            {% include 'publications-bootstrap/components/empty.html' %}
+            {% include 'publications_bootstrap/components/empty.html' %}
         {% endif %}
     </div>
 {% endblock %}
