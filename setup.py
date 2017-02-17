@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import os
+
 from setuptools import setup, find_packages
+
 from publications_bootstrap import __version__
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
@@ -20,10 +22,14 @@ setup(
     url='https://github.com/mbourqui/django-publications-bootstrap',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=('Django>=1.5.0', 'Pillow>=2.4.0', 'django-countries>=4.0'),
+    install_requires=[
+        'Django>=1.8.0',
+        'Pillow>=2.4.0',
+        'django-countries>=4.0',
+    ],
     zip_safe=False,
     license='MIT',
-    classifiers=(
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
         'Framework :: Django',
@@ -47,5 +53,5 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-    ),
+    ],
 )

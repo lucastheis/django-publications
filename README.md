@@ -1,5 +1,5 @@
 [![Python](https://img.shields.io/badge/Python-2.7,3.3,3.4,3.5-blue.svg?style=flat-square)](/)
-[![Django](https://img.shields.io/badge/Django-1.5,1.6,1.7,1.8,1.9,1.10-blue.svg?style=flat-square)](/)
+[![Django](https://img.shields.io/badge/Django-1.8,1.9,1.10-blue.svg?style=flat-square)](/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](/LICENSE)
 [![Build Status](https://travis-ci.org/mbourqui/django-publications-bootstrap.svg?branch=master)](https://travis-ci.org/mbourqui/django-publications-bootstrap)
 <!--[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)-->
@@ -38,7 +38,7 @@ Requirements
 ------------
 
 * Python >= 2.7.0
-* Django >= 1.5.0
+* Django >= 1.8.0
 * Pillow >= 2.4.0
 * django-countries >= 4.0
 * Bootstrap v4.0.0-alpha.6
