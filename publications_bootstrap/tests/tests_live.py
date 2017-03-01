@@ -41,8 +41,9 @@ class LiveTests(LiveServerTestCase):
     def test_import_bibtex(self):
         count = Publication.objects.count()
 
-        self.selenium.get('{0}{1}'.format(self.live_server_url,
-                                          '/admin/publications/publication/import_bibtex/'))
+        self.selenium.get('{0}{1}'.format(
+            self.live_server_url,
+            '/admin/publications_bootstrap/publication/import_bibtex/'))
         bibliography_input = self.selenium.find_element_by_name("bibliography")
         bibliography_input.send_keys(tests.TEST_BIBLIOGRAPHY)
         self.selenium.find_element_by_xpath('//input[@value="Import"]').click()
@@ -53,6 +54,6 @@ class LiveTests(LiveServerTestCase):
         count = Publication.objects.count()
 
         self.selenium.get(
-            '{0}{1}'.format(self.live_server_url, '/admin/publications/publication/'))
+            '{0}{1}'.format(self.live_server_url, '/admin/publications_bootstrap/publication/'))
         self.selenium.find_element_by_link_text('Import BibTex').click()
         self.selenium.find_element_by_xpath('//input[@value="Import"]').click()
