@@ -163,7 +163,7 @@ class Tests(TestCase):
         self.client.login(username='admin', password='admin')
 
         count = Publication.objects.count()
-        response = self.client.post('/admin/publications/publication/import_bibtex/',
+        self.client.post('/admin/publications_bootstrap/publication/import_bibtex/',
                                     {'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
 
         self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
