@@ -204,7 +204,7 @@ class Tests(TestCase):
 
         # Test admin actions
         from django.contrib.admin import ACTION_CHECKBOX_NAME
-        change_url = reverse('admin:publications_publication_changelist')
+        change_url = reverse('admin:publications_bootstrap_publication_changelist')
         for action, db_value in [('set_status_draft', Publication.DRAFT),
                                  ('set_status_submitted', Publication.SUBMITTED),
                                  ('set_status_accepted', Publication.ACCEPTED),
