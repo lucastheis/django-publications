@@ -29,7 +29,7 @@ def render_template(template, request, args):
 
 
 @register.simple_tag(takes_context=True)
-def get_publications(context, template='publications_bootstrap/pages/publications_bootstrap.html'):
+def get_publications(context, template='publications_bootstrap/pages/publications.html'):
     """
     Get all publications.
     """
@@ -46,7 +46,7 @@ def get_publications(context, template='publications_bootstrap/pages/publication
     # load custom links and files
     populate(publications)
 
-    return render_template(template, context['request'], {'publications_bootstrap': publications})
+    return render_template(template, context['request'], {'publications': publications})
 
 
 @register.simple_tag(takes_context=True)
