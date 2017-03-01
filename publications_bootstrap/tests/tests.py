@@ -198,9 +198,9 @@ class Tests(TestCase):
 
         self.assertEqual(self.client.get('/publications/').status_code, 200)
         self.assertEqual(
-            self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code, 200)
+            self.client.get('/admin/publications_bootstrap/type/6/move-up/', follow=True).status_code, 200)
         self.assertEqual(
-            self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code, 200)
+            self.client.get('/admin/publications_bootstrap/type/6/move-down/', follow=True).status_code, 200)
 
         # Test admin actions
         from django.contrib.admin import ACTION_CHECKBOX_NAME
