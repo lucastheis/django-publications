@@ -67,5 +67,6 @@ node_modules/
 
 # Python packaging
 *.egg-info
+.eggs/*
 build/*
 dist/*
