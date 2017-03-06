@@ -4,13 +4,13 @@
 [![Build Status](https://travis-ci.org/mbourqui/django-publications-bootstrap.svg?branch=master)](https://travis-ci.org/mbourqui/django-publications-bootstrap)
 <!--[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)-->
 
-# django-publications-bootstrap
+
+# Bootstrap-powered scientific publications for Django
 
 A Django app for managing scientific publications, providing a Bootstrap-powered UI.
 
 
-Screenshots
------------
+## Screenshots
 
 [![frontend][3]][1]
 [![backend][4]][2]
@@ -21,8 +21,7 @@ Screenshots
 [4]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend_small.png
 
 
-Features
---------
+## Features
 
 * automatically creates lists for individual authors and keywords
 * BibTex import/export
@@ -34,31 +33,35 @@ Features
 * support for images
 
 
-Requirements
-------------
+## Requirements
 
-* Python >= 2.7.0
-* Django >= 1.8.0
+* Python >= 2.7
+* Django >= 1.8.17
 * Pillow >= 2.4.0
-* django-countries >= 4.0
+* `django-countries` >= 4.0
 * Bootstrap v4.0.0-alpha.6
 
 
-Installation
-------------
+## Installation
 
 1. Run `pip install django-publications-bootstrap`.
 
-1. Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
+* Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
 
-1. Add the following to your project's `urls.py`:
+* Add the following to your project's `urls.py`:
 
         url(r'^publications/', include('publications_bootstrap.urls')),
 
-1. In your project's base template, make sure the following blocks are available in the `<head>` tag:
+* In your project's base template, make sure the following blocks are available in the `<head>` tag:
   * `head`, to provide xml content
   * `css`, to provide CSS specific to this application
-
+  
   The content itself will be inserted in the `content` block.
 
-1. Run `./manage.py syncdb`.
+* Run `./manage.py syncdb`.
+
+
+## Credits
+
+This is a fork of [django-publications](https://github.com/lucastheis/django-publications) from
+[lucastheis](https://github.com/lucastheis).
