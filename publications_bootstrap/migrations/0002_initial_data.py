@@ -7,7 +7,7 @@ from django.db import migrations
 
 
 def load_data(apps, schema_editor):
-    management.call_command('loaddata', 'initial_data.json')
+    management.call_command('loaddata', 'publications_bootstrap_initial_data.json')
 
 
 class Migration(migrations.Migration):

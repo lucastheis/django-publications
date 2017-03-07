@@ -13,7 +13,7 @@ from ..templatetags.publication_extras import tex_parse
 
 
 class Tests(TestCase):
-    fixtures = ['initial_data.json', 'test_data.json']
+    fixtures = ['publications_bootstrap_initial_data.json', 'test_data.json']
     urls = 'publications_bootstrap.tests.urls'
 
     def setUp(self):
