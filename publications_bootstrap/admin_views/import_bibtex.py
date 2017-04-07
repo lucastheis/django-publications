@@ -3,13 +3,13 @@ __authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
 import re
+
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django_countries import countries
 
-from .. import six as six
 from ..bibtex import parse
 from ..models import Publication, Type
 
