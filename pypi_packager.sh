@@ -25,8 +25,8 @@ done
 eval set -- "$@"
 
 # Clear previous compilations to prevent potential issues and limit disk space usage
-rm README.rst
-rm -r dist/  build/ django_publications_bootstrap.egg-info/
+rm -f README.rst
+rm -rf dist/ build/ django_publications_bootstrap.egg-info/
 
 # Generate doc as restructured text for nice PyPI rendering
 pandoc --from=markdown --to=rst --output=README.rst README.md

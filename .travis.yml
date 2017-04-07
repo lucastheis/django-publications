@@ -13,7 +13,7 @@ branches:
     except:
         - media
 before_install:
-    - ./pypi_packager.py
+    - ./pypi_packager.sh
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
