@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 from publications_bootstrap import __version__
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
 
 # allow setup.py to be run from any path

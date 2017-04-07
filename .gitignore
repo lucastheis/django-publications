@@ -25,6 +25,7 @@ __pycache__
 
 # Docs
 _build
+README.rst  # generated with pandoc
 
 # Logs
 logs
