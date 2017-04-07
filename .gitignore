@@ -25,7 +25,6 @@ __pycache__
 
 # Docs
 _build
-README.rst  # generated with pandoc
 
 # Logs
 logs
@@ -71,3 +70,4 @@ node_modules/
 .eggs/*
 build/*
 dist/*
+README.rst
