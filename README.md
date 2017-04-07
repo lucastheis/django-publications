@@ -1,4 +1,4 @@
-[![Python](https://img.shields.io/badge/Python-2.7,3.4,3.5-blue.svg?style=flat-square)](/)
+[![Python](https://img.shields.io/badge/Python-2.7,3.4,3.5,3.6-blue.svg?style=flat-square)](/)
 [![Django](https://img.shields.io/badge/Django-1.8,1.9,1.10-blue.svg?style=flat-square)](/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](/LICENSE)
 [![Build Status](https://travis-ci.org/mbourqui/django-publications-bootstrap.svg?branch=master)](https://travis-ci.org/mbourqui/django-publications-bootstrap)
