@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# This script generates a package for submission to the Python Package Index
+# This script generates a package and submits it to the Python Package Index
 
-# Clear previous compilations to prevent 'caching' issues
+# Clear previous compilations to prevent potential issues and limit disk space usage
 rm README.rst
 rm -r dist/  build/ django_publications_bootstrap.egg-info/
 
