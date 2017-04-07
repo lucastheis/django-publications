@@ -1,4 +1,4 @@
-[![Python](https://img.shields.io/badge/Python-2.7,3.3,3.4,3.5-blue.svg?style=flat-square)](/)
+[![Python](https://img.shields.io/badge/Python-2.7,3.4,3.5-blue.svg?style=flat-square)](/)
 [![Django](https://img.shields.io/badge/Django-1.8,1.9,1.10-blue.svg?style=flat-square)](/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](/LICENSE)
 [![Build Status](https://travis-ci.org/mbourqui/django-publications-bootstrap.svg?branch=master)](https://travis-ci.org/mbourqui/django-publications-bootstrap)
@@ -31,12 +31,13 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 * PDF upload
 * RSS feeds
 * support for images
+* embeddable references
 
 
 ## Requirements
 
-* Python >= 2.7
-* Django >= 1.8.17
+* Python == 2.7 or >= 3.4
+* Django >= 1.8.18
 * Pillow >= 2.4.0
 * `django-countries` >= 4.0
 * Bootstrap v4.0.0-alpha.6
@@ -52,13 +53,13 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 
         url(r'^publications/', include('publications_bootstrap.urls')),
 
+* Run `./manage.py migrate publications_bootstrap`.
+
 * In your project's base template, make sure the following blocks are available in the `<head>` tag:
   * `head`, to provide xml content
   * `css`, to provide CSS specific to this application
   
   The content itself will be inserted in the `content` block.
-
-* Run `./manage.py syncdb`.
 
 
 ## Credits
