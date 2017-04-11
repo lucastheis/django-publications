@@ -11,7 +11,7 @@ from ..tests import tests
 
 
 class LiveTests(LiveServerTestCase):
-    fixtures = ['publications_bootstrap_initial_data.json', 'test_data.json']
+    fixtures = ['initial_data.json', 'test_data.json']
     urls = 'publications_bootstrap.tests.urls'
 
     @classmethod
