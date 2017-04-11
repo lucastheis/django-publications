@@ -39,6 +39,7 @@ python setup.py bdist_wheel
 
 # Upload to PyPI, if asked to
 if [ -n "$SUBMIT" ]; then
+    twine register dist/django_publications_bootstrap-*.whl
     twine upload dist/*
 fi
 
