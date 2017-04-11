@@ -1,5 +1,8 @@
 # django-publications-bootstrap
 
+## 1.0.2 - TBD
+
+
 ## 1.0.1 - 07.04.2017
 - Merge PR [#34](https://github.com/lucastheis/django-publications/pull/34) from source project
 

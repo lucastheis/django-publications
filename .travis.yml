@@ -23,6 +23,6 @@ install:
     - pip install -q selenium
     - pip install -q coveralls
 script:
-    - coverage run --source publications_bootstrap --omit publications_bootstrap/six.py publications_bootstrap/tests/__main__.py
+    - coverage run --source publications_bootstrap publications_bootstrap/tests/__main__.py
 after_success:
     - coveralls
