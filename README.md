@@ -48,15 +48,15 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 
 1. Run `pip install django-publications-bootstrap`.
 
-* Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
+1. Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
 
-* Add the following to your project's `urls.py`:
+1. Add the following to your project's `urls.py`:
 
         url(r'^publications/', include('publications_bootstrap.urls')),
 
-* Run `./manage.py migrate publications_bootstrap`.
+1. Run `./manage.py migrate publications_bootstrap`.
 
-* In your project's base template, make sure the following blocks are available in the `<head>` tag:
+1. In your project's base template, make sure the following blocks are available in the `<head>` tag:
   * `head`, to provide xml content
   * `css`, to provide CSS specific to this application
   
