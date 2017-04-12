@@ -57,10 +57,10 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 1. Run `./manage.py migrate publications_bootstrap`.
 
 1. In your project's base template, make sure the following blocks are available in the `<head>` tag:
-  * `head`, to provide xml content
-  * `css`, to provide CSS specific to this application
+    * `head`, to provide xml content
+    * `css`, to provide CSS specific to this application
   
-  The content itself will be inserted in the `content` block.
+    The content itself will be inserted in the `content` block.
 
 
 ## Credits
