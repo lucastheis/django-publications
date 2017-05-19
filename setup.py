@@ -29,6 +29,7 @@ setup(
         'Pillow>=2.4.0',
         'django-countries>=4.0',
         'django-ordered-model>=1.4.1',
+        'django-echoices>=1.1.0',
     ],
     zip_safe=False,
     keywords='django scientific publications citations references bibliography',

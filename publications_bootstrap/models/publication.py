@@ -5,7 +5,10 @@ from string import ascii_uppercase
 from django.conf import settings
 from django.db import models
 from django.utils.http import urlquote_plus
+from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
+from echoices.enums import EChoice, EOrderedChoice
+from echoices.fields import EChoiceCharField
 
 from ..fields import NullCharField, PagesField
 from ..models import Type, Catalog
@@ -24,49 +27,33 @@ class Publication(models.Model):
         app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
     # names shown in admin area
-    MONTH_CHOICES = (
-        (1, 'January'),
-        (2, 'February'),
-        (3, 'March'),
-        (4, 'April'),
-        (5, 'May'),
-        (6, 'June'),
-        (7, 'July'),
-        (8, 'August'),
-        (9, 'September'),
-        (10, 'October'),
-        (11, 'November'),
-        (12, 'December')
-    )
+    class EMonths(EOrderedChoice):
+        JAN = (1, _('January', 'Jan'))
+        FEB = (2, _('February', 'Feb'))
+        MAR = (3, _('March', 'Mar'))
+        APR = (4, _('April', 'Apr'))
+        MAY = (5, _('May', 'May'))
+        JNE = (6, _('June', 'Jun'))
+        JLY = (7, _('July', 'Jul'))
+        AUG = (8, _('August', 'Aug'))
+        SEP = (9, _('September', 'Sep'))
+        OCT = (10, _('October', 'Oct'))
+        NOV = (11, _('November', 'Nov'))
+        DEC = (12, _('December', 'Dec'))
 
-    # abbreviations used in BibTex
-    MONTH_BIBTEX = {
-        1: 'Jan',
-        2: 'Feb',
-        3: 'Mar',
-        4: 'Apr',
-        5: 'May',
-        6: 'Jun',
-        7: 'Jul',
-        8: 'Aug',
-        9: 'Sep',
-        10: 'Oct',
-        11: 'Nov',
-        12: 'Dec'
-    }
+        def __init__(self, v_, l_, bibtex):
+            # abbreviations used in BibTex
+            self.bibtex = bibtex
+
 
     # Status of the publication
-    DRAFT = 'd'
-    SUBMITTED = 's'
-    ACCEPTED = 'a'
-    PUBLISHED = 'p'
-    STATUS_CHOICES = (
-        (DRAFT, 'Draft'),
-        (SUBMITTED, 'Submitted'),
-        (ACCEPTED, 'Accepted'),
-        (PUBLISHED, 'Published'),
-    )
-    STATUS_CHOICES_DICT = dict(STATUS_CHOICES)
+    class EStatuses(EChoice):
+        DRAFT = ('d', 'draft')
+        SUBMITTED = ('s', 'submitted')
+        ACCEPTED = ('a', 'accepted')
+        PUBLISHED = ('p', 'published')
+
+    STATUS_CHOICES_DICT = dict(EStatuses.choices())
 
     type = models.ForeignKey(Type)
     citekey = NullCharField(max_length=512, blank=True, null=True, unique=True,
@@ -75,7 +62,7 @@ class Publication(models.Model):
     authors = models.CharField(max_length=2048,
                                help_text='List of authors separated by commas or <i>and</i>.')
     year = models.PositiveIntegerField()
-    month = models.IntegerField(choices=MONTH_CHOICES, blank=True, null=True)
+    month = models.IntegerField(choices=EMonths.choices(), blank=True, null=True)
     journal = models.CharField(max_length=256, blank=True)
     book_title = models.CharField(max_length=256, blank=True,
                                   help_text='Title of a book, part of which is being cited. See '
@@ -135,7 +122,7 @@ class Publication(models.Model):
     isbn = NullCharField(max_length=32, verbose_name='ISBN', blank=True, null=True, unique=True,
                          help_text='Only for a book.')  # A-B-C-D
     catalogs = models.ManyToManyField(Catalog, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PUBLISHED, blank=False)
+    status = EChoiceCharField(EStatuses, default=EStatuses.PUBLISHED, blank=False)
 
     def __init__(self, *args, **kwargs):
         models.Model.__init__(self, *args, **kwargs)
@@ -291,10 +278,10 @@ class Publication(models.Model):
         return self.title.replace('%', r'\%')
 
     def month_bibtex(self):
-        return self.MONTH_BIBTEX.get(self.month, '')
+        return self.month.bibtex
 
     def month_long(self):
-        for month_int, month_str in self.MONTH_CHOICES:
+        for month_int, month_str in self.EMonths.choices():
             if month_int == self.month:
                 return month_str
         return ''
