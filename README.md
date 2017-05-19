@@ -3,8 +3,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/django_publications_bootstrap.svg?style=flat-square)](https://pypi.python.org/pypi/django-publications-bootstrap)
 [![Build Status](https://travis-ci.org/mbourqui/django-publications-bootstrap.svg?branch=master)](https://travis-ci.org/mbourqui/django-publications-bootstrap)
-<!--[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)-->
-
+[![Coverage Status](https://coveralls.io/repos/github/mbourqui/django-publications-bootstrap/badge.svg?branch=master)](https://coveralls.io/github/mbourqui/django-publications-bootstrap?branch=master)
 
 # Bootstrap-powered scientific publications for Django
 
