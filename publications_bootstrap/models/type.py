@@ -2,7 +2,7 @@
 
 from django.db import models
 
-from ..models.orderedmodel import OrderedModel
+from ordered_model.models import OrderedModel
 
 
 class Type(OrderedModel):

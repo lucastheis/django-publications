@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .orderedmodeladmin import OrderedModelAdmin
+from ordered_model.admin import OrderedModelAdmin
 
 
 class TypeAdmin(OrderedModelAdmin):

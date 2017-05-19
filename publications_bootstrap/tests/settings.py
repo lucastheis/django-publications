@@ -15,6 +15,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
+    'ordered_model',
+
     'publications_bootstrap',
 )
 DATABASES = {

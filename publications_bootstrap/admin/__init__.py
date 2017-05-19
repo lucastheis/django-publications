@@ -3,7 +3,6 @@
 from django.contrib import admin
 
 from .listadmin import ListAdmin
-from .orderedmodeladmin import OrderedModelAdmin
 from .publicationadmin import PublicationAdmin
 from .typeadmin import TypeAdmin
 from ..models import Type, Catalog, Publication
