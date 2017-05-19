@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block head %}
     {{ block.super }}
     <link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications_bootstrap:unapi' %}"/>
@@ -10,7 +9,13 @@
 {% endblock %}
 
 {% block css %}
+{{ block.super }}
+    <!-- Latest compiled and minified Bootstrap 4 Alpha 6 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link href="{% static 'publications_bootstrap/css/style.css' %}" rel="stylesheet">
+    {% block page_css %}
+        {# Page specific CSS #}
+    {% endblock %}
 {% endblock css %}
 
 {% block content %}
@@ -25,3 +30,15 @@
         {% endif %}
     </div>
 {% endblock %}
+
+{% block js %}
+{{ block.super }}
+    <!-- Required by Bootstrap v4 Alpha 6 -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    {% block app_js %}
+        {# Page specific JS #}
+    {% endblock app_js %}
+{% endblock js %}

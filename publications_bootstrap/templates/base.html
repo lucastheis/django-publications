@@ -11,39 +11,42 @@
     {% block head %}
     {% endblock head %}
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <![endif]-->
-
-    <!-- Latest compiled and minified Bootstrap 4 Alpha 6 CSS -->
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-          integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi"
-          crossorigin="anonymous">
-    <style type="text/css">
-        body {
-            font-family: "Hiragino Sans GB", "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
-            font-size: 10pt;
-            line-height: 14pt;
-            padding: 20px;
-        }
-    </style>
-
     {% block css %}
-        {# Additional CSS overriden by the pages #}
+        <style type="text/css">
+            body {
+                font-family: "Hiragino Sans GB", "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
+                font-size: 10pt;
+                line-height: 14pt;
+                padding: 20px;
+            }
+        </style>
     {% endblock %}
 </head>
+
 <body>
+
 {% if messages %}
     {% for message in messages %}
         <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
     {% endfor %}
 {% endif %}
+
 <div class="container">
     {% block content %}
         <p>Use this document as a way to quick start any new project.</p>
     {% endblock content %}
 </div> <!-- /container -->
+
+{% block js %}
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+{% endblock js %}
 </body>
 </html>
