@@ -81,7 +81,7 @@ def import_bibtex(request):
                         'url',
                         'doi',
                         'isbn',
-                        'keywords',
+                        'tags',
                         'note',
                         'abstract',
                         'month']
@@ -150,7 +150,7 @@ def import_bibtex(request):
                         isbn=entry['isbn'],
                         external=False,
                         abstract=entry['abstract'],
-                        keywords=entry['keywords'],
+                        tags=entry['tags'],
                         status=Publication.PUBLISHED))
                 else:
                     errors['bibliography'] = 'Make sure that the keys <title>, <author> and <year> are present.'

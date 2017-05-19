@@ -5,7 +5,7 @@ from django.shortcuts import render
 from ..models import Publication
 
 
-def id(request, publication_id):
+def by_id(request, publication_id):
     try:
         publication = Publication.objects.get(pk=publication_id)
 
@@ -29,10 +29,9 @@ def id(request, publication_id):
         publication.files = publication.customfile_set.all()
 
         return render(request, 'publications_bootstrap/pages/id.html', {'publication': publication,
-                                                                        'title': publication.type,
-                                                                        })
+                                                                        'title': publication.type})
     except Publication.DoesNotExist:
         return render(request, 'publications_bootstrap/base.html', {
             'error': True,
-            'alert': {'message': "There is no publication with this id: {}".format(publication_id)},
-        }, status=404)
+            'alert': {'message': "There is no publication with this id: {}".format(publication_id)}},
+                      status=404)

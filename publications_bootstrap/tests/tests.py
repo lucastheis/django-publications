@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from django.template import Template, RequestContext
 from django.test import TestCase
 
-from ..models import Publication, Type, CustomLink, List
+from ..models import Publication, Type, CustomLink, Catalog
 from ..templatetags.publication_extras import tex_parse
 
 
@@ -72,8 +72,7 @@ class Tests(TestCase):
         self.assertEqual(publication.citekey, 'Unique2013a')
 
     def test_custom_links(self):
-        link = CustomLink.objects.create(publication_id=1, description='Test',
-                                         url='http://test.com')
+        link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
         link.save()
 
         self.assertEqual(self.client.get('/publications/').status_code, 200)
@@ -111,21 +110,17 @@ class Tests(TestCase):
         self.assertEqual(self.client.get('/publications/j.-p.+lies/?ris').status_code, 200)
         self.assertEqual(self.client.get('/publications/j.-p.+lies/?rss').status_code, 200)
         self.assertEqual(self.client.get('/publications/tag/noise+correlations/').status_code, 200)
-        self.assertEqual(
-            self.client.get('/publications/tag/noise+correlations/?plain').status_code, 200)
-        self.assertEqual(
-            self.client.get('/publications/tag/noise+correlations/?bibtex').status_code, 200)
-        self.assertEqual(
-            self.client.get('/publications/tag/noise+correlations/?mods').status_code, 200)
-        self.assertEqual(
-            self.client.get('/publications/tag/noise+correlations/?ris').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/highlights/').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/highlights/?plain').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/highlights/?bibtex').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/highlights/?mods').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/highlights/?ris').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/highlights/?rss').status_code, 200)
-        self.assertEqual(self.client.get('/publications/list/foobar/').status_code, 404)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/tag/noise+correlations/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/catalog/highlights/').status_code, 200)
+        self.assertEqual(self.client.get('/publications/catalog/highlights/?plain').status_code, 200)
+        self.assertEqual(self.client.get('/publications/catalog/highlights/?bibtex').status_code, 200)
+        self.assertEqual(self.client.get('/publications/catalog/highlights/?mods').status_code, 200)
+        self.assertEqual(self.client.get('/publications/catalog/highlights/?ris').status_code, 200)
+        self.assertEqual(self.client.get('/publications/catalog/highlights/?rss').status_code, 200)
+        self.assertEqual(self.client.get('/publications/catalog/foobar/').status_code, 404)
         self.assertEqual(self.client.get('/publications/year/2011/').status_code, 200)
         self.assertEqual(self.client.get('/publications/year/2011/?plain').status_code, 200)
         self.assertEqual(self.client.get('/publications/year/2011/?bibtex').status_code, 200)
@@ -150,8 +145,7 @@ class Tests(TestCase):
         publication.clean()
         publication.save()
 
-        link = CustomLink.objects.create(
-            publication_id=publication.id, description='Test', url='http://test.com')
+        link = CustomLink.objects.create(publication_id=publication.id, description='Test', url='http://test.com')
         link.save()
 
         response = self.client.get('/publications/c.+common/')
@@ -164,7 +158,7 @@ class Tests(TestCase):
 
         count = Publication.objects.count()
         self.client.post('/admin/publications_bootstrap/publication/import_bibtex/',
-                                    {'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
+                         {'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
 
         self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
 
@@ -185,22 +179,18 @@ class Tests(TestCase):
         self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
         self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
         self.assertEqual(self.client.get('/publications/unapi/?id=1&format=mods').status_code, 200)
-        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=bibtex').status_code,
-                         200)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=bibtex').status_code, 200)
         self.assertEqual(self.client.get('/publications/unapi/?id=1&format=ris').status_code, 200)
-        self.assertEqual(
-            self.client.get('/publications/unapi/?id=99999&format=bibtex').status_code, 404)
-        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=foobar').status_code,
-                         406)
+        self.assertEqual(self.client.get('/publications/unapi/?id=99999&format=bibtex').status_code, 404)
+        self.assertEqual(self.client.get('/publications/unapi/?id=1&format=foobar').status_code, 406)
 
     def test_admin(self):
         self.client.login(username='admin', password='admin')
 
         self.assertEqual(self.client.get('/publications/').status_code, 200)
-        self.assertEqual(
-            self.client.get('/admin/publications_bootstrap/type/6/move-up/', follow=True).status_code, 200)
-        self.assertEqual(
-            self.client.get('/admin/publications_bootstrap/type/6/move-down/', follow=True).status_code, 200)
+        self.assertEqual(self.client.get('/admin/publications_bootstrap/type/6/move-up/', follow=True).status_code, 200)
+        self.assertEqual(self.client.get('/admin/publications_bootstrap/type/6/move-down/', follow=True).status_code,
+                         200)
 
         # Test admin actions
         from django.contrib.admin import ACTION_CHECKBOX_NAME
@@ -214,11 +204,9 @@ class Tests(TestCase):
             response = self.client.post(change_url, data, follow=True)
 
             # Test effective change in DB
-            measured = Publication.objects.filter(status=db_value,
-                                                  pk__in=data[ACTION_CHECKBOX_NAME]).count()
+            measured = Publication.objects.filter(status=db_value, pk__in=data[ACTION_CHECKBOX_NAME]).count()
             expected = Publication.objects.count()
-            self.assertEqual(measured, expected,
-                             "AssertionError in {}: {} != {}".format(action, measured, expected, ))
+            self.assertEqual(measured, expected, "AssertionError in {}: {} != {}".format(action, measured, expected, ))
             # Test UI
             # For some reason, the <ul class="messagelist"> is not shown on D1.10
             if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
@@ -233,27 +221,26 @@ class Tests(TestCase):
                                     msg_prefix="AssertionError in {}: ".format(action))
 
     def test_extras(self):
-        link = CustomLink.objects.create(publication_id=1, description='Test',
-                                         url='http://test.com')
+        link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
         link.save()
 
         publication = Publication.objects.get(pk=1)
-        highlights_list = List.objects.get(title__iexact='highlights')
+        highlights_catalog = Catalog.objects.get(title__iexact='highlights')
 
-        # add publication to list
-        publication.lists.add(highlights_list)
+        # add publication to catalog
+        publication.catalogs.add(highlights_catalog)
 
-        # Create empty List
-        naughty_list = List(title="Naughty")
-        naughty_list.save()
+        # Create empty Catalog
+        naughty_catalog = Catalog(title="Naughty")
+        naughty_catalog.save()
 
-        # render list
+        # render catalog
         tpl = Template("""
 {% load publication_extras %}
 {% get_publication 1 %}
-{% get_publication_list 'highlights' 'publications_bootstrap/components/publications_with_thumbnails.html' %}
-{% get_publication_list 'naughty' %}
-{% get_publication_list 'foobar' %}
+{% get_catalog 'highlights' 'publications_bootstrap/components/publications_with_thumbnails.html' %}
+{% get_catalog 'naughty' %}
+{% get_catalog 'foobar' %}
 {% get_publication 100 %}
 {% get_publications %}
 """)

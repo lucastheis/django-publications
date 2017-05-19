@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from .author import author
-from .id import id
-from .keyword import keyword
-from .list import list
-from .unapi import unapi
-from .year import year
+from .author import by_author
+from .id import by_id
+from .tag import by_tag
+from .catalog import for_catalog
+from .unapi import by_unapi
+from .year import by_year

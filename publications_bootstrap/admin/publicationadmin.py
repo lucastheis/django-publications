@@ -48,10 +48,10 @@ class PublicationAdmin(admin.ModelAdmin):
     form = PublicationAdminForm
     list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title', 'status',)
     list_display_links = ('title',)
-    list_filter = ('year', 'journal', 'status', 'lists',)
+    list_filter = ('year', 'journal', 'status', 'catalogs',)
     change_list_template = 'admin/publications_bootstrap/publication_change_list.html'
     search_fields = (
-        'title', 'journal', 'book_title', 'authors', 'keywords', 'year', 'institution', 'school', 'organization')
+        'title', 'journal', 'book_title', 'authors', 'tags', 'year', 'institution', 'school', 'organization')
     actions = ['set_status_draft', 'set_status_submitted', 'set_status_accepted', 'set_status_published']
     fieldsets = (
         (None, {
@@ -85,14 +85,14 @@ class PublicationAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             'fields': ('school', 'location', 'country')}),
         ('References', {
-            'fields': ('citekey', 'keywords', 'code', 'url', 'doi', 'isbn')}),
+            'fields': ('citekey', 'tags', 'code', 'url', 'doi', 'isbn')}),
         ('Description', {
             'fields': ('abstract', 'note')}),
         ('Media', {
             'classes': ('collapse',),
             'fields': ('pdf', 'image', 'thumbnail')}),
-        ('Lists', {
-            'fields': ('lists',)}),
+        ('Catalogs', {
+            'fields': ('catalogs',)}),
     )
     inlines = [CustomLinkInline, CustomFileInline]
 

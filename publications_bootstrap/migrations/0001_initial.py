@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='List',
+            name='Catalog',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=128, unique=True)),
@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
                 ('section', models.CharField(blank=True, max_length=128, null=True)),
                 ('pages', publications_bootstrap.fields.PagesField(blank=True, max_length=32)),
                 ('note', models.CharField(blank=True, help_text='Any additional information that can help the reader. The first word should be capitalized.', max_length=256)),
-                ('keywords', models.CharField(blank=True, help_text='List of keywords separated by commas.', max_length=256)),
+                ('tags', models.CharField(blank=True, help_text='List of tags separated by commas.', max_length=256)),
                 ('url', models.URLField(blank=True, help_text='Link to PDF or journal page.', verbose_name='URL')),
                 ('code', models.URLField(blank=True, help_text='Link to page with code.')),
                 ('pdf', models.FileField(blank=True, null=True, upload_to='publications_bootstrap/', verbose_name='PDF')),
@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
                 ('doi', publications_bootstrap.fields.NullCharField(blank=True, max_length=128, null=True, unique=True, verbose_name='DOI')),
                 ('isbn', publications_bootstrap.fields.NullCharField(blank=True, help_text='Only for a book.', max_length=32, null=True, unique=True, verbose_name='ISBN')),
                 ('status', models.CharField(choices=[('d', 'Draft'), ('s', 'Submitted'), ('a', 'Accepted'), ('p', 'Published')], default='p', max_length=1)),
-                ('lists', models.ManyToManyField(blank=True, to='publications_bootstrap.List')),
+                ('catalogs', models.ManyToManyField(blank=True, to='publications_bootstrap.Catalog')),
             ],
             options={
                 'ordering': ['-year', '-month', '-id'],

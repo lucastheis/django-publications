@@ -2,15 +2,15 @@
 
 from django.shortcuts import render
 
-from ..models import List
+from ..models import Catalog
 from ..utils import populate
 
 
-def list(request, title):
+def for_catalog(request, title):
     try:
-        publication_list = List.objects.get(title__iexact=title)
+        catalog = Catalog.objects.get(title__iexact=title)
 
-        publications = publication_list.publication_set.all()
+        publications = catalog.publication_set.all()
         publications = publications.order_by('-year', '-month', '-id')
 
         if 'plain' in request.GET:
@@ -38,12 +38,12 @@ def list(request, title):
         # load custom links and files
         populate(publications)
 
-        return render(request, 'publications_bootstrap/pages/list.html', {
+        return render(request, 'publications_bootstrap/pages/catalog.html', {
             'publications': publications,
-            'title': "publications for list {}".format(title)})
+            'title': "publications for catalog {}".format(title)})
 
-    except List.DoesNotExist:
+    except Catalog.DoesNotExist:
         return render(request, 'publications_bootstrap/base.html', {
             'error': True,
-            'alert': {'message': "There is no publication list with this name: {}".format(title)},
-        }, status=404)
+            'alert': {'message': "There is no publication catalog with this name: {}".format(title)}},
+                      status=404)

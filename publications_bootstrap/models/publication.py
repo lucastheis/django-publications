@@ -8,7 +8,7 @@ from django.utils.http import urlquote_plus
 from django_countries.fields import CountryField
 
 from ..fields import NullCharField, PagesField
-from ..models import Type, List
+from ..models import Type, Catalog
 
 if 'django.contrib.sites' in settings.INSTALLED_APPS:
     from django.contrib.sites.models import Site
@@ -121,8 +121,8 @@ class Publication(models.Model):
     note = models.CharField(max_length=256, blank=True,
                             help_text='Any additional information that can help the reader. The '
                                       'first word should be capitalized.')
-    keywords = models.CharField(max_length=256, blank=True,
-                                help_text='List of keywords separated by commas.')
+    tags = models.CharField(max_length=256, blank=True,
+                            help_text='List of tags separated by commas.')
     url = models.URLField(blank=True, verbose_name='URL', help_text='Link to PDF or journal page.')
     code = models.URLField(blank=True, help_text='Link to page with code.')
     pdf = models.FileField(upload_to='publications_bootstrap/', verbose_name='PDF', blank=True, null=True)
@@ -134,19 +134,19 @@ class Publication(models.Model):
     doi = NullCharField(max_length=128, verbose_name='DOI', blank=True, null=True, unique=True)
     isbn = NullCharField(max_length=32, verbose_name='ISBN', blank=True, null=True, unique=True,
                          help_text='Only for a book.')  # A-B-C-D
-    lists = models.ManyToManyField(List, blank=True)
+    catalogs = models.ManyToManyField(Catalog, blank=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PUBLISHED, blank=False)
 
     def __init__(self, *args, **kwargs):
         models.Model.__init__(self, *args, **kwargs)
 
-        # post-process keywords
-        self.keywords = self.keywords.replace(';', ',')
-        self.keywords = self.keywords.replace(', and ', ', ')
-        self.keywords = self.keywords.replace(',and ', ', ')
-        self.keywords = self.keywords.replace(' and ', ', ')
-        self.keywords = [s.strip().lower() for s in self.keywords.split(',')]
-        self.keywords = ', '.join(self.keywords).lower()
+        # post-process tags
+        self.tags = self.tags.replace(';', ',')
+        self.tags = self.tags.replace(', and ', ', ')
+        self.tags = self.tags.replace(',and ', ', ')
+        self.tags = self.tags.replace(' and ', ', ')
+        self.tags = [s.strip().lower() for s in self.tags.split(',')]
+        self.tags = ', '.join(self.tags).lower()
 
         self._produce_author_lists()
 
@@ -262,8 +262,8 @@ class Publication(models.Model):
             else:
                 return self.title[:index] + '...'
 
-    def keywords_escaped(self):
-        return [(keyword.strip(), urlquote_plus(keyword.strip())) for keyword in self.keywords.split(',')]
+    def tags_escaped(self):
+        return [(tag.strip(), urlquote_plus(tag.strip())) for tag in self.tags.split(',')]
 
     def authors_escaped(self):
         return [(author, author.lower().replace(' ', '+')) for author in self.authors_list]

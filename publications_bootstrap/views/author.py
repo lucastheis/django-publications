@@ -9,7 +9,7 @@ from ..models import Type, Publication
 from ..utils import populate
 
 
-def author(request, name):
+def by_author(request, name):
     fullname = capwords(name.replace('+', ' '))
     fullname = fullname.replace(' Von ', ' von ').replace(' Van ', ' van ')
     fullname = fullname.replace(' Der ', ' der ')
@@ -92,5 +92,4 @@ def author(request, name):
 
     return render(request, 'publications_bootstrap/pages/author.html', {'publications': publications,
                                                                         'types': types,
-                                                                        'author': fullname
-                                                                        })
+                                                                        'author': fullname})

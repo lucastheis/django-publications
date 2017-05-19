@@ -9,11 +9,11 @@ from . import views
 
 app_name = 'publications_bootstrap'
 urlpatterns = [
-    url(r'^$', views.year, name='index'),
-    url(r'^(?P<publication_id>\d+)/$', views.id, name='id'),
-    url(r'^year/(?P<year>\d+)/$', views.year, name='year'),
-    url(r'^tag/(?P<keyword>.+)/$', views.keyword, name='keyword'),
-    url(r'^list/(?P<title>.+)/$', views.list, name='list'),
-    url(r'^unapi/$', views.unapi, name='unapi'),
-    url(r'^(?P<name>.+)/$', views.author, name='author'),
+    url(r'^$', views.by_year, name='index'),
+    url(r'^(?P<publication_id>\d+)/$', views.by_id, name='id'),
+    url(r'^year/(?P<year>\d+)/$', views.by_year, name='year'),
+    url(r'^tag/(?P<tag>.+)/$', views.by_tag, name='tag'),
+    url(r'^catalog/(?P<title>.+)/$', views.for_catalog, name='catalog'),
+    url(r'^unapi/$', views.by_unapi, name='unapi'),
+    url(r'^(?P<name>.+)/$', views.by_author, name='author'),
 ]

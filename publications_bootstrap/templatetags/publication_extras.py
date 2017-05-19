@@ -9,7 +9,7 @@ from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
-from ..models import Publication, List, Type
+from ..models import Publication, Catalog, Type
 from ..utils import populate
 
 register = Library()
@@ -64,14 +64,14 @@ def get_publication(context, p_id):
 
 
 @register.simple_tag(takes_context=True)
-def get_publication_list(context, list_title, template='publications_bootstrap/components/section.html'):
+def get_catalog(context, catalog_title, template='publications_bootstrap/components/section.html'):
     """
-    Get a publication list.
+    Get a publication catalog.
     """
     try:
-        publications_list = List.objects.get(title__iexact=list_title)
+        publications_catalog = Catalog.objects.get(title__iexact=catalog_title)
 
-        publications = publications_list.publication_set.all()
+        publications = publications_catalog.publication_set.all()
         if not publications:
             raise Publication.DoesNotExist
         publications = publications.order_by('-year', '-month', '-id')
@@ -79,12 +79,12 @@ def get_publication_list(context, list_title, template='publications_bootstrap/c
         # load custom links and files
         populate(publications)
 
-        return render_template(template, context['request'], {'title': list_title, 'publications': publications})
-    except List.DoesNotExist:
+        return render_template(template, context['request'], {'title': catalog_title, 'publications': publications})
+    except Catalog.DoesNotExist:
         return render_template('publications_bootstrap/components/empty.html', context['request'],
                                {'error': True, 'alert':
                                    {'heading': 'Zut!',
-                                    'message': 'There is no such list named "%"'.format(list_title)}})
+                                    'message': 'There is no such catalog named "%"'.format(catalog_title)}})
     except Publication.DoesNotExist:
         return render_template('publications_bootstrap/components/empty.html', context['request'], {})
 

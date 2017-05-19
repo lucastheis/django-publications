@@ -6,13 +6,13 @@ from ..models import Publication
 from ..utils import populate
 
 
-def keyword(request, keyword):
-    keyword = keyword.lower().replace(' ', '+')
-    candidates = Publication.objects.filter(keywords__icontains=keyword.split('+')[0], external=False)
+def by_tag(request, tag):
+    tag = tag.lower().replace(' ', '+')
+    candidates = Publication.objects.filter(tags__icontains=tag.split('+')[0], external=False)
     publications = []
 
     for i, publication in enumerate(candidates):
-        if keyword in [k[1] for k in publication.keywords_escaped()]:
+        if tag in [k[1] for k in publication.tags_escaped()]:
             publications.append(publication)
 
     if 'plain' in request.GET:
@@ -34,8 +34,7 @@ def keyword(request, keyword):
     # load custom links and files
     populate(publications)
 
-    return render(request, 'publications_bootstrap/pages/keyword.html', {
+    return render(request, 'publications_bootstrap/pages/tag.html', {
         'publications': publications,
-        'keyword': keyword.replace('+', ' '),
-        'title': "publications for keyword {}".format(keyword.replace('+', ' ')),
-    })
+        'tag': tag.replace('+', ' '),
+        'title': "publications for tag {}".format(tag.replace('+', ' '))})

@@ -6,7 +6,7 @@ from django.shortcuts import render
 from ..models import Publication
 
 
-def unapi(request):
+def by_unapi(request):
     """
     This view implements unAPI 1.0 (see http://unapi.info).
     """

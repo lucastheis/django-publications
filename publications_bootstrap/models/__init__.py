@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .type import Type
-from .list import List
+from .catalog import Catalog
 from .publication import Publication
 from .customlink import CustomLink
 from .customfile import CustomFile

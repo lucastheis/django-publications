@@ -6,7 +6,7 @@ from ..models import Publication
 from ..utils import populate
 
 
-def year(request, year=None):
+def by_year(request, year=None):
     years = []
     publications = Publication.objects.select_related()
     if year:
@@ -52,5 +52,4 @@ def year(request, year=None):
     populate(publications)
 
     return render(request, 'publications_bootstrap/pages/years.html', {'publications': publications,
-                                                                       'years': years
-                                                                       })
+                                                                       'years': years})

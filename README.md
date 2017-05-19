@@ -24,7 +24,7 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 
 ## Features
 
-* automatically creates lists for individual authors and keywords
+* automatically creates lists for individual authors and tags
 * BibTex import/export
 * RIS export (EndNote, Reference Manager)
 * unAPI support (Zotero)
