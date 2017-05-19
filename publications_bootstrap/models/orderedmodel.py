@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Copyright (c) 2009, Ben Firshman
 All rights reserved.
@@ -26,11 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import warnings
-from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+
 from django.db import models
 from django.db.models import Max, Min, F
 from django.utils.translation import ugettext as _
+
 
 class OrderedModel(models.Model):
     """
@@ -99,7 +101,8 @@ class OrderedModel(models.Model):
         Move this object down one position.
         """
         warnings.warn(
-            _("The method move_down() is deprecated and will be removed in the next release. Please use down() instead!"),
+            _(
+                "The method move_down() is deprecated and will be removed in the next release. Please use down() instead!"),
             DeprecationWarning
         )
         return self.down()

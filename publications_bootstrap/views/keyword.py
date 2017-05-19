@@ -1,6 +1,4 @@
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
-__docformat__ = 'epytext'
+# -*- coding: utf-8 -*-
 
 from django.shortcuts import render
 
@@ -10,8 +8,7 @@ from ..utils import populate
 
 def keyword(request, keyword):
     keyword = keyword.lower().replace(' ', '+')
-    candidates = Publication.objects.filter(keywords__icontains=keyword.split('+')[0],
-                                            external=False)
+    candidates = Publication.objects.filter(keywords__icontains=keyword.split('+')[0], external=False)
     publications = []
 
     for i, publication in enumerate(candidates):
@@ -19,24 +16,20 @@ def keyword(request, keyword):
             publications.append(publication)
 
     if 'plain' in request.GET:
-        return render(request, 'publications_bootstrap/export/publications.txt', {
-            'publications': publications
-        }, content_type='text/plain; charset=UTF-8')
+        return render(request, 'publications_bootstrap/export/publications.txt', {'publications': publications},
+                      content_type='text/plain; charset=UTF-8')
 
     if 'bibtex' in request.GET:
-        return render(request, 'publications_bootstrap/export/publications.bib', {
-            'publications': publications
-        }, content_type='text/x-bibtex; charset=UTF-8')
+        return render(request, 'publications_bootstrap/export/publications.bib', {'publications': publications},
+                      content_type='text/x-bibtex; charset=UTF-8')
 
     if 'mods' in request.GET:
-        return render(request, 'publications_bootstrap/export/publications.mods', {
-            'publications': publications
-        }, content_type='application/xml; charset=UTF-8')
+        return render(request, 'publications_bootstrap/export/publications.mods', {'publications': publications},
+                      content_type='application/xml; charset=UTF-8')
 
     if 'ris' in request.GET:
-        return render(request, 'publications_bootstrap/export/publications.ris', {
-            'publications': publications
-        }, content_type='application/x-research-info-systems; charset=UTF-8')
+        return render(request, 'publications_bootstrap/export/publications.ris', {'publications': publications},
+                      content_type='application/x-research-info-systems; charset=UTF-8')
 
     # load custom links and files
     populate(publications)

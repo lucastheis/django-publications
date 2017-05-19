@@ -1,6 +1,4 @@
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
-__docformat__ = 'epytext'
+# -*- coding: utf-8 -*-
 
 from distutils.version import StrictVersion
 from re import sub
@@ -40,8 +38,7 @@ def get_publications(context, template='publications_bootstrap/components/public
     publications = publications.order_by('-year', '-month', '-id')
 
     if not publications:
-        return render_template('publications_bootstrap/components/empty.html',
-                               context['request'], {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'], {})
 
     # load custom links and files
     populate(publications)
@@ -60,17 +57,14 @@ def get_publication(context, p_id):
         pbl.links = pbl.customlink_set.all()
         pbl.files = pbl.customfile_set.all()
 
-        return render_template('publications_bootstrap/components/publication.html',
-                               context['request'],
+        return render_template('publications_bootstrap/components/publication.html', context['request'],
                                {'publication': pbl})
     except Publication.DoesNotExist:
-        return render_template('publications_bootstrap/components/empty.html', context['request'],
-                               {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'], {})
 
 
 @register.simple_tag(takes_context=True)
-def get_publication_list(context, list_title,
-                         template='publications_bootstrap/components/section.html'):
+def get_publication_list(context, list_title, template='publications_bootstrap/components/section.html'):
     """
     Get a publication list.
     """
@@ -85,17 +79,14 @@ def get_publication_list(context, list_title,
         # load custom links and files
         populate(publications)
 
-        return render_template(template, context['request'],
-                               {'title': list_title, 'publications': publications})
+        return render_template(template, context['request'], {'title': list_title, 'publications': publications})
     except List.DoesNotExist:
         return render_template('publications_bootstrap/components/empty.html', context['request'],
                                {'error': True, 'alert':
                                    {'heading': 'Zut!',
-                                    'message': 'There is no such list named "%"'.format(
-                                        list_title)}})
+                                    'message': 'There is no such list named "%"'.format(list_title)}})
     except Publication.DoesNotExist:
-        return render_template('publications_bootstrap/components/empty.html', context['request'],
-                               {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'], {})
 
 
 @register.filter()

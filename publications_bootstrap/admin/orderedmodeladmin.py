@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Copyright (c) 2009, Ben Firshman
 All rights reserved.
@@ -51,8 +53,7 @@ if not getattr(ChangeList, 'get_queryset', False):
 
 class OrderedModelAdmin(admin.ModelAdmin):
     def get_model_info(self):
-        return dict(app=self.model._meta.app_label,
-                    model=self.model._meta.model_name)
+        return dict(app=self.model._meta.app_label, model=self.model._meta.model_name)
 
     def get_urls(self):
         try:
@@ -66,12 +67,11 @@ class OrderedModelAdmin(admin.ModelAdmin):
 
             return update_wrapper(wrapper, view)
 
-        return [
-                   url(r'^(.+)/move-(up)/$', wrap(self.move_view),
-                       name='{app}_{model}_order_up'.format(**self.get_model_info())),
-                   url(r'^(.+)/move-(down)/$', wrap(self.move_view),
-                       name='{app}_{model}_order_down'.format(**self.get_model_info())),
-               ] + super(OrderedModelAdmin, self).get_urls()
+        return [url(r'^(.+)/move-(up)/$', wrap(self.move_view),
+                    name='{app}_{model}_order_up'.format(**self.get_model_info())),
+                url(r'^(.+)/move-(down)/$', wrap(self.move_view),
+                    name='{app}_{model}_order_down'.format(**self.get_model_info())),
+                ] + super(OrderedModelAdmin, self).get_urls()
 
     def _get_changelist(self, request):
         list_display = self.get_list_display(request)
@@ -107,8 +107,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
             'module_name': self.model._meta.model_name,
             'object_id': obj.id,
             'urls': {
-                'up': reverse("admin:{app}_{model}_order_up".format(**self.get_model_info()),
-                              args=[obj.id, 'up']),
+                'up': reverse("admin:{app}_{model}_order_up".format(**self.get_model_info()), args=[obj.id, 'up']),
                 'down': reverse("admin:{app}_{model}_order_down".format(**self.get_model_info()),
                                 args=[obj.id, 'down']),
             },

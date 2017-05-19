@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
-__docformat__ = 'epytext'
 
 from string import ascii_uppercase
 
@@ -128,17 +125,15 @@ class Publication(models.Model):
                                 help_text='List of keywords separated by commas.')
     url = models.URLField(blank=True, verbose_name='URL', help_text='Link to PDF or journal page.')
     code = models.URLField(blank=True, help_text='Link to page with code.')
-    pdf = models.FileField(upload_to='publications_bootstrap/', verbose_name='PDF', blank=True,
-                           null=True)
+    pdf = models.FileField(upload_to='publications_bootstrap/', verbose_name='PDF', blank=True, null=True)
     image = models.ImageField(upload_to='publications_bootstrap/images/', blank=True, null=True)
-    thumbnail = models.ImageField(upload_to='publications_bootstrap/thumbnails/', blank=True,
-                                  null=True)
-    external = models.BooleanField(default=False, help_text='If publication was written in '
-                                                            'another lab, mark as external.')
+    thumbnail = models.ImageField(upload_to='publications_bootstrap/thumbnails/', blank=True, null=True)
+    external = models.BooleanField(default=False,
+                                   help_text='If publication was written in another lab, mark as external.')
     abstract = models.TextField(blank=True)
     doi = NullCharField(max_length=128, verbose_name='DOI', blank=True, null=True, unique=True)
-    isbn = NullCharField(max_length=32, verbose_name='ISBN', help_text='Only for a book.',
-                         blank=True, null=True, unique=True)  # A-B-C-D
+    isbn = NullCharField(max_length=32, verbose_name='ISBN', blank=True, null=True, unique=True,
+                         help_text='Only for a book.')  # A-B-C-D
     lists = models.ManyToManyField(List, blank=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PUBLISHED, blank=False)
 
@@ -176,8 +171,7 @@ class Publication(models.Model):
         self.authors_list_split = []
 
         # tests if title already ends with a punctuation mark
-        self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] \
-            if len(self.title) > 0 else False
+        self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] if len(self.title) > 0 else False
 
         suffixes = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', "Jr.", "Sr."]
         prefixes = ['Dr.']
@@ -192,8 +186,8 @@ class Publication(models.Model):
 
             # check if last string contains initials
             if (len(names[-1]) <= 3) \
-                and names[-1] not in suffixes \
-                and all(c in ascii_uppercase for c in names[-1]):
+                    and names[-1] not in suffixes \
+                    and all(c in ascii_uppercase for c in names[-1]):
                 # turn "Gauss CF" into "C. F. Gauss"
                 names = [c + '.' for c in names[-1]] + names[:-1]
 
@@ -240,17 +234,15 @@ class Publication(models.Model):
 
                 # splitting point
                 sp = 1 + num_suffixes + num_prepositions
-                self.authors_list_split.append(
-                    (' '.join(names[:-sp]), ' '.join(names[-sp:])))
+                self.authors_list_split.append((' '.join(names[:-sp]), ' '.join(names[-sp:])))
 
         # list of authors in BibTex format
         self.authors_bibtex = ' and '.join(self.authors_list)
 
         # overwrite authors string
         if len(self.authors_list) > 2:
-            self.authors = ', and '.join([
-                ', '.join(self.authors_list[:-1]),
-                self.authors_list[-1]])
+            self.authors = ', and '.join([', '.join(self.authors_list[:-1]),
+                                          self.authors_list[-1]])
         elif len(self.authors_list) > 1:
             self.authors = ' and '.join(self.authors_list)
         else:
@@ -271,20 +263,17 @@ class Publication(models.Model):
                 return self.title[:index] + '...'
 
     def keywords_escaped(self):
-        return [(keyword.strip(), urlquote_plus(keyword.strip()))
-                for keyword in self.keywords.split(',')]
+        return [(keyword.strip(), urlquote_plus(keyword.strip())) for keyword in self.keywords.split(',')]
 
     def authors_escaped(self):
-        return [(author, author.lower().replace(' ', '+'))
-                for author in self.authors_list]
+        return [(author, author.lower().replace(' ', '+')) for author in self.authors_list]
 
     def key(self):
         # this publication's first author
         author_lastname = self.authors_list[0].split(' ')[-1]
 
-        publications = Publication.objects.filter(
-            year=self.year,
-            authors__icontains=author_lastname).order_by('month', 'id')
+        publications = Publication.objects.filter(year=self.year,
+                                                  authors__icontains=author_lastname).order_by('month', 'id')
 
         # character to append to BibTex key
         char = ord('a')

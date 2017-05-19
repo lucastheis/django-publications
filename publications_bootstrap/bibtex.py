@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
-__docformat__ = 'epytext'
-__version__ = '1.2.0'
-
 import re
+
 from django.utils import six
 
 # from . import six
@@ -78,8 +74,7 @@ def parse(string):
 
     for entry in entries:
         # parse entry
-        pairs = re.findall(r'(?u)([^=,\s]+)\s*\=\s*("[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,]*)',
-                           entry[2])
+        pairs = re.findall(r'(?u)([^=,\s]+)\s*\=\s*("[^"]*"|{(?:[^{}]*|{[^{}]*})*}|[^,]*)', entry[2])
 
         # add to bibliography
         bib.append({'type': entry[0].lower(), 'key': entry[1]})
