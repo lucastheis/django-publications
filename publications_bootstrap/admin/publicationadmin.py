@@ -14,17 +14,17 @@ except ImportError:
     from django.conf.urls.defaults import url
 
 from .. import admin_views
-from ..models import Publication, CustomLink, CustomFile
+from ..models import Publication, PublicationLink, PublicationFile
 
 
-class CustomLinkInline(admin.StackedInline):
-    model = CustomLink
+class PublicationLinkInline(admin.StackedInline):
+    model = PublicationLink
     extra = 1
     max_num = 5
 
 
-class CustomFileInline(admin.StackedInline):
-    model = CustomFile
+class PublicationFileInline(admin.StackedInline):
+    model = PublicationFile
     extra = 1
     max_num = 5
 
@@ -94,7 +94,7 @@ class PublicationAdmin(admin.ModelAdmin):
         ('Catalogs', {
             'fields': ('catalogs',)}),
     )
-    inlines = [CustomLinkInline, CustomFileInline]
+    inlines = [PublicationLinkInline, PublicationFileInline]
 
     def get_urls(self):
         return [url(r'^import_bibtex/$', admin_views.import_bibtex, name='publications_publication_import_bibtex'),

@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from django.template import Template, RequestContext
 from django.test import TestCase
 
-from ..models import Publication, Type, CustomLink, Catalog
+from ..models import Publication, Type, PublicationLink, Catalog
 from ..templatetags.publication_extras import tex_parse
 
 
@@ -71,8 +71,8 @@ class Tests(TestCase):
 
         self.assertEqual(publication.citekey, 'Unique2013a')
 
-    def test_custom_links(self):
-        link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
+    def test_publication_links(self):
+        link = PublicationLink.objects.create(publication_id=1, description='Test', url='http://test.com')
         link.save()
 
         self.assertEqual(self.client.get('/publications/').status_code, 200)
@@ -145,7 +145,7 @@ class Tests(TestCase):
         publication.clean()
         publication.save()
 
-        link = CustomLink.objects.create(publication_id=publication.id, description='Test', url='http://test.com')
+        link = PublicationLink.objects.create(publication_id=publication.id, description='Test', url='http://test.com')
         link.save()
 
         response = self.client.get('/publications/c.+common/')
@@ -221,7 +221,7 @@ class Tests(TestCase):
                                     msg_prefix="AssertionError in {}: ".format(action))
 
     def test_extras(self):
-        link = CustomLink.objects.create(publication_id=1, description='Test', url='http://test.com')
+        link = PublicationLink.objects.create(publication_id=1, description='Test', url='http://test.com')
         link.save()
 
         publication = Publication.objects.get(pk=1)

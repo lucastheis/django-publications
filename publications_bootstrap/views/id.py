@@ -25,8 +25,8 @@ def by_id(request, publication_id):
             return render(request, 'publications_bootstrap/export/publications.ris', {'publications': [publication]},
                           content_type='application/x-research-info-systems; charset=UTF-8')
 
-        publication.links = publication.customlink_set.all()
-        publication.files = publication.customfile_set.all()
+        publication.links = publication.publicationlink_set.all()
+        publication.files = publication.publicationfile_set.all()
 
         return render(request, 'publications_bootstrap/pages/id.html', {'publication': publication,
                                                                         'title': publication.type})

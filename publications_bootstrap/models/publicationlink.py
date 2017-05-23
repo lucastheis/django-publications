@@ -5,13 +5,13 @@ from django.db import models
 from ..models import Publication
 
 
-class CustomFile(models.Model):
+class PublicationLink(models.Model):
     class Meta:
         app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
     publication = models.ForeignKey(Publication)
     description = models.CharField(max_length=256)
-    file = models.FileField(upload_to='publications_bootstrap/')
+    url = models.URLField(verbose_name='URL')
 
     def __unicode__(self):
         return self.description

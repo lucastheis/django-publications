@@ -54,8 +54,8 @@ def get_publication(context, p_id):
     try:
         pbl = Publication.objects.get(pk=int(p_id))
 
-        pbl.links = pbl.customlink_set.all()
-        pbl.files = pbl.customfile_set.all()
+        pbl.links = pbl.publicationlink_set.all()
+        pbl.files = pbl.publicationfile_set.all()
 
         return render_template('publications_bootstrap/components/publication.html', context['request'],
                                {'publication': pbl})
