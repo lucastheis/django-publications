@@ -29,10 +29,10 @@ MONTHS = {
 COUNTRIES_BY_CODE = dict(countries)
 # Reversed dict
 try:
-    # Python 3+
+    # Python 2.7.x
     COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.iteritems()}
 except:
-    # Python 2.7.x
+    # Python 3+
     COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.items()}
 
 
@@ -91,7 +91,7 @@ def import_bibtex(request):
                             entry[key] = ''
 
                     # map integer fields to integers
-                    entry['month'] = MONTHS.get(entry['month'].lower(), 0)
+                    entry['month'] = Publication.EMonths.get(MONTHS.get(entry['month'].lower(), 0), None)
 
                     for field in ['volume', 'number', 'chapter', 'section']:
                         entry[field] = entry.get(field, None)
@@ -151,7 +151,7 @@ def import_bibtex(request):
                         external=False,
                         abstract=entry['abstract'],
                         tags=entry['tags'],
-                        status=Publication.PUBLISHED))
+                        status=Publication.EStatuses.PUBLISHED))
                 else:
                     errors['bibliography'] = 'Make sure that the keys <title>, <author> and <year> are present.'
                     break

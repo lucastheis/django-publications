@@ -195,10 +195,10 @@ class Tests(TestCase):
         # Test admin actions
         from django.contrib.admin import ACTION_CHECKBOX_NAME
         change_url = reverse('admin:publications_bootstrap_publication_changelist')
-        for action, db_value in [('set_status_draft', Publication.DRAFT),
-                                 ('set_status_submitted', Publication.SUBMITTED),
-                                 ('set_status_accepted', Publication.ACCEPTED),
-                                 ('set_status_published', Publication.PUBLISHED), ]:
+        for action, db_value in [('set_status_draft', Publication.EStatuses.DRAFT),
+                                 ('set_status_submitted', Publication.EStatuses.SUBMITTED),
+                                 ('set_status_accepted', Publication.EStatuses.ACCEPTED),
+                                 ('set_status_published', Publication.EStatuses.PUBLISHED), ]:
             data = {'action': action,
                     ACTION_CHECKBOX_NAME: Publication.objects.all().values_list('pk', flat=True)}
             response = self.client.post(change_url, data, follow=True)

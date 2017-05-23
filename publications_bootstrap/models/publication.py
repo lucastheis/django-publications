@@ -8,7 +8,7 @@ from django.utils.http import urlquote_plus
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 from echoices.enums import EChoice, EOrderedChoice
-from echoices.fields import EChoiceCharField
+from echoices.fields import make_echoicefield
 
 from ..fields import NullCharField, PagesField
 from ..models import Type, Catalog
@@ -28,32 +28,29 @@ class Publication(models.Model):
 
     # names shown in admin area
     class EMonths(EOrderedChoice):
-        JAN = (1, _('January', 'Jan'))
-        FEB = (2, _('February', 'Feb'))
-        MAR = (3, _('March', 'Mar'))
-        APR = (4, _('April', 'Apr'))
-        MAY = (5, _('May', 'May'))
-        JNE = (6, _('June', 'Jun'))
-        JLY = (7, _('July', 'Jul'))
-        AUG = (8, _('August', 'Aug'))
-        SEP = (9, _('September', 'Sep'))
-        OCT = (10, _('October', 'Oct'))
-        NOV = (11, _('November', 'Nov'))
-        DEC = (12, _('December', 'Dec'))
+        JAN = (1, _('January'), 'Jan')
+        FEB = (2, _('February'), 'Feb')
+        MAR = (3, _('March'), 'Mar')
+        APR = (4, _('April'), 'Apr')
+        MAY = (5, _('May'), 'May')
+        JNE = (6, _('June'), 'Jun')
+        JLY = (7, _('July'), 'Jul')
+        AUG = (8, _('August'), 'Aug')
+        SEP = (9, _('September'), 'Sep')
+        OCT = (10, _('October'), 'Oct')
+        NOV = (11, _('November'), 'Nov')
+        DEC = (12, _('December'), 'Dec')
 
         def __init__(self, v_, l_, bibtex):
             # abbreviations used in BibTex
             self.bibtex = bibtex
 
-
     # Status of the publication
     class EStatuses(EChoice):
-        DRAFT = ('d', 'draft')
-        SUBMITTED = ('s', 'submitted')
-        ACCEPTED = ('a', 'accepted')
-        PUBLISHED = ('p', 'published')
-
-    STATUS_CHOICES_DICT = dict(EStatuses.choices())
+        DRAFT = ('d', _('draft'))
+        SUBMITTED = ('s', _('submitted'))
+        ACCEPTED = ('a', _('accepted'))
+        PUBLISHED = ('p', _('published'))
 
     type = models.ForeignKey(Type)
     citekey = NullCharField(max_length=512, blank=True, null=True, unique=True,
@@ -62,7 +59,7 @@ class Publication(models.Model):
     authors = models.CharField(max_length=2048,
                                help_text='List of authors separated by commas or <i>and</i>.')
     year = models.PositiveIntegerField()
-    month = models.IntegerField(choices=EMonths.choices(), blank=True, null=True)
+    month = make_echoicefield(EMonths, blank=True, null=True)
     journal = models.CharField(max_length=256, blank=True)
     book_title = models.CharField(max_length=256, blank=True,
                                   help_text='Title of a book, part of which is being cited. See '
@@ -122,7 +119,7 @@ class Publication(models.Model):
     isbn = NullCharField(max_length=32, verbose_name='ISBN', blank=True, null=True, unique=True,
                          help_text='Only for a book.')  # A-B-C-D
     catalogs = models.ManyToManyField(Catalog, blank=True)
-    status = EChoiceCharField(EStatuses, default=EStatuses.PUBLISHED, blank=False)
+    status = make_echoicefield(EStatuses, default=EStatuses.PUBLISHED, blank=False)
 
     def __init__(self, *args, **kwargs):
         models.Model.__init__(self, *args, **kwargs)
@@ -281,9 +278,8 @@ class Publication(models.Model):
         return self.month.bibtex
 
     def month_long(self):
-        for month_int, month_str in self.EMonths.choices():
-            if month_int == self.month:
-                return month_str
+        if self.month:
+            return self.month.label
         return ''
 
     def first_author(self):
@@ -348,7 +344,7 @@ class Publication(models.Model):
 
         if self.month:
             context_obj.append(
-                'rft.date={0}-{1}-1'.format(self.year, self.month))
+                'rft.date={0}-{1}-1'.format(self.year, self.month.value))
         else:
             context_obj.append('rft.date={0}'.format(self.year))
 

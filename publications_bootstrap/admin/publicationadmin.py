@@ -106,25 +106,24 @@ class PublicationAdmin(admin.ModelAdmin):
             message_bit = "1 publication was"
         else:
             message_bit = "{:d} publications were".format(rows_updated)
-        self.message_user(request, "{} successfully marked as {}.".format(message_bit,
-                                                                          Publication.STATUS_CHOICES_DICT[new_status]))
+        self.message_user(request, "{} successfully marked as {}.".format(message_bit, new_status.label))
 
     def set_status_draft(self, request, queryset):
-        self._set_status(request, queryset, Publication.DRAFT)
+        self._set_status(request, queryset, Publication.EStatuses.DRAFT)
 
     set_status_draft.short_description = _("Mark selected %(verbose_name_plural)s as drafts")
 
     def set_status_submitted(self, request, queryset):
-        self._set_status(request, queryset, Publication.SUBMITTED)
+        self._set_status(request, queryset, Publication.EStatuses.SUBMITTED)
 
     set_status_submitted.short_description = _("Mark selected %(verbose_name_plural)s as submitted")
 
     def set_status_accepted(self, request, queryset):
-        self._set_status(request, queryset, Publication.ACCEPTED)
+        self._set_status(request, queryset, Publication.EStatuses.ACCEPTED)
 
     set_status_accepted.short_description = _("Mark selected %(verbose_name_plural)s as accepted")
 
     def set_status_published(self, request, queryset):
-        self._set_status(request, queryset, Publication.PUBLISHED)
+        self._set_status(request, queryset, Publication.EStatuses.PUBLISHED)
 
     set_status_published.short_description = _("Mark selected %(verbose_name_plural)s as published")
