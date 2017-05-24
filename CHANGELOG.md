@@ -1,6 +1,6 @@
 # django-publications-bootstrap
 
-## 2.0.0 - TBD
+## 2.0.0 - 24.04.2017
 - Refacto models
   * Renamed `Custom[Link|File]` to `Publication[Link|File]`
   * Replace Enums with django-echoices
@@ -8,20 +8,19 @@
 - Drop support of Python 2.7
 - Drop support of Django 1.8 due to django-echoices
 
-## 1.0.2 - TBD
-
+## 1.0.2 - 11.04.2017
+- Drop usage of self-hoster six.py (See #17)
+- Update initial data loading
 
 ## 1.0.1 - 07.04.2017
 - Merge PR [#34](https://github.com/lucastheis/django-publications/pull/34) from source project
 
 ## 1.0.0 - 17.02.2017
-
 - Rename project from `django-publications` to `django-publications-bootstrap`
 - Merge new features to `master`
 - Use Bootstrap 4.0.0-alpha.6 for the layout
 
 ## 0.7.0
-
 - Use Bootstrap 4.0.0-alpha.5 for the layout
   - Refactor file inclusions
   - Integration in project's base layout
@@ -57,14 +56,12 @@
    - (Partially) updated export formats to support new fields
 
 ## 0.6.2
-
 - Minor bug fixes
 - Added migrations
 - Allow non-numerical page entries
 - Fixed compatibility issues with Django 1.9
 
 ## 0.6.1
-
 - Added support for Zotero/unAPI
 - Added support for Endnote/RIS
 - Bug fixes in BibTex parsing and rendering
@@ -72,19 +69,16 @@
 - Dropped support for Django 1.4
 
 ## 0.6.0
-
 - Added the possibility to create lists of publications
 - Added support for images (requires Pillow)
 - Dropped support for Django 1.3
 
 ## 0.5.1
-
 - Restored backwards compatibility with Django 1.3
 - Improved BibTex parsing
 - Added ISBN field
 
 ## 0.5.0
-
 - Fixed compatibility issues with Django 1.5, breaks compatibility with Django 1.3
 - Added institution field
 - Added support for custom links and files
