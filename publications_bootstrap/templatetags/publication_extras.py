@@ -88,6 +88,21 @@ def get_catalog(context, catalog_title, template='publications_bootstrap/compone
     except Publication.DoesNotExist:
         return render_template('publications_bootstrap/components/empty.html', context['request'], {})
 
+@register.simple_tag(takes_context=True)
+def get_citation(context, format=None):
+    """
+    Get a formatted citation
+    
+    Parameters
+    ----------
+    context
+
+    Returns
+    -------
+
+    """
+    pass
+
 
 @register.filter()
 def tex_parse(string):
