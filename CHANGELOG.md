@@ -1,5 +1,13 @@
 # django-publications-bootstrap
 
+## 2.0.0 - TBD
+- Refacto models
+  * Renamed `Custom[Link|File]` to `Publication[Link|File]`
+  * Replace Enums with django-echoices
+- Drop self-hosted libraries for PyPI dependencies
+- Drop support of Python 2.7
+- Drop support of Django 1.8 due to django-echoices
+
 ## 1.0.2 - TBD
 
 
