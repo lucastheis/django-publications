@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import warnings
 from string import ascii_uppercase
 
 from django.conf import settings
@@ -247,17 +247,31 @@ class Publication(models.Model):
                 return self.title[:index] + '...'
 
     def tags_escaped(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.tags_escaped.__name__, ),
+                      FutureWarning)
         return [(tag.strip(), urlquote_plus(tag.strip())) for tag in self.tags.split(',')]
 
     def authors_escaped(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.authors_escaped.__name__, ),
+                      FutureWarning)
         return [(author, author.lower().replace(' ', '+')) for author in self.authors_list]
 
     def key(self):
+        warnings.warn("Signature of {0}.{1} may change or become a property in a future release.".format(
+            Publication.__name__, Publication.key.__name__, ), FutureWarning)
+        from django.db.models import Count
         # this publication's first author
         author_lastname = self.authors_list[0].split(' ')[-1]
 
-        publications = Publication.objects.filter(year=self.year,
-                                                  authors__icontains=author_lastname).order_by('month', 'id')
+        # SEE: https://stackoverflow.com/a/5236352/
+        publications = Publication.objects.filter(year=self.year, authors__icontains=author_lastname) \
+            .annotate(null_citekey=Count('citekey')) \
+            .annotate(null_month=Count('month')) \
+            .order_by('-null_citekey',  # Ensure publications with citekey are listed first
+                      '-null_month',  # Penalize publications without month
+                      'month', 'id')
 
         # character to append to BibTex key
         char = ord('a')
@@ -272,32 +286,57 @@ class Publication(models.Model):
         return self.authors_list[0].split(' ')[-1] + str(self.year) + chr(char)
 
     def title_bibtex(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.title_bibtex.__name__, ),
+                      FutureWarning)
         return self.title.replace('%', r'\%')
 
     def month_bibtex(self):
-        return self.month.bibtex
+        warnings.warn("{0}.{1} is deprecated and will be removed in a future release. "
+                      "Please use {0}.{2} instead".format(Publication.__name__, Publication.month_bibtex.__name__,
+                                                          "month.bibtex"), PendingDeprecationWarning)
+        if self.month:
+            return self.month.bibtex
+        return ''
 
     def month_long(self):
+        warnings.warn("{0}.{1} is deprecated and will be removed in a future release. "
+                      "Please use {0}.{2} instead".format(Publication.__name__, Publication.month_long.__name__,
+                                                          "month.label"), PendingDeprecationWarning)
         if self.month:
             return self.month.label
         return ''
 
     def first_author(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.first_author.__name__, ),
+                      FutureWarning)
         return self.authors_list[0]
 
     def journal_or_book_title(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.journal_or_book_title.__name__, ),
+                      FutureWarning)
         if self.journal:
             return self.journal
         else:
             return self.book_title
 
     def first_page(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.first_page.__name__, ),
+                      FutureWarning)
         return self.pages.split('-')[0]
 
     def last_page(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.last_page.__name__, ),
+                      FutureWarning)
         return self.pages.split('-')[-1]
 
     def z3988(self):
+        warnings.warn("Signature of {0}.{1} may change or become a property in a future release.".format(
+            Publication.__name__, Publication.z3988.__name__, ), FutureWarning)
         context_obj = ['ctx_ver=Z39.88-2004']
 
         if 'django.contrib.sites' in settings.INSTALLED_APPS:
