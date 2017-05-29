@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import warnings
 from distutils.version import StrictVersion
 
 import django
@@ -10,6 +11,8 @@ from django.test import TestCase
 
 from ..models import Publication, Type, PublicationLink, Catalog
 from ..templatetags.publication_extras import tex_parse
+
+warnings.simplefilter("always")
 
 
 class Tests(TestCase):
@@ -70,6 +73,57 @@ class Tests(TestCase):
         publication.save()
 
         self.assertEqual(publication.citekey, 'Unique2013a')
+
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and D. Uncommon',
+            title=u'Title 4',
+            year=2013,
+            month=Publication.EMonths.MAY,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
+
+        self.assertEqual(publication.citekey, 'Unique2013b')
+
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and D. Uncommon',
+            title=u'Title 5',
+            year=2013,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
+
+        self.assertEqual(publication.citekey, 'Unique2013c')
+
+    def test_month(self):
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and B. Common',
+            title=u'Publication with month',
+            year=2017,
+            month=Publication.EMonths.MAY)
+        publication.clean()
+        publication.save()
+
+        self.assertEqual(publication.month, Publication.EMonths.MAY)
+        self.assertEqual(publication.month_long(), Publication.EMonths.MAY.label)
+        self.assertEqual(publication.month_bibtex(), Publication.EMonths.MAY.bibtex)
+
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and B. Common',
+            title=u'Publication without month',
+            year=2017)
+        publication.clean()
+        publication.save()
+
+        self.assertEqual(publication.month, None)
+        self.assertEqual(publication.month_long(), '')
+        self.assertEqual(publication.month_bibtex(), '')
 
     def test_publication_links(self):
         link = PublicationLink.objects.create(publication_id=1, description='Test', url='http://test.com')
