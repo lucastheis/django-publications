@@ -1,0 +1,9 @@
+{% load publication_extras %}
+<div class="bibliography">
+    <h5>{{ title }}</h5>
+    <ul class="list-unstyled">
+        {% for reference in references %}{% with publication=reference.1 %}
+        <li id="{{ publication.citekey }}">{% include marker with references=reference|as_list|as_list marker=marker_options only %}&nbsp;{% include citation %}</li>
+        {% endwith %}{% endfor %}
+    </ul>
+</div>

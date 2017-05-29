@@ -12,7 +12,7 @@ class Catalog(models.Model):
         ordering = ('title',)
         app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
-    title = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=128, unique=True, db_index=True)
     description = models.CharField(max_length=128)
 
     def __unicode__(self):

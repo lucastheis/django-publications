@@ -10,11 +10,11 @@ class Type(OrderedModel):
         ordering = ('order',)
         app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
-    title = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=128, unique=True, db_index=True)
     description = models.CharField(max_length=128)
     bibtex_types = models.CharField(max_length=256, default='article', verbose_name='BibTex types',
                                     help_text='Possible BibTex types, separated by comma.')
-    hidden = models.BooleanField(default=False, help_text='Hide publications from main view.')
+    hidden = models.BooleanField(default=False, db_index=True, help_text='Hide publications from main view.')
 
     def __unicode__(self):
         return self.title
