@@ -54,13 +54,13 @@
             </p>
         {% endif %}
     </div>
-    {% if publication.keywords %}
+    {% if publication.tags %}
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-                {% for keyword, keyword_escaped in publication.keywords_escaped %}
-                    <a class="keyword"
-                       href="{% url 'publications_bootstrap:keyword' keyword_escaped %}"><span
-                            class="tag tag-default">{{ keyword }}</span></a>
+                {% for tag, tag_escaped in publication.tags_escaped %}
+                    <a class="tag"
+                       href="{% url 'publications_bootstrap:tag' tag_escaped %}"><span
+                            class="tag tag-default">{{ tag }}</span></a>
                 {% endfor %}
             </li>
         </ul>

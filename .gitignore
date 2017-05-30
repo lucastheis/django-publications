@@ -37,6 +37,7 @@ npm-debug.log*
 .tox
 nosetests.xml
 htmlcov
+*/tests/db.sqlite3
 
 # Translations
 *.mo
@@ -70,3 +71,4 @@ node_modules/
 .eggs/*
 build/*
 dist/*
+README.rst

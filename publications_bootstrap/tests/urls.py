@@ -11,6 +11,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^publications/', include('publications_bootstrap.urls', namespace='publications_bootstrap')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^publications/', include('publications_bootstrap.urls', 'publications_test')),
+    url(r'^admin/', admin.site.urls),
 ]

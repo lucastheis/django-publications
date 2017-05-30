@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 from publications_bootstrap import __version__
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
 
 # allow setup.py to be run from any path
@@ -25,9 +25,12 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Django>=1.8.18',
+        'Django>=1.9.13',
         'Pillow>=2.4.0',
         'django-countries>=4.0',
+        'django-ordered-model>=1.4.1',
+        'six>=1.10.0',
+        'django-echoices>=2.1.0',
     ],
     zip_safe=False,
     keywords='django scientific publications citations references bibliography',
@@ -49,6 +52,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],

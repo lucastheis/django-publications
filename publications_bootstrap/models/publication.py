@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
-__docformat__ = 'epytext'
-
+import warnings
 from string import ascii_uppercase
 
 from django.conf import settings
 from django.db import models
 from django.utils.http import urlquote_plus
+from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
+from echoices.enums import EChoice, EOrderedChoice
+from echoices.fields import make_echoicefield
 
 from ..fields import NullCharField, PagesField
-from ..models import Type, List
+from ..models import Type, Catalog
 
 if 'django.contrib.sites' in settings.INSTALLED_APPS:
     from django.contrib.sites.models import Site
@@ -27,49 +27,30 @@ class Publication(models.Model):
         app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
     # names shown in admin area
-    MONTH_CHOICES = (
-        (1, 'January'),
-        (2, 'February'),
-        (3, 'March'),
-        (4, 'April'),
-        (5, 'May'),
-        (6, 'June'),
-        (7, 'July'),
-        (8, 'August'),
-        (9, 'September'),
-        (10, 'October'),
-        (11, 'November'),
-        (12, 'December')
-    )
+    class EMonths(EOrderedChoice):
+        JAN = (1, _('January'), 'Jan')
+        FEB = (2, _('February'), 'Feb')
+        MAR = (3, _('March'), 'Mar')
+        APR = (4, _('April'), 'Apr')
+        MAY = (5, _('May'), 'May')
+        JNE = (6, _('June'), 'Jun')
+        JLY = (7, _('July'), 'Jul')
+        AUG = (8, _('August'), 'Aug')
+        SEP = (9, _('September'), 'Sep')
+        OCT = (10, _('October'), 'Oct')
+        NOV = (11, _('November'), 'Nov')
+        DEC = (12, _('December'), 'Dec')
 
-    # abbreviations used in BibTex
-    MONTH_BIBTEX = {
-        1: 'Jan',
-        2: 'Feb',
-        3: 'Mar',
-        4: 'Apr',
-        5: 'May',
-        6: 'Jun',
-        7: 'Jul',
-        8: 'Aug',
-        9: 'Sep',
-        10: 'Oct',
-        11: 'Nov',
-        12: 'Dec'
-    }
+        def __init__(self, v_, l_, bibtex):
+            # abbreviations used in BibTex
+            self.bibtex = bibtex
 
     # Status of the publication
-    DRAFT = 'd'
-    SUBMITTED = 's'
-    ACCEPTED = 'a'
-    PUBLISHED = 'p'
-    STATUS_CHOICES = (
-        (DRAFT, 'Draft'),
-        (SUBMITTED, 'Submitted'),
-        (ACCEPTED, 'Accepted'),
-        (PUBLISHED, 'Published'),
-    )
-    STATUS_CHOICES_DICT = dict(STATUS_CHOICES)
+    class EStatuses(EChoice):
+        DRAFT = ('d', _('draft'))
+        SUBMITTED = ('s', _('submitted'))
+        ACCEPTED = ('a', _('accepted'))
+        PUBLISHED = ('p', _('published'))
 
     type = models.ForeignKey(Type)
     citekey = NullCharField(max_length=512, blank=True, null=True, unique=True,
@@ -78,7 +59,7 @@ class Publication(models.Model):
     authors = models.CharField(max_length=2048,
                                help_text='List of authors separated by commas or <i>and</i>.')
     year = models.PositiveIntegerField()
-    month = models.IntegerField(choices=MONTH_CHOICES, blank=True, null=True)
+    month = make_echoicefield(EMonths, blank=True, null=True)
     journal = models.CharField(max_length=256, blank=True)
     book_title = models.CharField(max_length=256, blank=True,
                                   help_text='Title of a book, part of which is being cited. See '
@@ -124,34 +105,32 @@ class Publication(models.Model):
     note = models.CharField(max_length=256, blank=True,
                             help_text='Any additional information that can help the reader. The '
                                       'first word should be capitalized.')
-    keywords = models.CharField(max_length=256, blank=True,
-                                help_text='List of keywords separated by commas.')
+    tags = models.CharField(max_length=256, blank=True,
+                            help_text='List of tags separated by commas.')
     url = models.URLField(blank=True, verbose_name='URL', help_text='Link to PDF or journal page.')
     code = models.URLField(blank=True, help_text='Link to page with code.')
-    pdf = models.FileField(upload_to='publications_bootstrap/', verbose_name='PDF', blank=True,
-                           null=True)
+    pdf = models.FileField(upload_to='publications_bootstrap/', verbose_name='PDF', blank=True, null=True)
     image = models.ImageField(upload_to='publications_bootstrap/images/', blank=True, null=True)
-    thumbnail = models.ImageField(upload_to='publications_bootstrap/thumbnails/', blank=True,
-                                  null=True)
-    external = models.BooleanField(default=False, help_text='If publication was written in '
-                                                            'another lab, mark as external.')
+    thumbnail = models.ImageField(upload_to='publications_bootstrap/thumbnails/', blank=True, null=True)
+    external = models.BooleanField(default=False,
+                                   help_text='If publication was written in another lab, mark as external.')
     abstract = models.TextField(blank=True)
     doi = NullCharField(max_length=128, verbose_name='DOI', blank=True, null=True, unique=True)
-    isbn = NullCharField(max_length=32, verbose_name='ISBN', help_text='Only for a book.',
-                         blank=True, null=True, unique=True)  # A-B-C-D
-    lists = models.ManyToManyField(List, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PUBLISHED, blank=False)
+    isbn = NullCharField(max_length=32, verbose_name='ISBN', blank=True, null=True, unique=True,
+                         help_text='Only for a book.')  # A-B-C-D
+    catalogs = models.ManyToManyField(Catalog, blank=True)
+    status = make_echoicefield(EStatuses, default=EStatuses.PUBLISHED, blank=False)
 
     def __init__(self, *args, **kwargs):
         models.Model.__init__(self, *args, **kwargs)
 
-        # post-process keywords
-        self.keywords = self.keywords.replace(';', ',')
-        self.keywords = self.keywords.replace(', and ', ', ')
-        self.keywords = self.keywords.replace(',and ', ', ')
-        self.keywords = self.keywords.replace(' and ', ', ')
-        self.keywords = [s.strip().lower() for s in self.keywords.split(',')]
-        self.keywords = ', '.join(self.keywords).lower()
+        # post-process tags
+        self.tags = self.tags.replace(';', ',')
+        self.tags = self.tags.replace(', and ', ', ')
+        self.tags = self.tags.replace(',and ', ', ')
+        self.tags = self.tags.replace(' and ', ', ')
+        self.tags = [s.strip().lower() for s in self.tags.split(',')]
+        self.tags = ', '.join(self.tags).lower()
 
         self._produce_author_lists()
 
@@ -176,8 +155,7 @@ class Publication(models.Model):
         self.authors_list_split = []
 
         # tests if title already ends with a punctuation mark
-        self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] \
-            if len(self.title) > 0 else False
+        self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] if len(self.title) > 0 else False
 
         suffixes = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', "Jr.", "Sr."]
         prefixes = ['Dr.']
@@ -192,8 +170,8 @@ class Publication(models.Model):
 
             # check if last string contains initials
             if (len(names[-1]) <= 3) \
-                and names[-1] not in suffixes \
-                and all(c in ascii_uppercase for c in names[-1]):
+                    and names[-1] not in suffixes \
+                    and all(c in ascii_uppercase for c in names[-1]):
                 # turn "Gauss CF" into "C. F. Gauss"
                 names = [c + '.' for c in names[-1]] + names[:-1]
 
@@ -240,17 +218,15 @@ class Publication(models.Model):
 
                 # splitting point
                 sp = 1 + num_suffixes + num_prepositions
-                self.authors_list_split.append(
-                    (' '.join(names[:-sp]), ' '.join(names[-sp:])))
+                self.authors_list_split.append((' '.join(names[:-sp]), ' '.join(names[-sp:])))
 
         # list of authors in BibTex format
         self.authors_bibtex = ' and '.join(self.authors_list)
 
         # overwrite authors string
         if len(self.authors_list) > 2:
-            self.authors = ', and '.join([
-                ', '.join(self.authors_list[:-1]),
-                self.authors_list[-1]])
+            self.authors = ', and '.join([', '.join(self.authors_list[:-1]),
+                                          self.authors_list[-1]])
         elif len(self.authors_list) > 1:
             self.authors = ' and '.join(self.authors_list)
         else:
@@ -270,21 +246,32 @@ class Publication(models.Model):
             else:
                 return self.title[:index] + '...'
 
-    def keywords_escaped(self):
-        return [(keyword.strip(), urlquote_plus(keyword.strip()))
-                for keyword in self.keywords.split(',')]
+    def tags_escaped(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.tags_escaped.__name__, ),
+                      FutureWarning)
+        return [(tag.strip(), urlquote_plus(tag.strip())) for tag in self.tags.split(',')]
 
     def authors_escaped(self):
-        return [(author, author.lower().replace(' ', '+'))
-                for author in self.authors_list]
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.authors_escaped.__name__, ),
+                      FutureWarning)
+        return [(author, author.lower().replace(' ', '+')) for author in self.authors_list]
 
     def key(self):
+        warnings.warn("Signature of {0}.{1} may change or become a property in a future release.".format(
+            Publication.__name__, Publication.key.__name__, ), FutureWarning)
+        from django.db.models import Count
         # this publication's first author
         author_lastname = self.authors_list[0].split(' ')[-1]
 
-        publications = Publication.objects.filter(
-            year=self.year,
-            authors__icontains=author_lastname).order_by('month', 'id')
+        # SEE: https://stackoverflow.com/a/5236352/
+        publications = Publication.objects.filter(year=self.year, authors__icontains=author_lastname) \
+            .annotate(null_citekey=Count('citekey')) \
+            .annotate(null_month=Count('month')) \
+            .order_by('-null_citekey',  # Ensure publications with citekey are listed first
+                      '-null_month',  # Penalize publications without month
+                      'month', 'id')
 
         # character to append to BibTex key
         char = ord('a')
@@ -299,33 +286,57 @@ class Publication(models.Model):
         return self.authors_list[0].split(' ')[-1] + str(self.year) + chr(char)
 
     def title_bibtex(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.title_bibtex.__name__, ),
+                      FutureWarning)
         return self.title.replace('%', r'\%')
 
     def month_bibtex(self):
-        return self.MONTH_BIBTEX.get(self.month, '')
+        warnings.warn("{0}.{1} is deprecated and will be removed in a future release. "
+                      "Please use {0}.{2} instead".format(Publication.__name__, Publication.month_bibtex.__name__,
+                                                          "month.bibtex"), PendingDeprecationWarning)
+        if self.month:
+            return self.month.bibtex
+        return ''
 
     def month_long(self):
-        for month_int, month_str in self.MONTH_CHOICES:
-            if month_int == self.month:
-                return month_str
+        warnings.warn("{0}.{1} is deprecated and will be removed in a future release. "
+                      "Please use {0}.{2} instead".format(Publication.__name__, Publication.month_long.__name__,
+                                                          "month.label"), PendingDeprecationWarning)
+        if self.month:
+            return self.month.label
         return ''
 
     def first_author(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.first_author.__name__, ),
+                      FutureWarning)
         return self.authors_list[0]
 
     def journal_or_book_title(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.journal_or_book_title.__name__, ),
+                      FutureWarning)
         if self.journal:
             return self.journal
         else:
             return self.book_title
 
     def first_page(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.first_page.__name__, ),
+                      FutureWarning)
         return self.pages.split('-')[0]
 
     def last_page(self):
+        warnings.warn("{0}.{1} will be a property in a future release.".format(Publication.__name__,
+                                                                               Publication.last_page.__name__, ),
+                      FutureWarning)
         return self.pages.split('-')[-1]
 
     def z3988(self):
+        warnings.warn("Signature of {0}.{1} may change or become a property in a future release.".format(
+            Publication.__name__, Publication.z3988.__name__, ), FutureWarning)
         context_obj = ['ctx_ver=Z39.88-2004']
 
         if 'django.contrib.sites' in settings.INSTALLED_APPS:
@@ -372,7 +383,7 @@ class Publication(models.Model):
 
         if self.month:
             context_obj.append(
-                'rft.date={0}-{1}-1'.format(self.year, self.month))
+                'rft.date={0}-{1}-1'.format(self.year, self.month.value))
         else:
             context_obj.append('rft.date={0}'.format(self.year))
 

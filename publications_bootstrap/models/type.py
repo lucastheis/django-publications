@@ -2,7 +2,7 @@
 
 from django.db import models
 
-from ..models.orderedmodel import OrderedModel
+from ordered_model.models import OrderedModel
 
 
 class Type(OrderedModel):
@@ -12,11 +12,9 @@ class Type(OrderedModel):
 
     title = models.CharField(max_length=128, unique=True)
     description = models.CharField(max_length=128)
-    bibtex_types = models.CharField(max_length=256, default='article',
-                                    verbose_name='BibTex types',
+    bibtex_types = models.CharField(max_length=256, default='article', verbose_name='BibTex types',
                                     help_text='Possible BibTex types, separated by comma.')
-    hidden = models.BooleanField(default=False,
-                                 help_text='Hide publications from main view.')
+    hidden = models.BooleanField(default=False, help_text='Hide publications from main view.')
 
     def __unicode__(self):
         return self.title
@@ -30,8 +28,7 @@ class Type(OrderedModel):
         self.bibtex_types = self.bibtex_types.replace('@', '')
         self.bibtex_types = self.bibtex_types.replace(';', ',')
         self.bibtex_types = self.bibtex_types.replace('and', ',')
-        self.bibtex_type_list = [s.strip().lower()
-                                 for s in self.bibtex_types.split(',')]
+        self.bibtex_type_list = [s.strip().lower() for s in self.bibtex_types.split(',')]
         self.bibtex_types = ', '.join(self.bibtex_type_list)
         self.bibtex_type = self.bibtex_type_list[0]
 

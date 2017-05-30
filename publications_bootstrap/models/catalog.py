@@ -3,7 +3,7 @@
 from django.db import models
 
 
-class List(models.Model):
+class Catalog(models.Model):
     """
     Model representing a list of publications.
     """

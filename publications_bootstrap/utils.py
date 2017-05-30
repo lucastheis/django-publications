@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from .models import CustomLink, CustomFile
+from .models import PublicationLink, PublicationFile
 
 
 def populate(publications):
     """
-    Load custom links and files from database and attach to publications
+    Load publication links and files from database and attach to publications
     """
 
-    customlinks = CustomLink.objects.filter(publication__in=publications)
-    customfiles = CustomFile.objects.filter(publication__in=publications)
+    publication_links = PublicationLink.objects.filter(publication__in=publications)
+    publication_files = PublicationFile.objects.filter(publication__in=publications)
 
     publications_ = {}
     for publication in publications:
@@ -17,7 +17,7 @@ def populate(publications):
         publication.files = []
         publications_[publication.id] = publication
 
-    for link in customlinks:
+    for link in publication_links:
         publications_[link.publication_id].links.append(link)
-    for file in customfiles:
+    for file in publication_files:
         publications_[file.publication_id].files.append(file)

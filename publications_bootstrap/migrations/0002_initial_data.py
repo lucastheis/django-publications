@@ -5,16 +5,19 @@ from __future__ import unicode_literals
 from django.core import management
 from django.db import migrations
 
+app_label = 'publications_bootstrap'
+fixture = 'initial_data'
 
-def load_data(apps, schema_editor):
-    management.call_command('loaddata', 'publications_bootstrap_initial_data.json')
+
+def load_fixtures(apps, schema_editor):
+    management.call_command('loaddata', fixture, app_label=app_label)
 
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('publications_bootstrap', '0001_initial'),
+        (app_label, '0001_initial'),
     ]
 
     operations = [
-        migrations.RunPython(load_data),
+        migrations.RunPython(load_fixtures),
     ]

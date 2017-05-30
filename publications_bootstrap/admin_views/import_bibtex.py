@@ -1,15 +1,13 @@
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__authors__ = ['Lucas Theis <lucas@theis.io>', 'Marc Bourqui']
-__docformat__ = 'epytext'
+# -*- coding: utf-8 -*-
 
 import re
+
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django_countries import countries
 
-from .. import six as six
 from ..bibtex import parse
 from ..models import Publication, Type
 
@@ -31,10 +29,10 @@ MONTHS = {
 COUNTRIES_BY_CODE = dict(countries)
 # Reversed dict
 try:
-    # Python 3+
+    # Python 2.7.x
     COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.iteritems()}
 except:
-    # Python 2.7.x
+    # Python 3+
     COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.items()}
 
 
@@ -83,7 +81,7 @@ def import_bibtex(request):
                         'url',
                         'doi',
                         'isbn',
-                        'keywords',
+                        'tags',
                         'note',
                         'abstract',
                         'month']
@@ -93,7 +91,7 @@ def import_bibtex(request):
                             entry[key] = ''
 
                     # map integer fields to integers
-                    entry['month'] = MONTHS.get(entry['month'].lower(), 0)
+                    entry['month'] = Publication.EMonths.get(MONTHS.get(entry['month'].lower(), 0), None)
 
                     for field in ['volume', 'number', 'chapter', 'section']:
                         entry[field] = entry.get(field, None)
@@ -120,7 +118,7 @@ def import_bibtex(request):
                             break
 
                     if type_id is None:
-                        errors['bibliography'] = 'Type "' + entry['type'] + '" unknown.'
+                        errors['bibliography'] = 'Type "{}" unknown.'.format(entry['type'])
                         break
 
                     # add publication
@@ -152,11 +150,10 @@ def import_bibtex(request):
                         isbn=entry['isbn'],
                         external=False,
                         abstract=entry['abstract'],
-                        keywords=entry['keywords'],
-                        status=Publication.PUBLISHED))
+                        tags=entry['tags'],
+                        status=Publication.EStatuses.PUBLISHED))
                 else:
-                    errors['bibliography'] = 'Make sure that the keys <title>, <author> and ' \
-                                             '<year> are present.'
+                    errors['bibliography'] = 'Make sure that the keys <title>, <author> and <year> are present.'
                     break
 
             if not publications:
@@ -177,12 +174,12 @@ def import_bibtex(request):
                 for publication in publications:
                     publication.save()
             except:
-                msg = 'Some error occured during saving of publications.'
+                msg = 'Some error occurred during saving of publications.'
             else:
                 if len(publications) > 1:
-                    msg = 'Successfully added ' + str(len(publications)) + ' publications.'
+                    msg = 'Successfully added {} publications.'.format(len(publications))
                 else:
-                    msg = 'Successfully added ' + str(len(publications)) + ' publication.'
+                    msg = 'Successfully added {} publication.'.format(len(publications))
 
             # show message
             messages.info(request, msg)
@@ -190,12 +187,9 @@ def import_bibtex(request):
             # redirect to publication listing
             return HttpResponseRedirect('../')
     else:
-        return render(
-            request,
-            'admin/publications_bootstrap/import_bibtex.html', {
-                'title': 'Import BibTex',
-                'types': Type.objects.all(),
-                'request': request})
+        return render(request, 'admin/publications_bootstrap/import_bibtex.html', {'title': 'Import BibTex',
+                                                                                   'types': Type.objects.all(),
+                                                                                   'request': request})
 
 
 import_bibtex = staff_member_required(import_bibtex)

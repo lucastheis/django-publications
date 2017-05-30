@@ -1,5 +1,7 @@
 import os
+from distutils.version import StrictVersion
 
+import django
 from django.conf import global_settings
 
 BASE_DIR = os.path.dirname(__file__)
@@ -15,6 +17,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
+    'ordered_model',
+
     'publications_bootstrap',
 )
 DATABASES = {
@@ -23,12 +27,15 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
+    MIDDLEWARE_CLASSES = MIDDLEWARE
 
 LANGUAGE_CODE = 'en'
 

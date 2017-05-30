@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io>'
-__docformat__ = 'epytext'
 
 from django.contrib import admin
-from ..models import Type, List, Publication
+
+from .listadmin import ListAdmin
 from .publicationadmin import PublicationAdmin
 from .typeadmin import TypeAdmin
-from .listadmin import ListAdmin
-from .orderedmodeladmin import OrderedModelAdmin
+from ..models import Type, Catalog, Publication
 
 admin.site.register(Type, TypeAdmin)
-admin.site.register(List, ListAdmin)
+admin.site.register(Catalog, ListAdmin)
 admin.site.register(Publication, PublicationAdmin)
