@@ -1,19 +1,20 @@
 # django-publications-bootstrap
 
-## 2.x.y - TBA
+## 2.0.3 - 30.05.2017
 - Avoid RemovedInDjango20Warnings while testing
+- Support of Django 1.11
 
-## 2.0.2 - 29.04.2017
+## 2.0.2 - 29.05.2017
 - Fix [#25](https://github.com/mbourqui/django-publications-bootstrap/issues/25)
 - Fix [#26](https://github.com/mbourqui/django-publications-bootstrap/issues/26)
 - Update tests to better cover citekey generation
 - Add tests for Publication.month property
 - Set warnings for future refacto of Publication methods to properties
 
-## 2.0.1 - 29.04.2017
+## 2.0.1 - 29.05.2017
 - Fix [#23](https://github.com/mbourqui/django-publications-bootstrap/issues/23)
 
-## 2.0.0 - 24.04.2017
+## 2.0.0 - 24.05.2017
 - Refacto models
   * Renamed `Custom[Link|File]` to `Publication[Link|File]`
   * Replace Enums with django-echoices
