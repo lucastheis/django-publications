@@ -1,5 +1,7 @@
 import os
+from distutils.version import StrictVersion
 
+import django
 from django.conf import global_settings
 
 BASE_DIR = os.path.dirname(__file__)
@@ -31,6 +33,9 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
+    MIDDLEWARE_CLASSES = MIDDLEWARE
 
 LANGUAGE_CODE = 'en'
 
