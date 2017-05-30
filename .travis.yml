@@ -6,6 +6,7 @@ python:
 env:
   - DJANGO_VERSION=1.9.13
   - DJANGO_VERSION=1.10.7
+  - DJANGO_VERSION=1.11
 # https://docs.djangoproject.com/en/1.9/faq/install/#what-python-version-can-i-use-with-django
 addons:
   apt_packages:
