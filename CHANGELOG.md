@@ -1,9 +1,13 @@
 # django-publications-bootstrap
 
+## 2.x.y - TBA
+- Avoid RemovedInDjango20Warnings while testing
+
 ## 2.0.2 - 29.04.2017
 - Fix [#25](https://github.com/mbourqui/django-publications-bootstrap/issues/25)
 - Fix [#26](https://github.com/mbourqui/django-publications-bootstrap/issues/26)
 - Update tests to better cover citekey generation
+- Add tests for Publication.month property
 - Set warnings for future refacto of Publication methods to properties
 
 ## 2.0.1 - 29.04.2017
