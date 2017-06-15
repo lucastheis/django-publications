@@ -30,7 +30,7 @@ setup(
         'django-countries>=4.0',
         'django-ordered-model>=1.4.1',
         'six>=1.10.0',
-        'django-echoices>=2.1.0',
+        'django-echoices==2.2.3',
     ],
     zip_safe=False,
     keywords='django scientific publications citations references bibliography',
