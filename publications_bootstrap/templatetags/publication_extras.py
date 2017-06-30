@@ -81,8 +81,7 @@ class CitationManger:
                 references[-1].append((r, p))
             else:
                 references.append([(r, p)])
-        return render_to_string(self.marker, dict(references=references, marker=self.marker_options),
-                                context['request'])
+        return render_template(self.marker, context['request'], dict(references=references, marker=self.marker_options))
 
     def nocite(self, *puids):
         from operator import itemgetter
