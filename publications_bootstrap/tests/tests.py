@@ -414,8 +414,11 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
                          """[<a href="#Chagas2013a">1</a>,<a href="#Ecker2014a">2</a>]""")
         tpl = Template("""{% load publication_extras %}{% cite 1 5 2 %}""")
         self.assertEqual(tpl.render(RequestContext(HttpRequest())),
-                         """[<a href="#Chagas2013a">1</a>-<a href="#Gerhard2014a">3</a>]""")
-        # TODO: test other params: sup, open/close
+                         """[<a href="#Chagas2013a">1</a>&#8209;<a href="#Gerhard2014a">3</a>]""")
+        tpl = Template("""{% load publication_extras %}{% cite 2 5 %}""")
+        self.assertEqual(tpl.render(RequestContext(HttpRequest())),
+                         """[<a href="#Chagas2013a">1</a>,<a href="#Gerhard2014a">3</a>]""")
+        # TODO: test other params: sup, open/close, href
 
     def test_nocite(self):
         tpl = Template("""{% load publication_extras %}{% nocite 2 %}""")
@@ -429,19 +432,21 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
         self.assertIn("""<div class="card bibliography">""", res)
         self.assertInHTML("""<h4 class="card-title">References</h4>""", res)
         self.assertIn("""<li class="list-group-item" id="Chagas2013a">""", res)
-        self.assertIn("""[<a href="#Chagas2013a">1</a>]&nbsp;""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Chagas2013a">1</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/a.+chagas/">A. Chagas</a>""", res)
         self.assertIn("""<li class="list-group-item" id="Ecker2014a">""", res)
-        self.assertIn("""[<a href="#Ecker2014a">2</a>]&nbsp;""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Ecker2014a">2</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>""", res)
         self.assertIn("""<li class="list-group-item" id="Gerhard2014a">""", res)
-        self.assertIn("""[<a href="#Gerhard2014a">3</a>]&nbsp;""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Gerhard2014a">3</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/h.+gerhard/">H. Gerhard</a>""", res)
         self.assertIn("""<li class="list-group-item" id="Theis2011a">""", res)
-        self.assertIn("""[<a href="#Theis2011a">4</a>]&nbsp;""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Theis2011a">4</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/l.+theis/">L. Theis</a>""", res)
 
-        tpl_base = """{{% load publication_extras %}}{{% setup_citations bibliography='{}' %}}{{% nocite 2 3 4 %}}
+        tpl_base = """{{% load publication_extras %}}
+{{% setup_citations bibliography='{}' %}}
+{{% nocite 2 3 4 %}}
 {{% thebibliography %}}"""
         for layout in ['card', 'list']:
             tpl = Template(tpl_base.format(layout))
@@ -453,11 +458,11 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
                 self.assertIn("""<div class="bibliography">""", res)
                 self.assertInHTML("""<h5>References</h5>""", res)
                 self.assertIn("""<li id="Chagas2013a">""", res)
-                self.assertIn("""[<a href="#Chagas2013a">1</a>]&nbsp;""", res)
+                self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Chagas2013a">1</a>]</div>""", res)
                 self.assertIn("""<ul class="list-unstyled">""", res)
                 self.assertInHTML("""<a href="/publications/a.+chagas/">A. Chagas</a>""", res)
                 self.assertIn("""<li id="Ecker2011a">""", res)
-                self.assertIn("""[<a href="#Ecker2011a">3</a>]&nbsp;""", res)
+                self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Ecker2011a">3</a>]</div>""", res)
                 self.assertInHTML("""<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>""", res)
 
     def test_settings(self):
