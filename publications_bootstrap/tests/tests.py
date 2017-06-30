@@ -385,7 +385,7 @@ class TestExtras(TestCase):
 <a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>,
 <a href="/publications/m.+bethge/">M. Bethge</a>, and
 <a href="/publications/c.+schwarz/">C. Schwarz</a>,
-"Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents" <i>Frontiers in Neural Circuits</i> 7 no.&nbsp;190 (2013)""")
+"Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents" <i>Frontiers in Neural Circuits</i> 7 n°&nbsp;190 (2013)""")
         tpl = Template("""{% load publication_extras %}{% get_citation 2 style='chicago' %}""")
         self.assertEqual(tpl.render(RequestContext(HttpRequest())), """<a href="/publications/a.+chagas/">A. Chagas</a>,
 <a href="/publications/l.+theis/">L. Theis</a>,
@@ -393,7 +393,7 @@ class TestExtras(TestCase):
 <a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>,
 <a href="/publications/m.+bethge/">M. Bethge</a>, and
 <a href="/publications/c.+schwarz/">C. Schwarz</a>,
-"Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents" <i>Frontiers in Neural Circuits</i> 7 no.&nbsp;190 (2013)""")
+"Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents" <i>Frontiers in Neural Circuits</i> 7 n°&nbsp;190 (2013)""")
         self.assertEqual(citation, tpl.render(RequestContext(HttpRequest())))  # Default is chicago
         # TODO: test other publication types
         tpl = Template("""{% load publication_extras %}{% get_citation 2 style='vancouver' %}""")
@@ -432,16 +432,16 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
         self.assertIn("""<div class="card bibliography">""", res)
         self.assertInHTML("""<h4 class="card-title">References</h4>""", res)
         self.assertIn("""<li class="list-group-item" id="Chagas2013a">""", res)
-        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Chagas2013a">1</a>]</div>""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a>1</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/a.+chagas/">A. Chagas</a>""", res)
         self.assertIn("""<li class="list-group-item" id="Ecker2014a">""", res)
-        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Ecker2014a">2</a>]</div>""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a>2</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>""", res)
         self.assertIn("""<li class="list-group-item" id="Gerhard2014a">""", res)
-        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Gerhard2014a">3</a>]</div>""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a>3</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/h.+gerhard/">H. Gerhard</a>""", res)
         self.assertIn("""<li class="list-group-item" id="Theis2011a">""", res)
-        self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Theis2011a">4</a>]</div>""", res)
+        self.assertInHTML("""<div class="d-flex mr-1">[<a>4</a>]</div>""", res)
         self.assertInHTML("""<a href="/publications/l.+theis/">L. Theis</a>""", res)
 
         tpl_base = """{{% load publication_extras %}}
@@ -458,11 +458,11 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
                 self.assertIn("""<div class="bibliography">""", res)
                 self.assertInHTML("""<h5>References</h5>""", res)
                 self.assertIn("""<li id="Chagas2013a">""", res)
-                self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Chagas2013a">1</a>]</div>""", res)
+                self.assertInHTML("""<div class="d-flex mr-1">[<a>1</a>]</div>""", res)
                 self.assertIn("""<ul class="list-unstyled">""", res)
                 self.assertInHTML("""<a href="/publications/a.+chagas/">A. Chagas</a>""", res)
                 self.assertIn("""<li id="Ecker2011a">""", res)
-                self.assertInHTML("""<div class="d-flex mr-1">[<a href="#Ecker2011a">3</a>]</div>""", res)
+                self.assertInHTML("""<div class="d-flex mr-1">[<a>3</a>]</div>""", res)
                 self.assertInHTML("""<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>""", res)
 
     def test_settings(self):
