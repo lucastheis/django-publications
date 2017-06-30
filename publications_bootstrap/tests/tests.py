@@ -429,7 +429,7 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
     def test_thebibliography(self):
         tpl = Template("""{% load publication_extras %}{% thebibliography %}""")
         res = tpl.render(RequestContext(HttpRequest()))
-        self.assertIn("""<div class="card bibliography">""", res)
+        self.assertIn("""<div class="card mt-5 bibliography">""", res)
         self.assertInHTML("""<h4 class="card-title">References</h4>""", res)
         self.assertIn("""<li class="list-group-item" id="Chagas2013a">""", res)
         self.assertInHTML("""<div class="d-flex mr-1">[<a>1</a>]</div>""", res)
@@ -446,17 +446,17 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
 
         tpl_base = """{{% load publication_extras %}}
 {{% setup_citations bibliography='{}' %}}
-{{% nocite 2 3 4 %}}
+{{% cite 2 3 4 %}}
 {{% thebibliography %}}"""
         for layout in ['card', 'list']:
             tpl = Template(tpl_base.format(layout))
             res = tpl.render(RequestContext(HttpRequest()))
             if layout == 'card':
                 # Already test previously, as 'card' is the default layout
-                self.assertIn("""<div class="card bibliography">""", res)
+                self.assertIn("""<div class="card mt-5 bibliography">""", res)
             elif layout == 'list':
-                self.assertIn("""<div class="bibliography">""", res)
-                self.assertInHTML("""<h5>References</h5>""", res)
+                self.assertIn("""<div class="mt-5 bibliography">""", res)
+                self.assertInHTML("""<h4>References</h4>""", res)
                 self.assertIn("""<li id="Chagas2013a">""", res)
                 self.assertInHTML("""<div class="d-flex mr-1">[<a>1</a>]</div>""", res)
                 self.assertIn("""<ul class="list-unstyled">""", res)
