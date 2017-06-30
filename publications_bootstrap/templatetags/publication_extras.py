@@ -100,9 +100,11 @@ class CitationManger:
         else:
             # TODO: by author, by title
             raise NotImplementedError
+        marker_options = dict(self.marker_options)
+        marker_options.pop('#', None)  # Remove hyperlink on 'self' item
         return render_template(self.bibliography, context['request'],
                                dict(title=title, references=references, marker=self.marker,
-                                    marker_options=self.marker_options, citation=self.citation))
+                                    marker_options=marker_options, citation=self.citation))
 
     def clear(self):
         self.cited.clear()

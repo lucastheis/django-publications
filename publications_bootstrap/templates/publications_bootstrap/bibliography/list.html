@@ -3,7 +3,7 @@
     <h5>{{ title }}</h5>
     <ul class="list-unstyled">
         {% for reference in references %}{% with publication=reference.1 %}
-        <li id="{{ publication.citekey }}">{% include marker with references=reference|as_list|as_list marker=marker_options only %}&nbsp;{% include citation %}</li>
+        <li id="{{ publication.citekey }}"><div class="media"><div class="d-flex mr-1">{% include marker with references=reference|as_list|as_list marker=marker_options only %}</div><div class="media-body">{% include citation %}</div></div></li>
         {% endwith %}{% endfor %}
     </ul>
 </div>
