@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='publication',
             name='month',
-            field=echoices.fields.make_echoicefield(blank=True, db_index=True, echoices=publications_bootstrap.models.publication.EMonths, null=True),
+            field=echoices.fields.make_echoicefield(blank=True, db_index=True, echoices=publications_bootstrap.models.Publication.EMonths, null=True),
         ),
         migrations.AlterField(
             model_name='publication',
