@@ -29,10 +29,11 @@ DEFAULT_BIBLIOGRAPHY_TITLE = 'References'
 DEFAULT_SORTING = 'referenced'
 
 
-def render_template(template, request, args):
+def render_template(template, request, context={}):
     if StrictVersion(django.get_version()) < StrictVersion('1.8.0'):
-        return get_template(template).render(RequestContext(request, args))
-    return get_template(template).render(args, request)  # FIXME: replace with render_to_string()
+        return get_template(template).render(RequestContext(request, context))
+    # Use kwargs for Django < 1.10
+    return render_to_string(template, context=context, request=request)
 
 
 class CitationManger:
@@ -100,9 +101,9 @@ class CitationManger:
         else:
             # TODO: by author, by title
             raise NotImplementedError
-        return render_to_string(self.bibliography, dict(title=title, references=references, marker=self.marker,
-                                                        marker_options=self.marker_options, citation=self.citation),
-                                context['request'])
+        return render_template(self.bibliography, context['request'],
+                               dict(title=title, references=references, marker=self.marker,
+                                    marker_options=self.marker_options, citation=self.citation))
 
     def clear(self):
         self.cited.clear()
@@ -146,7 +147,7 @@ def get_publication(context, puid, template='publications_bootstrap/components/p
 
         return render_template(template, context['request'], {'publication': pbl})
     except Publication.DoesNotExist:
-        return render_template('publications_bootstrap/components/empty.html', context['request'], {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'])
 
 
 @register.simple_tag(takes_context=True)
@@ -160,7 +161,7 @@ def get_publications(context, template='publications_bootstrap/components/public
     publications = publications.filter(external=False, type__in=types)
 
     if not publications:
-        return render_template('publications_bootstrap/components/empty.html', context['request'], {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'])
 
     publications = publications.order_by('-year', '-month', '-id')
     populate(publications)  # load custom links and files
@@ -190,7 +191,7 @@ def get_catalog(context, id_or_title, template='publications_bootstrap/component
                                    {'heading': 'Zut!',
                                     'message': 'There is no such catalog named "%"'.format(id_or_title)}})
     except Publication.DoesNotExist:
-        return render_template('publications_bootstrap/components/empty.html', context['request'], {})
+        return render_template('publications_bootstrap/components/empty.html', context['request'])
 
 
 @register.simple_tag(takes_context=True)
@@ -227,7 +228,7 @@ def setup_citations(**kwargs):
         marker : str
             Marker specifications or path to custom template. Specifications are a mini-language:
             TODO: specifications
-            For example: '^[#1-,' will 
+            For example: '^[#1-,' will
             * use superscript notation (^; optional),
             * square brackets ([; can also be '(', '{'or '<'),
             * provide a hyperlink to the entry in the bibliography (#; optional),
