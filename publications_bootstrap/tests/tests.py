@@ -347,10 +347,16 @@ class TestExtras(TestCase):
         self.assertInHTML(
             """<a href="/publications/2/" class="title">Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents</a>""",
             res)
+        tpl = Template("""{% load publication_extras %}{% get_publication 'ThisIsNoCitekey' %}""")
+        res = tpl.render(RequestContext(HttpRequest()))
+        self.assertInHTML(
+            """<div class="alert alert-info" role="alert"><h4 class="alert-heading">Sorry</h4><p>There are no publications.</p></div>""",
+            res)
 
     def test_get_publications(self):
         tpl = Template("""{% load publication_extras %}{% get_publications %}""")
-        # TODO
+        tpl.render(RequestContext(HttpRequest()))
+        # TODO: some assertions
 
     def test_get_catalog(self):
         link = PublicationLink.objects.create(publication_id=1, description='Test', url='http://test.com')
@@ -386,15 +392,10 @@ class TestExtras(TestCase):
 <a href="/publications/m.+bethge/">M. Bethge</a>, and
 <a href="/publications/c.+schwarz/">C. Schwarz</a>,
 "Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents" <i>Frontiers in Neural Circuits</i> 7 n°&nbsp;190 (2013)""")
+        tpl = Template("""{% load publication_extras %}{% get_citation 'Chagas2013a' %}""")
+        self.assertEqual(tpl.render(RequestContext(HttpRequest())), citation)
         tpl = Template("""{% load publication_extras %}{% get_citation 2 style='chicago' %}""")
-        self.assertEqual(tpl.render(RequestContext(HttpRequest())), """<a href="/publications/a.+chagas/">A. Chagas</a>,
-<a href="/publications/l.+theis/">L. Theis</a>,
-<a href="/publications/b.+sengupta/">B. Sengupta</a>,
-<a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>,
-<a href="/publications/m.+bethge/">M. Bethge</a>, and
-<a href="/publications/c.+schwarz/">C. Schwarz</a>,
-"Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents" <i>Frontiers in Neural Circuits</i> 7 n°&nbsp;190 (2013)""")
-        self.assertEqual(citation, tpl.render(RequestContext(HttpRequest())))  # Default is chicago
+        self.assertEqual(tpl.render(RequestContext(HttpRequest())), citation)  # Default is chicago
         # TODO: test other publication types
         tpl = Template("""{% load publication_extras %}{% get_citation 2 style='vancouver' %}""")
         self.assertEqual(tpl.render(RequestContext(HttpRequest())), """<a href="/publications/a.+chagas/">A. Chagas</a>,
@@ -447,12 +448,11 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
         tpl_base = """{{% load publication_extras %}}
 {{% setup_citations bibliography='{}' %}}
 {{% cite 2 3 4 %}}
-{{% thebibliography %}}"""
+{{% thebibliography reset=True %}}"""
         for layout in ['card', 'list']:
             tpl = Template(tpl_base.format(layout))
             res = tpl.render(RequestContext(HttpRequest()))
             if layout == 'card':
-                # Already test previously, as 'card' is the default layout
                 self.assertIn("""<div class="card mt-5 bibliography">""", res)
             elif layout == 'list':
                 self.assertIn("""<div class="mt-5 bibliography">""", res)
@@ -465,12 +465,15 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
                 self.assertInHTML("""<div class="d-flex mr-1">[<a>3</a>]</div>""", res)
                 self.assertInHTML("""<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>""", res)
 
+        tpl = Template("""{% load publication_extras %}{% nocite 2 %}{% thebibliography sorting='foobar' %}""")
+        self.assertRaises(NotImplementedError, tpl.render, RequestContext(HttpRequest()))
+
     def test_settings(self):
         # TODO: default values set in django.conf.settings
         pass
 
 
-TEST_BIBLIOGRAPHY_COUNT = 10
+TEST_BIBLIOGRAPHY_COUNT = 11
 TEST_BIBLIOGRAPHY = r"""
 @article{Bethge2002c,
   author = "M. Bethge and D. Rotermund and K. Pawelzik",
@@ -595,5 +598,18 @@ archivePrefix = "arXiv",
   organization={ACM},
   address = {New York, NY},
   country = {USA}
+}
+
+@article{doi:10.1080/00913367.1990.10673180,
+  author = { Thomas E.   Barry },
+  title = {Publication Productivity in the Three Leading U.S. Advertising Journals: Inaugural Issues through 1988},
+  journal = {Journal of Advertising},
+  volume = {19},
+  number = {1},
+  pages = {52-60},
+  year = {1990},
+  doi = {10.1080/00913367.1990.10673180},
+  URL = {http://dx.doi.org/10.1080/00913367.1990.10673180},
+  eprint = {http://dx.doi.org/10.1080/00913367.1990.10673180}
 }
 """

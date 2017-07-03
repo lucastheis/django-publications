@@ -95,7 +95,7 @@ class CitationManger:
 
     def thebibliography(self, context, title=DEFAULT_BIBLIOGRAPHY_TITLE, **kwargs):
         sorting = kwargs.get('sorting', self.sorting)  # FIXME: Not yet supported
-        if self.sorting == 'referenced':
+        if sorting == 'referenced':
             references = self.cited.values()
         else:
             # TODO: by author, by title
