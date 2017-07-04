@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from .publication import Publication
 
 
 class Catalog(models.Model):
@@ -14,6 +15,7 @@ class Catalog(models.Model):
 
     title = models.CharField(max_length=128, unique=True)
     description = models.CharField(max_length=128)
+    publications = models.ManyToManyField(Publication, blank=True, db_index=True)
 
     def __unicode__(self):
         return self.title

@@ -69,9 +69,9 @@ def get_catalog(context, catalog_title, template='publications_bootstrap/compone
     Get a publication catalog.
     """
     try:
-        publications_catalog = Catalog.objects.get(title__iexact=catalog_title)
+        catalog = Catalog.objects.get(title__iexact=catalog_title)
 
-        publications = publications_catalog.publication_set.all()
+        publications = catalog.publications.all()
         if not publications:
             raise Publication.DoesNotExist
         publications = publications.order_by('-year', '-month', '-id')
