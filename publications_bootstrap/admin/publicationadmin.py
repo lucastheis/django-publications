@@ -10,7 +10,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf.urls import url
 
 from .. import admin_views
-from ..models import Publication, PublicationLink, PublicationFile
+from ..models import Publication, PublicationLink, PublicationFile, Catalog
+
+
+class PublicationCatalogInline(admin.TabularInline):
+    model = Catalog.publications.through
 
 
 class PublicationLinkInline(admin.StackedInline):
@@ -44,7 +48,7 @@ class PublicationAdmin(admin.ModelAdmin):
     form = PublicationAdminForm
     list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title', 'status',)
     list_display_links = ('title',)
-    list_filter = ('year', 'journal', 'status', 'catalogs',)
+    list_filter = ('year', 'journal', 'status',)
     change_list_template = 'admin/publications_bootstrap/publication_change_list.html'
     search_fields = (
         'title', 'journal', 'book_title', 'authors', 'tags', 'year', 'institution', 'school', 'organization')
@@ -87,10 +91,8 @@ class PublicationAdmin(admin.ModelAdmin):
         ('Media', {
             'classes': ('collapse',),
             'fields': ('pdf', 'image', 'thumbnail')}),
-        ('Catalogs', {
-            'fields': ('catalogs',)}),
     )
-    inlines = [PublicationLinkInline, PublicationFileInline]
+    inlines = [PublicationLinkInline, PublicationFileInline, PublicationCatalogInline]
 
     def get_urls(self):
         return [url(r'^import_bibtex/$', admin_views.import_bibtex, name='publications_publication_import_bibtex'),

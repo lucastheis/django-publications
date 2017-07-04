@@ -10,7 +10,7 @@ def for_catalog(request, title):
     try:
         catalog = Catalog.objects.get(title__iexact=title)
 
-        publications = catalog.publication_set.all()
+        publications = catalog.publications.all()
         publications = publications.order_by('-year', '-month', '-id')
 
         if 'plain' in request.GET:
