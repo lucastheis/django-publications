@@ -17,7 +17,7 @@ setup(
     name='django-publications-bootstrap',
     version=__version__,
     author='Marc Bourqui',
-    author_email='https://github.com/mbourqui',
+    author_email='pypi.kemar@bourqui.org',
     license='MIT',
     description='A Django app for managing scientific publications with a Bootstrap-powered UI.',
     long_description=README,
