@@ -7,11 +7,7 @@ from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-try:
-    from django.conf.urls import url
-except ImportError:
-    # Fix for Django<1.6
-    from django.conf.urls.defaults import url
+from django.conf.urls import url
 
 from .. import admin_views
 from ..models import Publication, PublicationLink, PublicationFile

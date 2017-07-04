@@ -1,3 +1,4 @@
+{% load static %}
 <?xml version="1.1" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -11,42 +12,53 @@
     {% block head %}
     {% endblock head %}
 
-    {% block css %}
-        <style type="text/css">
-            body {
-                font-family: "Hiragino Sans GB", "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
-                font-size: 10pt;
-                line-height: 14pt;
-                padding: 20px;
-            }
-        </style>
-    {% endblock %}
+    <!-- Latest compiled and minified Bootstrap 4 Alpha 6 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="{% static 'publications_bootstrap/css/style.css' %}" rel="stylesheet">
+    <style type="text/css">
+        body {
+            font-family: "Hiragino Sans GB", "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 14pt;
+            padding: 20px;
+        }
+    </style>
+    {% block pubo_css %}
+    {% endblock pubo_css %}
 </head>
 
 <body>
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-    {% endfor %}
-{% endif %}
-
 <div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
     {% block content %}
         <p>Use this document as a way to quick start any new project.</p>
     {% endblock content %}
-</div> <!-- /container -->
+</div>
+<!-- /container -->
 
-{% block js %}
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+{% block modal %}{% endblock modal %}
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <![endif]-->
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
 
-{% endblock js %}
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <![endif]-->
+
+<!-- Required by Bootstrap v4 Alpha 6 -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+{% block pubo_js %}
+{% endblock pubo_js %}
 </body>
 </html>
