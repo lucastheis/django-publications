@@ -1,0 +1,16 @@
+{% spaceless %}
+{# SEE: https://www.imperial.ac.uk/media/imperial-college/administration-and-support-services/library/public/vancouver.pdf #}
+{% load publication_extras %}
+{% with publication.authors_escaped|flatten_authors:"limit=6" as authors %}
+{% if publication.type.pk == 1 %}
+{{ authors }}.
+{{ publication.title }}. <i>{{ publication.journal }}</i>. {{ publication.year }}; {{ publication.volume }}{% if publication.number %} ({{ publication.number }}){% endif %}{% if publication.pages %} publication.pages{% endif %}.
+{% elif publication.type.pk == 4 %}
+{{ authors }}.
+<i>{{ publication.title }}</i>. {{ publication.location }}: {{ publication.publisher }};{{ publication.year }}
+{% else %}
+{{ authors }}.
+<i>{{ publication.title }}</i>. {{ publication.year }}.
+{% endif %}
+{% endwith %}
+{% endspaceless %}
