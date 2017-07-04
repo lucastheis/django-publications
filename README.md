@@ -32,6 +32,8 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 * RSS feeds
 * support for images
 * embeddable references
+* in-text citations, inspired by LaTeX
+* automatic bibliography, inspired by LaTeX
 
 
 ## Requirements
@@ -43,7 +45,7 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 * django-ordered-model >= 1.4.1
 * six >= 1.10.0
 * Bootstrap v4.0.0-alpha.6
-* django-echoices >= 2.1.0
+* django-echoices >= 2.2.5
 
 
 ## Installation
