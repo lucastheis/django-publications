@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('publications_bootstrap', '0002_initial_data'),  # 0003_db_index
+        ('publications_bootstrap', '0003_db_index'),
     ]
 
     operations = [
