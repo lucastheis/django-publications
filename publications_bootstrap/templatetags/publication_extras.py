@@ -175,9 +175,9 @@ def get_catalog(context, id_or_title, template='publications_bootstrap/component
     Get a publication catalog.
     """
     try:
-        publications_catalog = _get_catalog(id_or_title)
+        catalog = _get_catalog(id_or_title)
 
-        publications = publications_catalog.publication_set.all()
+        publications = catalog.publications.all()
         if not publications:
             raise Publication.DoesNotExist
         publications = publications.order_by('-year', '-month', '-id')
