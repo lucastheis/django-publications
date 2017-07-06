@@ -376,6 +376,10 @@ class TestExtras(TestCase):
 <a href="/publications/b.+sengupta/">B. Sengupta</a> and
 <a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>&nbsp;<b>et al.</b>""")
 
+    def test__get_publication(self):
+        from publications_bootstrap.templatetags import publication_extras
+        self.assertEqual(publication_extras._get_publication(2), publication_extras._get_publication('Chagas2013a'))
+
     def test_get_publication(self):
         tpl = Template("""{% load publication_extras %}{% get_publication 2 %}""")
         res = tpl.render(RequestContext(HttpRequest()))
@@ -395,6 +399,10 @@ class TestExtras(TestCase):
         tpl = Template("""{% load publication_extras %}{% get_publications %}""")
         tpl.render(RequestContext(HttpRequest()))
         # TODO: some assertions
+
+    def test__get_catalog(self):
+        from publications_bootstrap.templatetags import publication_extras
+        self.assertEqual(publication_extras._get_catalog(1), publication_extras._get_catalog('highlights'))
 
     def test_get_catalog(self):
         link = PublicationLink.objects.create(publication_id=1, description='Test', url='http://test.com')
@@ -431,8 +439,6 @@ class TestExtras(TestCase):
 <a href="/publications/m.+bethge/">M. Bethge</a>, and
 <a href="/publications/c.+schwarz/">C. Schwarz</a>,
 "Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents" <i>Frontiers in Neural Circuits</i> 7 n°&nbsp;190 (2013)""")
-        tpl = Template("""{% load publication_extras %}{% get_citation 'Chagas2013a' %}""")
-        self.assertEqual(tpl.render(RequestContext(HttpRequest())), citation)
         tpl = Template("""{% load publication_extras %}{% get_citation 2 style='chicago' %}""")
         self.assertEqual(tpl.render(RequestContext(HttpRequest())), citation)  # Default is chicago
         # TODO: test other publication types
@@ -444,6 +450,8 @@ class TestExtras(TestCase):
 <a href="/publications/m.+bethge/">M. Bethge</a>,
 <a href="/publications/c.+schwarz/">C. Schwarz</a>.
 Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents. <i>Frontiers in Neural Circuits</i>. 2013; 7 (190).""")
+        tpl = Template("""{% load publication_extras %}{% get_citation 'ThisIsNoCitekey' %}""")
+        self.assertRaises(Publication.DoesNotExist, tpl.render, RequestContext(HttpRequest()))
         # TODO: test other publication types
 
     def test_cite(self):
@@ -458,6 +466,8 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
         tpl = Template("""{% load publication_extras %}{% cite 2 5 %}""")
         self.assertEqual(tpl.render(RequestContext(HttpRequest())),
                          """[<a href="#Chagas2013a">1</a>,<a href="#Gerhard2014a">3</a>]""")
+        tpl = Template("""{% load publication_extras %}{% cite 'ThisIsNoCitekey' %}""")
+        self.assertRaises(Publication.DoesNotExist, tpl.render, RequestContext(HttpRequest()))
         # TODO: test other params: sup, open/close, href
 
     def test_nocite(self):
@@ -465,6 +475,8 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
         self.assertEqual(tpl.render(RequestContext(HttpRequest())), '')
         tpl = Template("""{% load publication_extras %}{% nocite 1 2 3 5 %}""")
         self.assertEqual(tpl.render(RequestContext(HttpRequest())), '')
+        tpl = Template("""{% load publication_extras %}{% nocite 'ThisIsNoCitekey' %}""")
+        self.assertRaises(Publication.DoesNotExist, tpl.render, RequestContext(HttpRequest()))
 
     def test_thebibliography(self):
         tpl = Template("""{% load publication_extras %}{% thebibliography %}""")
