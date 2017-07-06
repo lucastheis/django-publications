@@ -118,7 +118,6 @@ class Publication(models.Model):
     doi = NullCharField(max_length=128, verbose_name='DOI', blank=True, null=True, unique=True)
     isbn = NullCharField(max_length=32, verbose_name='ISBN', blank=True, null=True, unique=True,
                          help_text='Only for a book.')  # A-B-C-D
-    # catalogs = models.ManyToManyField(Catalog, blank=True)
     status = make_echoicefield(EStatuses, default=EStatuses.PUBLISHED, blank=False)
 
     def __init__(self, *args, **kwargs):
@@ -399,6 +398,10 @@ class Publication(models.Model):
         if not self.citekey:
             self._produce_author_lists()
             self.citekey = self.key()
+
+    @property
+    def catalogs(self):
+        return self.catalog_set.all()
 
     @staticmethod
     def simplify_name(name):

@@ -204,6 +204,23 @@ class Tests(TestCase):
         self.assertTrue('C. Common' in str(response.content))
         self.assertFalse('B. Common' in str(response.content))
 
+    def test_catalogs(self):
+        # Ensure backwards compatibility
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and C. Common and D. Someone',
+            title=u'Title 4',
+            year=2011,
+            journal=u'Journal',
+            external=0)
+        publication.clean()
+        publication.save()
+
+        catalog = Catalog.objects.get(pk=1)
+        catalog.publications.add(publication)
+
+        self.assertEqual(list(publication.catalogs), [catalog])
+
     def test_unapi(self):
         self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
         self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
