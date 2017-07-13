@@ -4,7 +4,7 @@ from distutils.version import StrictVersion
 import django
 from django.conf import global_settings
 
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 DEBUG = False
 
@@ -37,18 +37,33 @@ MIDDLEWARE = (
 if StrictVersion(django.get_version()) < StrictVersion('1.10.0'):
     MIDDLEWARE_CLASSES = MIDDLEWARE
 
+TIME_ZONE = 'Europe/Zurich'
+
 LANGUAGE_CODE = 'en'
-
-ROOT_URLCONF = 'publications_bootstrap.tests.urls'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
 
 SITE_ID = 1
 
 USE_I18N = True
+
+USE_TZ = True
+
+# MEDIA CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/stable/ref/settings/#media-root
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# See: https://docs.djangoproject.com/en/stable/ref/settings/#media-url
+MEDIA_URL = '/media/'
+
+# STATIC FILE CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = '/static/'
+
+ROOT_URLCONF = 'publications_bootstrap.tests.urls'
 
 if hasattr(global_settings, 'TEMPLATE_CONTEXT_PROCESSORS'):
     TEMPLATE_CONTEXT_PROCESSORS = tuple(global_settings.TEMPLATE_CONTEXT_PROCESSORS) + (
