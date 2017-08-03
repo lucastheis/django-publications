@@ -156,7 +156,10 @@ def import_bibtex(request):
 			messages.info(request, msg)
 
 			# redirect to publication listing
-			return HttpResponseRedirect('../')
+			if len(publications) == 1:
+				return HttpResponseRedirect('../%s/change/' % publications[0].id)
+			else:
+				return HttpResponseRedirect('../')
 	else:
 		return render(
 			request,
