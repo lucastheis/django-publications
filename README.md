@@ -38,7 +38,7 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 
 ## Requirements
 
-* Python >= 3.4
+* Python == 2.7 or >= 3.4
 * Django >= 1.9.13
 * Pillow >= 2.4.0
 * django-countries >= 4.0
