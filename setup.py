@@ -7,6 +7,8 @@ from setuptools import setup, find_packages
 
 from publications_bootstrap import __version__
 
+REPO_URL = "https://github.com/mbourqui/django-publications-bootstrap"
+
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
 
@@ -21,7 +23,8 @@ setup(
     license='MIT',
     description='A Django app for managing scientific publications with a Bootstrap-powered UI.',
     long_description=README,
-    url='https://github.com/mbourqui/django-publications-bootstrap',
+    url=REPO_URL,
+    download_url=REPO_URL + 'releases/tag/v' + __version__,
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
