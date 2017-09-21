@@ -1,7 +1,7 @@
 {% load publication_extras %}
 
 <div class="card">
-    <div class="card-block">
+    <div class="card-body">
         <p class="card-text">
             {{ publication.authors_escaped|flatten_authors:"limit=6&last=, and" }}
         </p>
@@ -10,7 +10,7 @@
         <a href="{% url 'publications_bootstrap:id' publication.pk %}"
            class="title">{{ publication.title|tex_parse }}</a>
     </h3>
-    <div class="card-block">
+    <div class="card-body">
         <p class="card-text">
             {% if publication.journal %}
                 <i>{{ publication.journal }}{% if publication.note %} ({{ publication.note }}
@@ -48,7 +48,7 @@
             </li>
         </ul>
     {% endif %}
-    <div class="card-block">
+    <div class="card-body">
         <div class="row">
             <div class="col-xs-5">
                 <form class="form-inline">
