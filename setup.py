@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 from publications_bootstrap import __version__
 
-REPO_URL = "https://github.com/mbourqui/django-publications-bootstrap"
+REPO_URL = "https://github.com/mbourqui/django-publications-bootstrap/"
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
