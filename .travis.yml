@@ -1,23 +1,35 @@
 language: python
 python:
-    - "2.7"
-    - "3.4"
+  - 3.4
+  - 3.5
+  - 3.6
 env:
-    - DJANGO_VERSION=1.5.11
-    - DJANGO_VERSION=1.6.8
-    - DJANGO_VERSION=1.7.8
-    - DJANGO_VERSION=1.8.0
-    - DJANGO_VERSION=1.9.9
-    - DJANGO_VERSION=1.10.2
+  - DJANGO_VERSION=1.9.13
+  - DJANGO_VERSION=1.10.7
+  - DJANGO_VERSION=1.11.3
+  - DJANGO_VERSION=1.11.4
+  - DJANGO_VERSION=1.11.5
+# https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django
+matrix:
+  exclude:
+    - env: DJANGO_VERSION=1.9.13
+      python: 3.6
+    - env: DJANGO_VERSION=1.10.7
+      python: 3.6
+addons:
+  apt_packages:
+    - pandoc
 branches:
     except:
         - media
+before_install:
+    - ./pypi_packager.sh
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
     - pip install -q selenium
     - pip install -q coveralls
 script:
-    - coverage run --source publications --omit publications/six.py publications/tests/__main__.py
+    - coverage run --source publications_bootstrap publications_bootstrap/tests/__main__.py
 after_success:
     - coveralls

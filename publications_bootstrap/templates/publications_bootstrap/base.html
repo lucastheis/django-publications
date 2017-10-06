@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block pubo_head %}
+    <link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications_bootstrap:unapi' %}" />
+    {% block pubo_head_page %}
+        {# Page specific head tags #}
+    {% endblock pubo_head_page %}
+{% endblock pubo_head %}
+
+{% block pubo_css %}
+    {% block pubo_css_page %}
+        {# Page specific CSS #}
+    {% endblock pubo_css_page %}
+{% endblock pubo_css %}
+
+{% block content %}
+    <div class="pubo">
+        {% if publication or publications %}
+            {% include 'publications_bootstrap/components/download_all.html' %}
+            {% block pubo_content_page %}
+                {% include 'publications_bootstrap/components/section.html' %}
+            {% endblock pubo_content_page %}
+        {% else %}
+            {% include 'publications_bootstrap/components/empty.html' %}
+        {% endif %}
+    </div>
+{% endblock content %}
+
+{% block pubo_js %}
+    {% block pubo_js_page %}
+        {# Page specific JS #}
+    {% endblock pubo_js_page %}
+{% endblock pubo_js %}

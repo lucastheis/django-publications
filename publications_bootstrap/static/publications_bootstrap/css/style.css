@@ -1,0 +1,51 @@
+.publications-container h1 {
+  font-weight: normal;
+  margin: 0px;
+  padding: 0px;
+  color: #aaa;
+}
+
+.publications-container h2 {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.publications-container a {
+  text-decoration: none;
+  color: #999;
+}
+
+.publications-container a.author, .publications-container a.title {
+  color: black;
+}
+
+.publications-container a span.tag:hover {
+  color: #666;
+  background: #ccc;
+}
+
+.publications-container hr {
+  border: 0px;
+  border-top: 1px solid #ddd;
+  margin: 5px 0px 15px;
+  height: 0px;
+  padding: 0px;
+}
+
+.publications-container pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap !important;
+  white-space: pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.publications-container section.download_all {
+  margin-bottom: 20px;
+  vertical-align: middle;
+  float: right;
+}
+
+.publications-container section.publications div.card {
+  margin-left: 5%;
+}

@@ -1,0 +1,11 @@
+{% load publication_extras %}
+<div class="card mt-5 bibliography">
+    <div class="card-body">
+        <h4 class="card-title">{{ title }}</h4>
+        <ul class="list-group list-group-flush">
+            {% for reference in references %}{% with publication=reference.1 %}
+                <li class="list-group-item" id="{{ publication.citekey }}"><div class="media"><div class="d-flex mr-1">{% include marker with references=reference|as_list|as_list marker=marker_options only %}</div><div class="media-body">{% include citation %}</div></div></li>
+            {% endwith %}{% endfor %}
+        </ul>
+    </div>
+</div>

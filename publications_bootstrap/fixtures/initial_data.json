@@ -1,0 +1,120 @@
+[
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 1,
+		"fields": {
+			"order": 0,
+			"title": "Journal",
+			"description": "Journal Articles",
+			"bibtex_types": "article",
+			"hidden": 0
+		}
+	},
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 2,
+		"fields": {
+			"order": 1,
+			"title": "Conference",
+			"description": "Conference Papers",
+			"bibtex_types": "inproceedings, conference",
+			"hidden": 0
+		}
+	},
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 3,
+		"fields": {
+			"order": 2,
+			"title": "Technical Report",
+			"description": "Technical Reports",
+			"bibtex_types": "techreport",
+			"hidden": 0
+		}
+	},
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 4,
+		"fields": {
+			"order": 3,
+			"title": "Book",
+			"description": "Books",
+			"bibtex_types": "book, manual",
+			"hidden": 0
+		}
+	},
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 5,
+		"fields": {
+			"order": 4,
+			"title": "Book Chapter",
+			"description": "Book Chapters",
+			"bibtex_types": "inbook, incollection",
+			"hidden": 0
+		}
+	},
+	{
+        "model": "publications_bootstrap.type",
+        "pk": 6,
+                "fields": {
+                        "order": 5,
+                        "title": "Online",
+                        "description": "Online publication",
+                        "bibtex_types": "online, misc",
+                        "hidden": 0
+                }
+        },
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 7,
+		"fields": {
+			"order": 6,
+			"title": "Abstract",
+			"description": "Abstracts",
+			"bibtex_types": "abstract",
+			"hidden": 1
+		}
+	},
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 8,
+		"fields": {
+			"order": 7,
+			"title": "Thesis",
+			"description": "Theses",
+			"bibtex_types": "phdthesis, mastersthesis",
+			"hidden": 1
+		}
+	},
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 9,
+		"fields": {
+			"order": 8,
+			"title": "Unpublished",
+			"description": "Unpublished Papers",
+			"bibtex_types": "unpublished",
+			"hidden": 1
+		}
+	},
+	{
+	"model": "publications_bootstrap.type",
+	"pk": 10,
+		"fields": {
+			"order": 9,
+			"title": "Patent",
+			"description": "Patents",
+			"bibtex_types": "patent,misc",
+			"hidden": 1
+		}
+	},
+	{
+	"model": "publications_bootstrap.catalog",
+	"pk": 1,
+		"fields": {
+			"title": "Highlights",
+			"description": "Highlights"
+		}
+	}
+]

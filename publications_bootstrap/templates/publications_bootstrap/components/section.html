@@ -1,0 +1,7 @@
+<section class="publications">
+    <h1 class="display-4">{{ title|capfirst|default:"Publications" }}</h1>
+    <hr>
+    {% for publication in publications %}
+        {% include "publications_bootstrap/components/publication.html" %}
+    {% endfor %}
+</section>

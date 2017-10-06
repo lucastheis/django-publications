@@ -1,0 +1,159 @@
+{% load publication_extras %}
+
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+            {{ publication.authors_escaped|flatten_authors:"limit=6&last=, and" }}
+        </p>
+    </div>
+    <h3 class="card-header">
+        <a href="{% url 'publications_bootstrap:id' publication.pk %}"
+           class="title">{{ publication.title|tex_parse }}</a>
+    </h3>
+    <div class="card-body">
+        <p class="card-text">
+            {% if publication.journal %}
+                <i>{{ publication.journal }}{% if publication.note %} ({{ publication.note }}
+                    ){% endif %},
+                    {% if publication.volume %}<b>{{ publication.volume }}</b>
+                        {% if publication.number %}({{ publication.number }})
+                        {% endif %},{% endif %}
+                    {% if publication.pages %}{{ publication.pages }},{% endif %}
+                    {{ publication.year }}
+                </i>
+            {% else %}
+                <i>{% if publication.book_title %}{{ publication.book_title }}
+                    {% if publication.note %} ({{ publication.note }})
+                    {% endif %},{% endif %}
+                    {% if publication.publisher %}{{ publication.publisher }},{% endif %}
+                    {% if publication.institution %}{{ publication.institution }},{% endif %}
+                    {{ publication.year }}{% if publication.isbn %},
+                        ISBN {{ publication.isbn }}{% endif %}</i>
+            {% endif %}
+        </p>
+        {% if publication.abstract %}
+            <p class="card-text">
+                {{ publication.abstract|tex_parse }}
+            </p>
+        {% endif %}
+    </div>
+    {% if publication.tags %}
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                {% for tag, tag_escaped in publication.tags_escaped %}
+                    <a class="tag"
+                       href="{% url 'publications_bootstrap:tag' tag_escaped %}"><span
+                            class="tag tag-default">{{ tag }}</span></a>
+                {% endfor %}
+            </li>
+        </ul>
+    {% endif %}
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xs-5">
+                <form class="form-inline">
+                    {% if publication.doi %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">DOI</span>
+                                <input title="DOI number" type="text" class="form-control"
+                                       value="{{ publication.doi }}"
+                                       aria-describedby="basic-addon1" readonly>
+                            </div>
+                            <a class="btn btn-primary" rel="external"
+                               href="http://dx.doi.org/{{ publication.doi }}"><img
+                                    src="https://maxcdn.icons8.com/Color/PNG/24/Programming/external_link-24.png"
+                                    title="External link to DOI" height="12"></a>
+                        </div>
+                    {% endif %}
+                    {% if publication.isbn %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">ISBN</span>
+                                <input title="ISBN number" type="text" class="form-control"
+                                       value="{{ publication.isbn }}"
+                                       aria-describedby="basic-addon2" readonly>
+                            </div>
+                            <a class="btn btn-primary" rel="external"
+                               href="http://isbndb.com/search/all?query=978-1-60558-139-2"><img
+                                    src="https://maxcdn.icons8.com/Color/PNG/24/Programming/external_link-24.png"
+                                    title="External link to ISBN" height="12"></a>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="col-xs-3">
+                <div class="btn-group" role="group" aria-label="Button group">
+                    {% if publication.code %}
+                        <a class="btn btn-secondary" href="{{ publication.code }}">Code</a>
+                    {% endif %}
+                    {% if publication.url %}
+                        <a class="btn btn-secondary" rel="external" href="{{ publication.url }}">URL</a>
+                    {% endif %}
+                </div>
+                {% if publication.links %}
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Additional links
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% for link in publication.links %}
+                                <a class="dropdown-item" rel="external"
+                                   href="{{ link.url }}">{{ link.description }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-xs-4">
+                {% if publication.pdf or publication.files %}
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon">Download</span>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-secondary dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                File
+                            </button>
+                            <div class="dropdown-menu">
+                                {% if publication.pdf %}
+                                    <a class="dropdown-item" href="{{ publication.pdf.url }}">
+                                        <img src="https://maxcdn.icons8.com/Color/PNG/48/Files/pdf_2-48.png"
+                                             title="PDF 2" height="48">Publication as PDF</a>
+                                {% endif %}
+                                {% for file in publication.files %}
+                                    <a class="dropdown-item"
+                                       href="{{ file.file.url }}"><img
+                                            src="https://maxcdn.icons8.com/Color/PNG/48/Very_Basic/file-48.png"
+                                            title="File" height="32">{{ file.description }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon">Export as</span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Citation format
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"
+                               href="{% url 'publications_bootstrap:id' publication.pk %}?ris">
+                                RIS</a>
+                            <a class="dropdown-item"
+                               href="{% url 'publications_bootstrap:id' publication.pk %}?bibtex">
+                                BibTex</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <abbr class="unapi-id" title="{{ publication.id }}"></abbr>
+    <span class="Z3988" title="{{ publication.z3988 }}"></span>
+</div>

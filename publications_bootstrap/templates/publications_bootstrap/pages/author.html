@@ -1,0 +1,13 @@
+{% extends "publications_bootstrap/base.html" %}
+
+{% block app_head %}
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="?rss"/>
+{% endblock %}
+
+{% block app_content %}
+    <h1 class="display-2">Publications with {{ author }}</h1>
+    <hr>
+    {% for type in types %}
+        {% include 'publications_bootstrap/components/section.html' with title=type.description publications=type.publications %}
+    {% endfor %}
+{% endblock %}

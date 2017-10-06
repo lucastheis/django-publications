@@ -1,0 +1,4 @@
+{% with slice_limit=":"|add:limit %}{% for author, author_escaped in authors|slice:slice_limit %}<a href="{% url 'publications_bootstrap:author' author_escaped %}">{{ author }}</a>{% if forloop.revcounter == 2 %}{% if not limit or limit|add:"0" >= authors|length %}{{ last }}
+{% else %}{{ separator }}
+{% endif %}{% elif not forloop.last %}{{ separator }}
+{% endif %}{% endfor %}{% endwith %}{% if limit and limit|add:"0" < authors|length %}{{ et_al|safe }}{% endif %}

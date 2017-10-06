@@ -1,0 +1,11 @@
+{% extends "publications_bootstrap/base.html" %}
+
+{% block app_head %}
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="?rss"/>
+{% endblock %}
+
+{% block app_content %}
+    {% for year, publications in years %}
+        {% include 'publications_bootstrap/components/section.html' with title=year %}
+    {% endfor %}
+{% endblock %}

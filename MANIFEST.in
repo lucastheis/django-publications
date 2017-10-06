@@ -1,4 +1,7 @@
+include LICENSE
+include README.rst
 include README.md
-recursive-include publications/templates *
-recursive-include publications/fixtures *
-recursive-include publications/static *
+include CHANGELOG.md
+recursive-include publications_bootstrap/templates *
+recursive-include publications_bootstrap/fixtures *
+recursive-include publications_bootstrap/static *

@@ -1,0 +1,15 @@
+{% load static i18n %}
+<ul class="list-unstyled">
+    {% for publication in publications %}
+        <li class="media">
+            {% if publication.thumbnail %}
+                <a href="{% if publication.code %}{{ publication.code }}{% else %}
+                    {% url 'publications_bootstrap:id' publication.pk %}{% endif %}">
+                    <img class="d-flex mr-3" src="{{ publication.thumbnail.url }}"/></a>
+            {% endif %}
+            <div class="media-body">
+                {% include "publications_bootstrap/components/publication.html" %}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
