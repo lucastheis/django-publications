@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from functools import update_wrapper
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
@@ -78,7 +78,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
                         list_display_links, self.list_filter, self.date_hierarchy,
                         self.search_fields, self.list_select_related,
                         self.list_per_page, self.list_max_show_all, self.list_editable,
-                        self)
+                        self, sortable_by=self.list_display)
 
         return cl
 

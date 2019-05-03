@@ -58,7 +58,7 @@ class Publication(models.Model):
 			12: 'Dec'
 		}
 
-	type = models.ForeignKey(Type)
+	type = models.ForeignKey(Type, on_delete=models.CASCADE)
 	citekey = models.CharField(max_length=512, blank=True, null=True,
 		help_text='BibTex citation key. Leave blank if unsure.')
 	title = models.CharField(max_length=512)

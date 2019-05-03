@@ -12,7 +12,7 @@ setup(
 	url='https://github.com/lucastheis/django-publications',
 	packages=find_packages(),
 	include_package_data=True,
-	install_requires=('Django>=1.5.0', 'Pillow>=2.3.0'),
+	install_requires=('Django>=2.1.0', 'Pillow>=2.3.0'),
 	zip_safe=False,
 	license='MIT',
 	classifiers=(
@@ -23,10 +23,7 @@ setup(
 		'Intended Audience :: Science/Research',
 		'License :: OSI Approved :: MIT License',
 		'Operating System :: OS Independent',
-		'Programming Language :: Python :: 2',
-		'Programming Language :: Python :: 2.6',
-		'Programming Language :: Python :: 2.7',
 		'Programming Language :: Python :: 3',
-		'Programming Language :: Python :: 3.3',
+		'Programming Language :: Python :: 3.7',
 	),
 )
