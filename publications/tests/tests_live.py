@@ -13,7 +13,7 @@ class LiveTests(LiveServerTestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.selenium = webdriver.PhantomJS()
+		cls.selenium = webdriver.Chrome()
 		super(LiveTests, cls).setUpClass()
 
 

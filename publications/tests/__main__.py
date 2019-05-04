@@ -1,7 +1,5 @@
 import os
 import sys
-
-from distutils.version import StrictVersion
 from django.conf import settings, global_settings
 
 BASE_DIR = os.path.dirname(__file__)
@@ -12,6 +10,7 @@ INSTALLED_APPS = (
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.staticfiles',
+	'django.contrib.messages',
 	'publications',
 )
 DATABASES = {
@@ -52,20 +51,20 @@ else:
 			'OPTIONS': {
 				'context_processors': [
 					'django.template.context_processors.request',
+					'django.contrib.auth.context_processors.auth',
+					'django.contrib.messages.context_processors.messages'
 				],
 			},
 		},
 	]
 
+settings_dict['MIDDLEWARE'] = MIDDLEWARE_CLASSES
+
 settings.configure(**settings_dict)
 
 import django
 
-if StrictVersion(django.get_version()) >= StrictVersion('1.7.0'):
-	from django import setup
-	from django.test.runner import DiscoverRunner
-	setup()
-	sys.exit(DiscoverRunner(verbosity=1).run_tests(['publications']))
-else:
-	from django.test.simple import DjangoTestSuiteRunner
-	sys.exit(DjangoTestSuiteRunner(verbosity=1).run_tests(['publications.Tests', 'publications.LiveTests']))
+from django import setup
+from django.test.runner import DiscoverRunner
+setup()
+sys.exit(DiscoverRunner(verbosity=1).run_tests(['publications']))
