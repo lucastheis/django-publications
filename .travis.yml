@@ -9,11 +9,16 @@ env:
 branches:
     except:
         - media
+
+before_install:
+    - sudo apt-get update
+    - sudo apt-get install -y sqlite3
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
     - pip install -q selenium
     - pip install -q coveralls
+    -
 script:
     - coverage run --source publications --omit publications/six.py publications/tests/__main__.py
 after_success:
