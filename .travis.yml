@@ -1,3 +1,4 @@
+dist: xenial
 language: python
 python:
     - "3.5"
@@ -10,9 +11,6 @@ branches:
     except:
         - media
 
-before_install:
-    - sudo apt-get update
-    - sudo apt-get install -y sqlite3
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
