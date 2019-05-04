@@ -11,6 +11,7 @@ branches:
     except:
         - media
 install:
+    - pip install --upgrade pip
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
     - pip install -q selenium
