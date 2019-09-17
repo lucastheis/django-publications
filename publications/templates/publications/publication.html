@@ -9,7 +9,11 @@
 	<a href="{% url 'publications:author' author_escaped %}" class="author">{{ author }}</a>{% if not forloop.last %}{% if forloop.revcounter == 2 %}{% if not forloop.first %},{% endif %} and {% else %}, {% endif %}{% endif %}
 	{% endfor %}<br />
 {% endif %}
-<b><a href="{% url 'publications:id' publication.pk %}" class="title">{{ publication.title|tex_parse }}</a></b><br/>
+<b><a href="{% url 'publications:id' publication.pk %}" class="title">{{ publication.title|tex_parse }}</a></b>
+{% if user.is_staff %}
+    <a href="{% url 'admin:publications_publication_change' publication.id %}">[EDIT]</a>
+{% endif %}
+<br/>
 {% if publication.journal %}
 	<i>{{ publication.journal }}{% if publication.note %} ({{ publication.note }}){% endif %},
 	{% if publication.volume %}<b>{{ publication.volume }}</b>{% if publication.number %}({{ publication.number }}){% endif %},{% endif %}
