@@ -88,6 +88,8 @@ def parse(string):
 				value = value[1:-1]
 			if key not in ['booktitle', 'title']:
 				value = value.replace('}', '').replace('{', '')
+			if key in ['pages']:
+				value = value.replace(" ","").replace("--","-")
 			else:
 				if value.startswith('{') and value.endswith('}'):
 					value = value[1:]
