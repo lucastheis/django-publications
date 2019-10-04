@@ -3,6 +3,9 @@ django-publications
 
 A Django app for managing scientific publications.
 
+[![Build Status](https://travis-ci.org/lucastheis/django-publications.svg?branch=develop)](https://travis-ci.org/lucastheis/django-publications)
+[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)
+
 Screenshots
 -----------
 
@@ -42,6 +45,13 @@ Installation
 
 3) Add the following to your project's `urls.py`:
 
+	```python
 	url(r'^publications/', include('publications.urls')),
+	```
 
-4) Run `./manage.py syncdb`.
+4) Run the following:
+
+	```
+	./manage.py makemigrations publications
+	./manage.py migrate
+	```
