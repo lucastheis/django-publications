@@ -10,13 +10,16 @@ env:
 branches:
     except:
         - media
-
+before_install:
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.25.0/geckodriver-v0.25.0-linux64.tar.gz
+  - mkdir geckodriver
+  - tar xzf geckodriver-v0.25.0-linux64.tar.gz -C geckodriver
+  - export PATH=$PATH:$PWD/geckodriver
 install:
     - pip install -q django==$DJANGO_VERSION
     - pip install -q -e .
     - pip install -q selenium
     - pip install -q coveralls
-    -
 script:
     - coverage run --source publications --omit publications/six.py publications/tests/__main__.py
 after_success:

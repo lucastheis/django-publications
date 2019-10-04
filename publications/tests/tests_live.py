@@ -13,7 +13,9 @@ class LiveTests(LiveServerTestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.selenium = webdriver.PhantomJS()
+		options = webdriver.firefox.options.Options()
+		options.add_argument('--headless')
+		cls.selenium = webdriver.Firefox(options=options)
 		super(LiveTests, cls).setUpClass()
 
 
@@ -25,9 +27,6 @@ class LiveTests(LiveServerTestCase):
 
 	def setUp(self):
 		User.objects.create_superuser('admin', 'admin@test.de', 'admin')
-
-		# give the browser a little time
-		sleep(1.)
 
 		# login
 		self.selenium.get('{0}{1}'.format(self.live_server_url, '/admin/'))
