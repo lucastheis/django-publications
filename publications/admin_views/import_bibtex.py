@@ -71,7 +71,10 @@ def import_bibtex(request):
 						'pages',
 						'note',
 						'abstract',
-						'month']
+						'month',
+						'eprint',
+						'primaryclass',
+						'archiveprefix']
 
 					for key in keys:
 						if not key in entry:
@@ -90,7 +93,15 @@ def import_bibtex(request):
 
 					# remove whitespace characters (likely due to line breaks)
 					entry['url'] = re.sub(r'\s', '', entry['url'])
+					entry['eprint'] = re.sub(r'\s', '', entry['eprint'])
 
+					# eprintclass and eprinttype are aliases for primaryclass and archiveprefix
+					if 'eprintclass' in entry:
+						entry['primaryclass'] = entry['eprintclass']
+					if 'eprinttype' in entry:
+						entry['archiveprefix'] = entry['eprinttype']
+
+					#
 					# determine type
 					type_id = None
 
@@ -122,6 +133,9 @@ def import_bibtex(request):
 						url=entry['url'],
 						doi=entry['doi'],
 						isbn=entry['isbn'],
+						eprint=entry['eprint'],
+						primaryclass=entry['primaryclass'],
+						archiveprefix=entry['archiveprefix'],
 						external=False,
 						abstract=entry['abstract'],
 						keywords=entry['keywords']))
