@@ -36,7 +36,7 @@ class PublicationAdmin(admin.ModelAdmin):
 		(None, {'fields':
 			('citekey', 'keywords', 'url', 'code', 'pdf', 'doi', 'isbn', 'note', 'external')}),
 		(None, {'fields':
-			('abstract',)}),
+			('eprint', 'archiveprefix', 'primaryclass', 'abstract',)}),
 		(None, {'fields':
 			('image', 'thumbnail')}),
 		(None, {'fields':

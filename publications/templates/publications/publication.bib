@@ -14,5 +14,8 @@
   doi = "{{ publication.doi }}"{% endif %}{% if publication.url %},
   url = "{{ publication.url }}"{% endif %}{% if publication.note %},
   note = "{{ publication.note }}"{% endif %}{% if publication.isbn %},
-  isbn = "{{ publication.isbn }}"{% endif %}
+  isbn = "{{ publication.isbn }}"{% endif %}{% if publication.eprint %},
+  eprint = "{{ publication.eprint }}"{% endif %}{% if publication.primaryclass %},
+  primaryclass = "{{ publication.primaryclass }}"{% endif %}{% if publication.archiveprefix %},
+  archiveprefix = "{{ publication.archiveprefix }}"{% endif %}
 }

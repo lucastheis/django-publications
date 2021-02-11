@@ -90,6 +90,12 @@ class Publication(models.Model):
 	isbn = models.CharField(max_length=32, verbose_name="ISBN", blank=True,
 		help_text='Only for a book.') # A-B-C-D
 	lists = models.ManyToManyField(List, blank=True)
+	eprint = models.CharField(max_length=256, verbose_name='eprint', blank=True,
+		help_text='Link to electronic (preprint) or eprint identifier')
+	primaryclass = models.CharField(max_length=128, verbose_name='eprint class',
+		blank=True, help_text='Preprint classification')
+	archiveprefix = models.CharField(max_length=128, verbose_name='eprint type',
+		blank=True, help_text='Name of preprint archive')
 
 	def __init__(self, *args, **kwargs):
 		models.Model.__init__(self, *args, **kwargs)
