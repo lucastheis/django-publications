@@ -293,6 +293,17 @@ class Publication(models.Model):
 	def last_page(self):
 		return self.pages.split('-')[-1]
 
+	def eprint_link(self):
+		if self.eprint.startswith('http'):
+			return urlquote_plus(self.eprint)
+		elif self.archiveprefix == 'arXiv':
+			return ('https://arxiv.org/abs/' +
+				urlquote_plus(self.eprint))
+		elif self.archiveprefix == 'pmcid':
+			return ('http://www.ncbi.nlm.nih.gov/pmc/articles/' +
+				urlquote_plus(self.eprint))
+		else:
+			return
 
 	def z3988(self):
 		contextObj = ['ctx_ver=Z39.88-2004']
