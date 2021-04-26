@@ -85,6 +85,8 @@ class Tests(TestCase):
 			title=u'Slowness and sparseness have diverging effects on complex cell learning',
 			year=2014,
 			journal=u'PLoS Computational Biology',
+			eprint=u'PMC3945087',
+			archiveprefix=u'pmcid',
 			external=0)
 		publication.clean()
 		publication.save()
@@ -259,7 +261,11 @@ TEST_BIBLIOGRAPHY = r"""
   number={3},
   pages={433--452},
   year={2000},
-  publisher={Oxford University Press}
+  publisher={Oxford University Press},
+  eprint={9905086},
+  eprinttype={arXiv},
+  eprintclass={astro-ph}
+
 }
 
 @misc{test:2009,
@@ -279,7 +285,10 @@ TEST_BIBLIOGRAPHY = r"""
  url       = {http://arxiv.org/abs/1409.7686},
  timestamp = {Mon, 27 Oct 2014 13:50:21 +0100},
  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/KummererWB14},
- bibsource = {dblp computer science bibliography, http://dblp.org}
+ bibsource = {dblp computer science bibliography, http://dblp.org},
+ eprint    = {1409.7686},
+ primaryclass = {cs.CV},
+ archiveprefix = {arXiv},
 }
 @incollection{dougan2014objective,
   title={Objective Functions},
