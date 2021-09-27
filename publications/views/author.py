@@ -27,6 +27,8 @@ def author(request, name):
 
     # split into forename, middlenames and surname
     names = name.replace(' ', '+').split('+')
+    # handle empty values
+    names = [n for n in names if n] or ['']
 
     # construct a liberal query
     surname = names[-1]
@@ -40,10 +42,10 @@ def author(request, name):
     surname = surname.replace(u'ss', u'%%')
 
     query_str = u'SELECT * FROM {table} ' \
-                'WHERE lower({table}.authors) LIKE lower(\'%%{surname}%%\') ' \
+                'WHERE lower({table}.authors) LIKE lower(%s) ' \
                 'ORDER BY {table}.year DESC, {table}.month DESC, {table}.id DESC'
-    query = Publication.objects.raw(
-        query_str.format(table=Publication._meta.db_table, surname=surname))
+    query_str = query_str.format(table=Publication._meta.db_table)
+    query = Publication.objects.raw(query_str, ['%' + surname + '%'])
 
     # find publications of this author
     publications = []
