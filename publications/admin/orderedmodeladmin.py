@@ -40,6 +40,7 @@ except ImportError:
     from django.contrib.admin.util import unquote
 from django.contrib.admin.views.main import ChangeList
 from django.db.models.options import Options
+from django import VERSION
 
 # Django <= 1.6
 if not getattr(Options, 'model_name', False):
@@ -70,14 +71,29 @@ class OrderedModelAdmin(admin.ModelAdmin):
     def _get_changelist(self, request):
         list_display = self.get_list_display(request)
         list_display_links = self.get_list_display_links(request, list_display)
+        args = (
+            request,
+            self.model,
+            list_display,
+            list_display_links,
+            self.list_filter,
+            self.date_hierarchy,
+            self.search_fields,
+            self.list_select_related,
+            self.list_per_page,
+            self.list_max_show_all,
+            self.list_editable,
+            self,
+        )
 
-        cl = ChangeList(request, self.model, list_display,
-                        list_display_links, self.list_filter, self.date_hierarchy,
-                        self.search_fields, self.list_select_related,
-                        self.list_per_page, self.list_max_show_all, self.list_editable,
-                        self, sortable_by=self.list_display)
+        if VERSION >= (2, 1):
+            sortable_by = self.list_display
+            args = args + (sortable_by,)
 
-        return cl
+        if VERSION >= (4, 0):
+            args = args + (self.search_help_text,)
+
+        return ChangeList(*args)
 
     request_query_string = ''
 
