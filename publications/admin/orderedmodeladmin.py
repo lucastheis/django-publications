@@ -54,19 +54,16 @@ class OrderedModelAdmin(admin.ModelAdmin):
                     model=self.model._meta.model_name)
 
     def get_urls(self):
-        try:
-            from django.conf.urls import url
-        except ImportError:
-            from django.conf.urls.defaults import url
+        from django.urls import re_path
 
         def wrap(view):
             def wrapper(*args, **kwargs):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
             return update_wrapper(wrapper, view)
         return [
-            url(r'^(.+)/move-(up)/$', wrap(self.move_view),
+            re_path(r'^(.+)/move-(up)/$', wrap(self.move_view),
                 name='{app}_{model}_order_up'.format(**self.get_model_info())),
-            url(r'^(.+)/move-(down)/$', wrap(self.move_view),
+            re_path(r'^(.+)/move-(down)/$', wrap(self.move_view),
                 name='{app}_{model}_order_down'.format(**self.get_model_info())),
         ] + super(OrderedModelAdmin, self).get_urls()
 
