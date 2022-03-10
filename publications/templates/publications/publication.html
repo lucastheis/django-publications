@@ -35,7 +35,7 @@
 {% endif %}
 {% if publication.code %}<a class="link" href="{{ publication.code }}">Code</a>,{% endif %}
 {% if publication.url %}<a class="link" rel="external" href="{{ publication.url }}">URL</a>,{% endif %}
-{% if publication.doi %}<a class="link" rel="external" href="http://dx.doi.org/{{ publication.doi }}">DOI</a>,{% endif %}
+{% if publication.doi %}<a class="link" rel="external" href="https://doi.org/{{ publication.doi }}">DOI</a>,{% endif %}
 {% if not publication.journal and publication.isbn %}<a class="link" rel="external" href="http://isbndb.com/search/all?query={{ publication.isbn }}">ISBN</a>,{% endif %}
 {% if publication.pdf %}<a class="link" href="{{ MEDIA_URL }}{{ publication.pdf }}">PDF</a>,{% endif %}
 {% for file in publication.files %}
