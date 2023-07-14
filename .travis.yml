@@ -1,13 +1,13 @@
 dist: xenial
 language: python
 python:
-    - "3.6"
     - "3.7"
     - "3.8"
+    - "3.9"
 env:
-    - DJANGO_VERSION=2.2.16
-    - DJANGO_VERSION=3.0.10
-    - DJANGO_VERSION=3.1.1
+    - DJANGO_VERSION=2.2.27
+    - DJANGO_VERSION=3.2.12
+    - DJANGO_VERSION=4.0.3
 branches:
     except:
         - media
