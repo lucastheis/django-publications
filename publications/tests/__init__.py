@@ -1,2 +1,2 @@
-from tests import Tests
-from tests_live import LiveTests
+from .tests import Tests
+from .tests_live import LiveTests
