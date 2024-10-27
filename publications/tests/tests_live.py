@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django.test import LiveServerTestCase
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from selenium import webdriver
-from time import sleep
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.expected_conditions import presence_of_element_located
+from selenium.webdriver.support.wait import WebDriverWait
 from publications.tests import tests
 from publications.models import Publication
+
 
 class LiveTests(LiveServerTestCase):
 	fixtures = ['initial_data.json', 'test_data.json']
@@ -13,9 +16,14 @@ class LiveTests(LiveServerTestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		options = webdriver.firefox.options.Options()
+		options = webdriver.ChromeOptions()
 		options.add_argument('--headless')
-		cls.selenium = webdriver.Firefox(options=options)
+		options.add_argument('--disable-gpu')
+		options.add_argument('--no-sandbox')
+
+		cls.selenium = webdriver.Chrome(options=options)
+		cls.wait = WebDriverWait(cls.selenium, timeout=5)
+
 		super(LiveTests, cls).setUpClass()
 
 
@@ -26,24 +34,27 @@ class LiveTests(LiveServerTestCase):
 
 
 	def setUp(self):
-		User.objects.create_superuser('admin', 'admin@test.de', 'admin')
+		get_user_model().objects.create_superuser('admin', 'admin@test.de', 'admin')
 
 		# login
 		self.selenium.get('{0}{1}'.format(self.live_server_url, '/admin/'))
-		username_input = self.selenium.find_element_by_name("username")
+		username_input = self.selenium.find_element(By.NAME, 'username')
 		username_input.send_keys('admin')
-		password_input = self.selenium.find_element_by_name("password")
+		password_input = self.selenium.find_element(By.NAME, 'password')
 		password_input.send_keys('admin')
-		self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
+		self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
 
 
 	def test_import_bibtex(self):
 		count = Publication.objects.count()
 
-		self.selenium.get('{0}{1}'.format(self.live_server_url, '/admin/publications/publication/import_bibtex/'))
-		bibliography_input = self.selenium.find_element_by_name("bibliography")
+		self.selenium.get(
+			'{0}{1}'.format(self.live_server_url, '/admin/publications/publication/import_bibtex/')
+		)
+		self.wait.until(presence_of_element_located((By.NAME, 'bibliography')))
+		bibliography_input = self.selenium.find_element(By.NAME, 'bibliography')
 		bibliography_input.send_keys(tests.TEST_BIBLIOGRAPHY)
-		self.selenium.find_element_by_xpath('//input[@value="Import"]').click()
+		self.selenium.find_element(By.XPATH, '//input[@value="Import"]').click()
 
 		self.assertEqual(Publication.objects.count() - count, tests.TEST_BIBLIOGRAPHY_COUNT)
 
@@ -52,5 +63,6 @@ class LiveTests(LiveServerTestCase):
 		count = Publication.objects.count()
 
 		self.selenium.get('{0}{1}'.format(self.live_server_url, '/admin/publications/publication/'))
-		self.selenium.find_element_by_link_text('Import BibTex').click()
-		self.selenium.find_element_by_xpath('//input[@value="Import"]').click()
+		self.wait.until(presence_of_element_located((By.LINK_TEXT, 'Import BibTex')))
+		self.selenium.find_element(By.LINK_TEXT, 'Import BibTex').click()
+		self.selenium.find_element(By.XPATH, '//input[@value="Import"]').click()

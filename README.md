@@ -3,7 +3,7 @@ django-publications
 
 A Django app for managing scientific publications.
 
-[![Build Status](https://travis-ci.org/lucastheis/django-publications.svg?branch=develop)](https://travis-ci.org/lucastheis/django-publications)
+[![CI](https://github.com/lucastheis/django-publications/actions/workflows/ci.yaml/badge.svg)](https://github.com/lucastheis/django-publications/actions)
 [![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)
 
 Screenshots
