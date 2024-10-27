@@ -45,10 +45,6 @@ class LiveTests(LiveServerTestCase):
 		self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
 
 
-	def tearDown(self):
-		self.selenium.close()
-
-
 	def test_import_bibtex(self):
 		count = Publication.objects.count()
 

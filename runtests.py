@@ -3,7 +3,7 @@
 import os
 import sys
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'publications.test_settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'publications.settings.test'
 
 import django
 from django.conf import settings
@@ -16,7 +16,7 @@ def main():
 	TestRunner = get_runner(settings)
 	test_runner = TestRunner()
 
-	failures = test_runner.run_tests(['publications.settings.test'])
+	failures = test_runner.run_tests(['publications.tests'])
 
 	sys.exit(bool(failures))
 
