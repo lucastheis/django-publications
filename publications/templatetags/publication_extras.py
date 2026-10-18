@@ -5,7 +5,6 @@ __docformat__ = 'epytext'
 import os
 import django
 
-from distutils.version import StrictVersion
 from django.template import Library, Node, Context, RequestContext
 from django.template.loader import get_template
 from django.utils.html import escape
@@ -23,7 +22,7 @@ GREEK_LETTERS = \
 
 
 def render_template(template, request, args):
-	if StrictVersion(django.get_version()) < StrictVersion('1.8.0'):
+	if django.VERSION < (1, 8):
 		return get_template(template).render(RequestContext(request, args))
 	return get_template(template).render(args, request)
 

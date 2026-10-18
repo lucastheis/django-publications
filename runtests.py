@@ -16,7 +16,8 @@ def main():
 	TestRunner = get_runner(settings)
 	test_runner = TestRunner()
 
-	failures = test_runner.run_tests(['publications.tests'])
+	test_labels = sys.argv[1:] if len(sys.argv) > 1 else ['publications.tests']
+	failures = test_runner.run_tests(test_labels)
 
 	sys.exit(bool(failures))
 

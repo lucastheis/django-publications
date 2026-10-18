@@ -62,6 +62,6 @@ class PagesField(models.Field):
 
 try:
 	from south.modelsinspector import add_introspection_rules
-	add_introspection_rules([], ["^publications\.fields\.PagesField"])
+	add_introspection_rules([], [r"^publications.fields.PagesField"])
 except:
 	pass
