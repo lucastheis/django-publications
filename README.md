@@ -32,9 +32,9 @@ Features
 Requirements
 ------------
 
-* Python >= 3.5.0
-* Django >= 2.1.0
-* Pillow >= 2.3.0
+* Python >= 3.14
+* Django >= 5.2
+* Pillow >= 12.3.0
 
 Installation
 ------------
@@ -46,7 +46,9 @@ Installation
 3) Add the following to your project's `urls.py`:
 
 	```python
-	url(r'^publications/', include('publications.urls')),
+	from django.urls import include, re_path
+ 
+	re_path(r'^publications/', include('publications.urls')),
 	```
 
 4) Run the following:

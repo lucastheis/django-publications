@@ -35,7 +35,7 @@ from django.template.loader import render_to_string
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
 from django.contrib.admin.views.main import ChangeList
-from django import VERSION
+from django.utils.safestring import mark_safe
 
 
 class OrderedModelAdmin(admin.ModelAdmin):
@@ -76,13 +76,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
             self,
         )
 
-        if VERSION >= (2, 1):
-            sortable_by = self.list_display
-            args = args + (sortable_by,)
-
-        if VERSION >= (4, 0):
-            args = args + (self.search_help_text,)
-
+        args = args + (self.list_display, self.search_help_text)
         return ChangeList(*args)
 
     request_query_string = ''
@@ -93,16 +87,16 @@ class OrderedModelAdmin(admin.ModelAdmin):
         return super().changelist_view(request, extra_context)
 
     def move_view(self, request, object_id, direction):
-        cl = self._get_changelist(request)
-        qs = cl.get_queryset(request)
-
         obj = get_object_or_404(self.model, pk=unquote(object_id))
-        obj.move(direction, qs)
+        if direction == 'up':
+            obj.up()
+        else:
+            obj.down()
 
         return HttpResponseRedirect('../../%s' % self.request_query_string)
 
     def move_up_down_links(self, obj):
-        return render_to_string("admin/publications/order_controls.html", {
+        html = render_to_string("admin/publications/order_controls.html", {
             'app_label': self.model._meta.app_label,
             'module_name': self.model._meta.model_name,
             'object_id': obj.id,
@@ -112,5 +106,6 @@ class OrderedModelAdmin(admin.ModelAdmin):
             },
             'query_string': self.request_query_string
         })
-    move_up_down_links.allow_tags = True
-    move_up_down_links.short_description = _(u'Move')
+        return mark_safe(html)
+
+    move_up_down_links.short_description = _('Move')

@@ -81,36 +81,6 @@ class OrderedModel(models.Model):
         self.save()
         replacement.save()
 
-    def move(self, direction, qs=None):
-        warnings.warn(
-            _("The method move() is deprecated and will be removed in the next release."),
-            DeprecationWarning
-        )
-        if direction == 'up':
-            self.up()
-        else:
-            self.down()
-
-    def move_down(self):
-        """
-        Move this object down one position.
-        """
-        warnings.warn(
-            _("The method move_down() is deprecated and will be removed in the next release. Please use down() instead!"),
-            DeprecationWarning
-        )
-        return self.down()
-
-    def move_up(self):
-        """
-        Move this object up one position.
-        """
-        warnings.warn(
-            _("The method move_up() is deprecated and will be removed in the next release. Please use up() instead!"),
-            DeprecationWarning
-        )
-        return self.up()
-
     def swap(self, qs):
         """
         Swap the positions of this object with a reference object.
