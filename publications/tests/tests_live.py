@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.test import LiveServerTestCase
 from django.contrib.auth import get_user_model
 from selenium import webdriver

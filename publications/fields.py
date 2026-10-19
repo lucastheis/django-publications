@@ -7,16 +7,12 @@ from django.forms import widgets
 from django.db import models
 
 class PagesWidget(widgets.MultiWidget):
+	template_name = 'publications/widgets/pages_widget.html'
+
 	def __init__(self, *args, **kwargs):
 		attrs = {'style': 'width: 40px; text-align: center;'}
-		forms.widgets.MultiWidget.__init__(self,
+		super().__init__(
 			[widgets.TextInput(attrs), widgets.TextInput(attrs)], *args, **kwargs)
-
-
-	def format_output(self, rendered_widgets):
-		to = ' <span style="vertical-align: middle;">to</span> '
-		return rendered_widgets[0] + to + rendered_widgets[1]
-
 
 	def decompress(self, value):
 		if value:
@@ -33,7 +29,7 @@ class PagesForm(forms.MultiValueField):
 	widget = PagesWidget
 
 	def __init__(self, *args, **kwargs):
-		forms.MultiValueField.__init__(self, [
+		super().__init__([
 			forms.CharField(),
 			forms.CharField()], *args, **kwargs)
 
@@ -54,14 +50,9 @@ class PagesForm(forms.MultiValueField):
 class PagesField(models.Field):
 	def formfield(self, **kwargs):
 		kwargs['form_class'] = PagesForm
-		return models.Field.formfield(self, **kwargs)
+		return super().formfield(**kwargs)
 
 
 	def get_internal_type(self):
 		return 'CharField'
 
-try:
-	from south.modelsinspector import add_introspection_rules
-	add_introspection_rules([], [r"^publications.fields.PagesField"])
-except:
-	pass

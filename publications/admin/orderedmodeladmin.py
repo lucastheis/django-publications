@@ -33,20 +33,10 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.contrib import admin
-try:
-    from django.contrib.admin.utils import unquote
-except ImportError:
-    # Django <= 1.6
-    from django.contrib.admin.util import unquote
+from django.contrib.admin.utils import unquote
 from django.contrib.admin.views.main import ChangeList
-from django.db.models.options import Options
 from django import VERSION
 
-# Django <= 1.6
-if not getattr(Options, 'model_name', False):
-    Options.model_name = lambda self: self.module_name.lower()
-if not getattr(ChangeList, 'get_queryset', False):
-    ChangeList.get_queryset = ChangeList.get_query_set
 
 class OrderedModelAdmin(admin.ModelAdmin):
 
@@ -66,7 +56,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
                 name='{app}_{model}_order_up'.format(**self.get_model_info())),
             re_path(r'^(.+)/move-(down)/$', wrap(self.move_view),
                 name='{app}_{model}_order_down'.format(**self.get_model_info())),
-        ] + super(OrderedModelAdmin, self).get_urls()
+        ] + super().get_urls()
 
     def _get_changelist(self, request):
         list_display = self.get_list_display(request)
@@ -100,7 +90,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         cl = self._get_changelist(request)
         self.request_query_string = cl.get_query_string()
-        return super(OrderedModelAdmin, self).changelist_view(request, extra_context)
+        return super().changelist_view(request, extra_context)
 
     def move_view(self, request, object_id, direction):
         cl = self._get_changelist(request)

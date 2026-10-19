@@ -45,4 +45,4 @@ class PublicationAdmin(admin.ModelAdmin):
 		return [
 				re_path(r'^import_bibtex/$', publications.admin_views.import_bibtex,
 					name='publications_publication_import_bibtex'),
-			] + super(PublicationAdmin, self).get_urls()
+			] + super().get_urls()

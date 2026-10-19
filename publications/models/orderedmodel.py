@@ -26,8 +26,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import warnings
-from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
 from django.db import models
 from django.db.models import Max, Min, F
 from django.utils.translation import gettext as _
@@ -65,7 +63,7 @@ class OrderedModel(models.Model):
         if not self.id:
             c = self.get_ordering_queryset().aggregate(Max('order')).get('order__max')
             self.order = 0 if c is None else c + 1
-        super(OrderedModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def _move(self, up, qs=None):
         qs = self.get_ordering_queryset(qs)

@@ -3,7 +3,6 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 import re
-import publications.six as six
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
@@ -83,9 +82,9 @@ def import_bibtex(request):
 					entry['volume'] = entry.get('volume', None)
 					entry['number'] = entry.get('number', None)
 
-					if isinstance(entry['volume'], six.text_type):
+					if isinstance(entry['volume'], str):
 						entry['volume'] = int(re.sub('[^0-9]', '', entry['volume']))
-					if isinstance(entry['number'], six.text_type):
+					if isinstance(entry['number'], str):
 						entry['number'] = int(re.sub('[^0-9]', '', entry['number']))
 
 					# remove whitespace characters (likely due to line breaks)

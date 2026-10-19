@@ -19,10 +19,6 @@ class Type(OrderedModel):
 	hidden = models.BooleanField(default=False,
 		help_text='Hide publications from main view.')
 
-	def __unicode__(self):
-		return self.type
-
-
 	def __str__(self):
 		return self.type
 
