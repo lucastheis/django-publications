@@ -26,8 +26,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import warnings
-from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
 from django.db import models
 from django.db.models import Max, Min, F
 from django.utils.translation import gettext as _
@@ -65,7 +63,7 @@ class OrderedModel(models.Model):
         if not self.id:
             c = self.get_ordering_queryset().aggregate(Max('order')).get('order__max')
             self.order = 0 if c is None else c + 1
-        super(OrderedModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def _move(self, up, qs=None):
         qs = self.get_ordering_queryset(qs)
@@ -82,36 +80,6 @@ class OrderedModel(models.Model):
         self.order, replacement.order = replacement.order, self.order
         self.save()
         replacement.save()
-
-    def move(self, direction, qs=None):
-        warnings.warn(
-            _("The method move() is deprecated and will be removed in the next release."),
-            DeprecationWarning
-        )
-        if direction == 'up':
-            self.up()
-        else:
-            self.down()
-
-    def move_down(self):
-        """
-        Move this object down one position.
-        """
-        warnings.warn(
-            _("The method move_down() is deprecated and will be removed in the next release. Please use down() instead!"),
-            DeprecationWarning
-        )
-        return self.down()
-
-    def move_up(self):
-        """
-        Move this object up one position.
-        """
-        warnings.warn(
-            _("The method move_up() is deprecated and will be removed in the next release. Please use up() instead!"),
-            DeprecationWarning
-        )
-        return self.up()
 
     def swap(self, qs):
         """

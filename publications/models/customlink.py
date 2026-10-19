@@ -13,8 +13,5 @@ class CustomLink(models.Model):
 	description = models.CharField(max_length=256)
 	url = models.URLField(verbose_name='URL')
 
-	def __unicode__(self):
-		return self.description
-
 	def __str__(self):
 		return self.description

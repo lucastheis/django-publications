@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
@@ -205,11 +203,6 @@ class Publication(models.Model):
 			self.authors = ' and '.join(self.authors_list)
 		else:
 			self.authors = self.authors_list[0]
-
-
-	def __unicode__(self):
-		return self.__str__()
-
 
 	def __str__(self):
 		if len(self.title) < 64:

@@ -33,20 +33,10 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.contrib import admin
-try:
-    from django.contrib.admin.utils import unquote
-except ImportError:
-    # Django <= 1.6
-    from django.contrib.admin.util import unquote
+from django.contrib.admin.utils import unquote
 from django.contrib.admin.views.main import ChangeList
-from django.db.models.options import Options
-from django import VERSION
+from django.utils.safestring import mark_safe
 
-# Django <= 1.6
-if not getattr(Options, 'model_name', False):
-    Options.model_name = lambda self: self.module_name.lower()
-if not getattr(ChangeList, 'get_queryset', False):
-    ChangeList.get_queryset = ChangeList.get_query_set
 
 class OrderedModelAdmin(admin.ModelAdmin):
 
@@ -66,7 +56,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
                 name='{app}_{model}_order_up'.format(**self.get_model_info())),
             re_path(r'^(.+)/move-(down)/$', wrap(self.move_view),
                 name='{app}_{model}_order_down'.format(**self.get_model_info())),
-        ] + super(OrderedModelAdmin, self).get_urls()
+        ] + super().get_urls()
 
     def _get_changelist(self, request):
         list_display = self.get_list_display(request)
@@ -86,13 +76,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
             self,
         )
 
-        if VERSION >= (2, 1):
-            sortable_by = self.list_display
-            args = args + (sortable_by,)
-
-        if VERSION >= (4, 0):
-            args = args + (self.search_help_text,)
-
+        args = args + (self.list_display, self.search_help_text)
         return ChangeList(*args)
 
     request_query_string = ''
@@ -100,19 +84,19 @@ class OrderedModelAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         cl = self._get_changelist(request)
         self.request_query_string = cl.get_query_string()
-        return super(OrderedModelAdmin, self).changelist_view(request, extra_context)
+        return super().changelist_view(request, extra_context)
 
     def move_view(self, request, object_id, direction):
-        cl = self._get_changelist(request)
-        qs = cl.get_queryset(request)
-
         obj = get_object_or_404(self.model, pk=unquote(object_id))
-        obj.move(direction, qs)
+        if direction == 'up':
+            obj.up()
+        else:
+            obj.down()
 
         return HttpResponseRedirect('../../%s' % self.request_query_string)
 
     def move_up_down_links(self, obj):
-        return render_to_string("admin/publications/order_controls.html", {
+        html = render_to_string("admin/publications/order_controls.html", {
             'app_label': self.model._meta.app_label,
             'module_name': self.model._meta.model_name,
             'object_id': obj.id,
@@ -122,5 +106,6 @@ class OrderedModelAdmin(admin.ModelAdmin):
             },
             'query_string': self.request_query_string
         })
-    move_up_down_links.allow_tags = True
-    move_up_down_links.short_description = _(u'Move')
+        return mark_safe(html)
+
+    move_up_down_links.short_description = _('Move')

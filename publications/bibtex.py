@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 __version__ = '1.2.0'
 
 import re
-import publications.six as six
 
 # special character mapping
 special_chars = (
@@ -59,7 +55,7 @@ def parse(string):
 	bib = []
 
 	# make sure we are dealing with unicode strings
-	if not isinstance(string, six.text_type):
+	if not isinstance(string, str):
 		string = string.decode('utf-8')
 
 	# replace special characters

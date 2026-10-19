@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.test import LiveServerTestCase
 from django.contrib.auth import get_user_model
 from selenium import webdriver
@@ -43,6 +41,7 @@ class LiveTests(LiveServerTestCase):
 		password_input = self.selenium.find_element(By.NAME, 'password')
 		password_input.send_keys('admin')
 		self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+		self.wait.until(presence_of_element_located((By.ID, 'user-tools')))
 
 
 	def test_import_bibtex(self):
@@ -55,6 +54,7 @@ class LiveTests(LiveServerTestCase):
 		bibliography_input = self.selenium.find_element(By.NAME, 'bibliography')
 		bibliography_input.send_keys(tests.TEST_BIBLIOGRAPHY)
 		self.selenium.find_element(By.XPATH, '//input[@value="Import"]').click()
+		self.wait.until(presence_of_element_located((By.LINK_TEXT, 'Import BibTex')))
 
 		self.assertEqual(Publication.objects.count() - count, tests.TEST_BIBLIOGRAPHY_COUNT)
 
@@ -65,4 +65,5 @@ class LiveTests(LiveServerTestCase):
 		self.selenium.get('{0}{1}'.format(self.live_server_url, '/admin/publications/publication/'))
 		self.wait.until(presence_of_element_located((By.LINK_TEXT, 'Import BibTex')))
 		self.selenium.find_element(By.LINK_TEXT, 'Import BibTex').click()
+		self.wait.until(presence_of_element_located((By.XPATH, '//input[@value="Import"]')))
 		self.selenium.find_element(By.XPATH, '//input[@value="Import"]').click()

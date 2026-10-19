@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -7,6 +5,7 @@ from django.db import transaction
 from django.template import Template, RequestContext
 from django.http import HttpRequest
 from publications.models import Publication, Type, CustomLink, List
+from publications.fields import PagesWidget
 from publications.templatetags.publication_extras import tex_parse
 
 class Tests(TestCase):
@@ -182,8 +181,52 @@ class Tests(TestCase):
 		self.client.login(username='admin', password='admin')
 
 		self.assertEqual(self.client.get('/publications/').status_code, 200)
-		self.assertEqual(self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code, 200)
-		self.assertEqual(self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code, 200)
+		self.assertEqual(self.client.get('/admin/publications/type/').status_code, 200)
+
+		type_obj = Type.objects.get(pk=6)
+		self.assertEqual(type_obj.order, 5)
+		self.assertEqual(
+			self.client.get('/admin/publications/type/6/move-up/', follow=True).status_code,
+			200)
+		type_obj.refresh_from_db()
+		self.assertEqual(type_obj.order, 4)
+
+		self.assertEqual(
+			self.client.get('/admin/publications/type/6/move-down/', follow=True).status_code,
+			200)
+		type_obj.refresh_from_db()
+		self.assertEqual(type_obj.order, 5)
+
+		first_type = Type.objects.get(order=0)
+		self.assertEqual(
+			self.client.get(
+				'/admin/publications/type/{}/move-up/'.format(first_type.pk), follow=True
+			).status_code,
+			200)
+		first_type.refresh_from_db()
+		self.assertEqual(first_type.order, 0)
+
+		last_type = Type.objects.get(order=8)
+		self.assertEqual(
+			self.client.get(
+				'/admin/publications/type/{}/move-down/'.format(last_type.pk), follow=True
+			).status_code,
+			200)
+		last_type.refresh_from_db()
+		self.assertEqual(last_type.order, 8)
+
+
+	def test_pages_widget_renders_subwidgets_with_separator(self):
+		rendered = PagesWidget().render('pages', '12-15')
+
+		self.assertEqual(rendered.count('<input'), 2)
+		first_input = rendered.index('name="pages_0"')
+		separator = rendered.index('>to</span>')
+		second_input = rendered.index('name="pages_1"')
+		self.assertLess(first_input, separator)
+		self.assertLess(separator, second_input)
+		self.assertIn('value="12"', rendered)
+		self.assertIn('value="15"', rendered)
 
 
 	def test_extras(self):

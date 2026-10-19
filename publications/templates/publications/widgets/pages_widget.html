@@ -1,0 +1,1 @@
+{% for subwidget in widget.subwidgets %}{% if not forloop.first %} <span style="vertical-align: middle;">to</span> {% endif %}{% include subwidget.template_name with widget=subwidget %}{% endfor %}

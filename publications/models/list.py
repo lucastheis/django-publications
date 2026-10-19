@@ -17,8 +17,5 @@ class List(models.Model):
 	list = models.CharField(max_length=128)
 	description = models.CharField(max_length=128)
 
-	def __unicode__(self):
-		return self.list
-
 	def __str__(self):
 		return self.list

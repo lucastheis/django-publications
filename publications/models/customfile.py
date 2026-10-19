@@ -13,8 +13,5 @@ class CustomFile(models.Model):
 	description = models.CharField(max_length=256)
 	file = models.FileField(upload_to='publications/')
 
-	def __unicode__(self):
-		return self.description
-
 	def __str__(self):
 		return self.description
